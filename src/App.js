@@ -1,43 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import bridge from '@vkontakte/vk-bridge';
-import View from '@vkontakte/vkui/dist/components/View/View';
-import ScreenSpinner from '@vkontakte/vkui/dist/components/ScreenSpinner/ScreenSpinner';
+import React, { useState } from 'react';
+import { View, ScreenSpinner, Epic, Tabbar, TabbarItem, Panel, ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-
-import Home from './panels/Home';
-import Persik from './panels/Persik';
+import Home from './pages/Home/Home';
+import CreateEvent from './pages/CreateEvent/CreateEvent';
+import ModalRoot from './modals/ModalRoot';
+import Event from './pages/Event/Event';
 
 const App = () => {
-	const [activePanel, setActivePanel] = useState('home');
-	const [fetchedUser, setUser] = useState(null);
-	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
+    const [activePanel, setActivePanel] = useState('event');
+    const [activeModal, setActiveModal] = useState();
+    const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 
-	useEffect(() => {
-		bridge.subscribe(({ detail: { type, data }}) => {
-			if (type === 'VKWebAppUpdateConfig') {
-				const schemeAttribute = document.createAttribute('scheme');
-				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
-				document.body.attributes.setNamedItem(schemeAttribute);
-			}
-		});
-		async function fetchData() {
-			const user = await bridge.send('VKWebAppGetUserInfo');
-			setUser(user);
-			setPopout(null);
-		}
-		fetchData();
-	}, []);
-
-	const go = e => {
-		setActivePanel(e.currentTarget.dataset.to);
-	};
-
-	return (
-		<View activePanel={activePanel} popout={popout}>
-			<Home id='home' fetchedUser={fetchedUser} go={go} />
-			<Persik id='persik' go={go} />
-		</View>
-	);
+    return (
+        <View id="app" activePanel={activePanel} modal={<ModalRoot activeModal={activeModal} />} popout={false && (
+            <ActionSheet>
+                <ActionSheetItem>Запросить платеж</ActionSheetItem>
+                <ActionSheetItem>Отметить как завершенное</ActionSheetItem>
+                <ActionSheetItem autoclose mode="cancel">Отменить</ActionSheetItem>
+            </ActionSheet>
+        )} >
+            <Home id="home" onAddEventClick={() => setActivePanel('create-event')} />
+            <CreateEvent id="create-event" onBackClick={() => setActivePanel('home')}
+                         onModalOpen={() => setActiveModal('friends')} />
+            <Event id="event" onBackClick={() => setActivePanel('home')} />
+        </View>
+    );
 }
 
 export default App;
