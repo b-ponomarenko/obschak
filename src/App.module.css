@@ -1,14 +1,14 @@
 .list {
-  padding-top: 52px;
+    padding-top: 52px;
 }
 
 .search {
-  position: relative;
-  top: -5px;
-  width: 100vw;
+    position: relative;
+    top: -5px;
+    width: 100vw;
 }
 
 .addButton {
-  background: white;
-  padding: 8px;
+    background: white;
+    padding: 8px;
 }
