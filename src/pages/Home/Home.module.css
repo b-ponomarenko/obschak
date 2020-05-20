@@ -1,0 +1,13 @@
+.list {
+  padding-top: 52px;
+}
+
+.search {
+  position: relative;
+  top: -5px;
+  width: 100vw;
+}
+
+.title {
+  display: flex;
+}

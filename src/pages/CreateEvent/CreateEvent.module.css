@@ -1,0 +1,25 @@
+.imagePlaceholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: blue;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.caption {
+  margin-top: 4px;
+}
+
+.createButton {
+  background: white;
+  padding: 8px;
+}
+
+.container {
+  padding-bottom: 60px;
+}
