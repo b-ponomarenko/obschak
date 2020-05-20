@@ -1,38 +1,38 @@
 .info {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .cell {
-  margin-left: -10px;
+    margin-left: -10px;
 }
 
 .avatarContainer {
-  position: relative;
+    position: relative;
 }
 
 .userFrom,
 .userTo {
-  border-radius: 50%;
-  border: 3px solid white;
+    border-radius: 50%;
+    border: 3px solid white;
 }
 
 .userFrom {
-  width: 45px;
+    width: 45px;
 }
 
 .userTo {
-  position: absolute;
-  top: 0;
-  right: -20px;
-  z-index: 1;
+    position: absolute;
+    top: 0;
+    right: -20px;
+    z-index: 1;
 }
 
 .balanceContent {
-  display: flex;
-  padding-left: 24px;
+    display: flex;
+    padding-left: 24px;
 }
 
 .icon {
-  transform: rotate(-90deg);
+    transform: rotate(-90deg);
 }
