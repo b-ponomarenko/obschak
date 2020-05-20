@@ -3,7 +3,7 @@ module.exports = {
         browser: true,
         es6: true,
     },
-    extends: ['eslint:recommended', 'plugin:react/recommended', 'prettier'],
+    extends: ['eslint:recommended', 'plugin:react/recommended', 'eslint-config-prettier'],
     globals: {
         Atomics: 'readonly',
         SharedArrayBuffer: 'readonly',
@@ -15,7 +15,7 @@ module.exports = {
         ecmaVersion: 11,
         sourceType: 'module',
     },
-    plugins: ['react'],
+    plugins: ['react', 'eslint-plugin-prettier'],
     rules: {
         indent: ['error', 4],
         'linebreak-style': ['error', 'unix'],

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 import Icon20FollowersOutline from '@vkontakte/icons/dist/20/followers_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
@@ -23,14 +23,23 @@ import {
     SimpleCell,
 } from '@vkontakte/vkui';
 import styles from './Event.module.css';
+import { useDispatch } from 'react-redux';
+import navigateTo from '../../actions/navigateTo';
+import openPopout from '../../actions/openPopout';
 
-const Event = ({ id, onBackClick }) => {
+const Event = ({ id }) => {
     const [tab, setTab] = useState('purchases');
+    const dispatch = useDispatch();
+    const navigateBack = useCallback(() => dispatch(navigateTo('index')), []);
+    const showBalanceActions = useCallback(
+        () => dispatch(openPopout({ name: 'BALANCE_ACTIONS' })),
+        []
+    );
 
     return (
         <Panel id={id}>
             <PanelHeader
-                left={<PanelHeaderBack onClick={onBackClick} />}
+                left={<PanelHeaderBack onClick={navigateBack} />}
                 right={
                     <PanelHeaderButton>
                         <Icon28SettingsOutline />
@@ -163,6 +172,7 @@ const Event = ({ id, onBackClick }) => {
             {tab === 'balance' && (
                 <Group>
                     <RichCell
+                        onClick={showBalanceActions}
                         before={
                             <div className={styles.avatarContainer}>
                                 <div className={styles.userFrom}>
