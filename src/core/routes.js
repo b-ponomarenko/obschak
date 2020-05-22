@@ -1,9 +1,9 @@
-import Home from '../views/Home/Home';
+import Events from '../views/Events/Events';
 import CreateEvent from '../views/CreateEvent/CreateEvent';
 import Event from '../views/Event/Event';
 
 export const routes = [
-    { id: 'index', component: Home },
+    { id: 'events', component: Events },
     { id: 'create-event', component: CreateEvent },
-    { id: 'event/:eventId', component: Event },
+    { id: 'events/:eventId', component: Event },
 ];

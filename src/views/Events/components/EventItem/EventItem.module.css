@@ -1,0 +1,17 @@
+.calendar {
+    display: flex;
+}
+
+.avatar {
+    position: relative;
+    margin-right: 12px;
+    place-self: flex-start;
+}
+
+.placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}

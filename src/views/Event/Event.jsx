@@ -8,8 +8,6 @@ import {
     Panel,
     PanelHeader,
     Button,
-    CellButton,
-    Cell,
     PanelHeaderButton,
     PanelHeaderBack,
     RichCell,
@@ -30,7 +28,7 @@ import openPopout from '../../actions/openPopout';
 const Event = ({ id }) => {
     const [tab, setTab] = useState('purchases');
     const dispatch = useDispatch();
-    const navigateBack = useCallback(() => dispatch(navigateTo('index')), []);
+    const navigateBack = useCallback(() => dispatch(navigateTo('events')), []);
     const showBalanceActions = useCallback(
         () => dispatch(openPopout({ name: 'BALANCE_ACTIONS' })),
         []

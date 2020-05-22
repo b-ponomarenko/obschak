@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "avatar": "http://dummyimage.com/72x72.jpg/ff4444/ffffff",
+        "firstName": "Desirée",
+        "lastName": "Raine"
+    },
+    {
+        "id": 2,
+        "avatar": "http://dummyimage.com/72x72.jpg/ff4444/ffffff",
+        "firstName": "Marie-françoise",
+        "lastName": "Paulich"
+    },
+    {
+        "id": 3,
+        "avatar": "http://dummyimage.com/72x72.jpg/ff4444/ffffff",
+        "firstName": "Mélina",
+        "lastName": "Sherington"
+    },
+    {
+        "id": 4,
+        "avatar": "http://dummyimage.com/72x72.jpg/cc0000/ffffff",
+        "firstName": "Nuó",
+        "lastName": "Binns"
+    },
+    {
+        "id": 5,
+        "avatar": "http://dummyimage.com/72x72.jpg/cc0000/ffffff",
+        "firstName": "Garçon",
+        "lastName": "Kemmish"
+    },
+    {
+        "id": 6,
+        "avatar": "http://dummyimage.com/72x72.jpg/5fa2dd/ffffff",
+        "firstName": "Pélagie",
+        "lastName": "Sherrington"
+    },
+    {
+        "id": 7,
+        "avatar": "http://dummyimage.com/72x72.jpg/ff4444/ffffff",
+        "firstName": "Léana",
+        "lastName": "Rey"
+    },
+    {
+        "id": 8,
+        "avatar": "http://dummyimage.com/72x72.jpg/5fa2dd/ffffff",
+        "firstName": "Anaé",
+        "lastName": "Snaddin"
+    },
+    {
+        "id": 9,
+        "avatar": "http://dummyimage.com/72x72.jpg/cc0000/ffffff",
+        "firstName": "Anaëlle",
+        "lastName": "Dowglass"
+    },
+    {
+        "id": 10,
+        "avatar": "http://dummyimage.com/72x72.jpg/ff4444/ffffff",
+        "firstName": "Bérénice",
+        "lastName": "Coucher"
+    }
+]
