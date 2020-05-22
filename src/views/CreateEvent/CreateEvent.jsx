@@ -24,7 +24,7 @@ import openModal from '../../actions/openModal';
 
 const CreateEvent = ({ id }) => {
     const dispatch = useDispatch();
-    const navigateBack = useCallback(() => dispatch(navigateTo('index')), []);
+    const navigateBack = useCallback(() => dispatch(navigateTo('events')), []);
     const openFriendsModal = useCallback(
         () => dispatch(openModal({ name: 'ADD_FRIENDS_MODAL' })),
         []

@@ -11,3 +11,7 @@
 .title {
     display: flex;
 }
+
+.iconFire {
+    color: var(--destructive);
+}

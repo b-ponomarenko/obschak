@@ -10,12 +10,14 @@ import { registerModal } from './core/modals';
 import AddFriendsModal from './modals/AddFriendsModal/AddFriendsModal';
 import { registerPopout } from './core/popout';
 import BalanceActions from './popouts/BalanceActions/BalanceActions';
+import { ScreenSpinner } from '@vkontakte/vkui';
 
 // Init VK  Mini App
 bridge.send('VKWebAppInit');
 
 registerModal('ADD_FRIENDS_MODAL', AddFriendsModal);
 registerPopout('BALANCE_ACTIONS', BalanceActions);
+registerPopout('SCREEN_SPINNER', ScreenSpinner);
 
 ReactDOM.render(
     <Provider store={store}>
