@@ -28,7 +28,7 @@ import { plural } from '../../plural';
 const groupEvents = memoize((events, search) => {
     const now = new Date();
     const sortedEvents = events
-        .filter(({ title }) => title.toLowerCase().includes(search))
+        .filter(({ title }) => title.toLowerCase().includes(search.toLowerCase()))
         .sort((a, b) => (isAfter(new Date(a.startDate), new Date(b.startDate)) ? 1 : -1));
     const pastEvents = [];
     const currentEvents = [];
@@ -57,10 +57,11 @@ const groupEvents = memoize((events, search) => {
 
 export default class EventsPure extends PureComponent {
     state = {
-        search: '',
+        search: 'Amuru',
     };
 
     static propTypes = {
+        id: pt.string,
         events: pt.array,
         navigateToNewEvent: pt.func.isRequired,
         fetchEvents: pt.func.isRequired,
@@ -105,7 +106,7 @@ export default class EventsPure extends PureComponent {
                     </PanelHeader>
                     <FixedLayout>
                         <div className={styles.search}>
-                            <Search />
+                            <Search value={search} />
                         </div>
                     </FixedLayout>
                 </Panel>

@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
+import pt from 'prop-types';
 import { format } from 'date-fns';
 import ru from 'date-fns/locale/ru';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
-import { RichCell, UsersStack, Avatar, Title } from '@vkontakte/vkui';
+import { RichCell, UsersStack } from '@vkontakte/vkui';
 import styles from './EventItem.module.css';
 import { useDispatch } from 'react-redux';
 import navigateTo from '../../../../actions/navigateTo';
-import getColorByText from '../../../../getColorByText';
+import Avatar from '../../../../components/Avatar/Avatar';
 
 const EventItem = ({ event }) => {
     const dispatch = useDispatch();
@@ -18,10 +19,7 @@ const EventItem = ({ event }) => {
             onClick={navigateToEvent}
             before={
                 <div className={styles.avatar}>
-                    <Avatar size={72} src={photo} style={{ background: getColorByText(title) }} />
-                    <div className={styles.placeholder}>
-                        {!photo && <Title level="1">{title.charAt(0)}</Title>}
-                    </div>
+                    <Avatar size={72} src={photo} letter={title} />
                 </div>
             }
             caption={
@@ -38,6 +36,17 @@ const EventItem = ({ event }) => {
             {title}
         </RichCell>
     );
+};
+
+EventItem.propTypes = {
+    event: pt.shape({
+        id: pt.number,
+        title: pt.string,
+        photo: pt.string,
+        startDate: pt.string,
+        endDate: pt.string,
+        users: pt.array,
+    }),
 };
 
 export default EventItem;

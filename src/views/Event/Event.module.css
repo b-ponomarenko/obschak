@@ -3,6 +3,14 @@
     align-items: center;
 }
 
+.avatar {
+    margin-right: 12px;
+}
+
+.inactive {
+    color: var(--attach_picker_tab_inactive_icon);
+}
+
 .cell {
     margin-left: -10px;
 }
