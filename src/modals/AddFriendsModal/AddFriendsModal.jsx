@@ -27,11 +27,7 @@ const AddFriendsModal = ({ id, payload }) => (
         <Search />
         <Div>
             <div className={styles.user}>
-                <Avatar
-                    size={60}
-                    src="https://placeimg.com/72/72/people"
-                    src="https://placeimg.com/72/72/people"
-                />
+                <Avatar size={60} src="https://placeimg.com/72/72/people" />
                 <div className={styles.deleteIcon}>
                     <Icon24DismissDark />
                 </div>
