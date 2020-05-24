@@ -57,7 +57,7 @@ const groupEvents = memoize((events, search) => {
 
 export default class EventsPure extends PureComponent {
     state = {
-        search: 'Amuru',
+        search: '',
     };
 
     static propTypes = {

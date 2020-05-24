@@ -5,22 +5,21 @@ import openPopout from '../../actions/openPopout';
 import eventById from '../../actions/events/eventById';
 import openModal from '../../actions/openModal';
 import closeModal from '../../actions/closeModal';
+import compose from '@tinkoff/utils/function/compose';
+import { withCurrentRoute } from '../../core/router';
 
-const mapState = ({ router, event }) => {
-    const { name, params } = router.currentRoute;
+const mapState = ({ event }, { route }) => {
+    const { params } = route;
 
     return {
-        id: name,
-        eventId: params?.eventId,
-        event: event[params?.eventId],
+        eventId: params.eventId,
+        event: event[params.eventId],
     };
 };
 
 const mapDispatch = (dispatch) => ({
     fetchEvent: (id) => dispatch(eventById(id)),
-    navigateBack: () => dispatch(navigateTo('events')),
-    navigateToPurchase: ({ eventId, purchaseId }) =>
-        dispatch(navigateTo(`events/${eventId}/${purchaseId}`)),
+    navigateTo: (routeName, routeParams) => dispatch(navigateTo(routeName, routeParams)),
     showBalanceActions: () => dispatch(openPopout({ name: 'BALANCE_ACTIONS' })),
     showEventMembers: (payload) =>
         dispatch(
@@ -31,4 +30,4 @@ const mapDispatch = (dispatch) => ({
         ),
 });
 
-export default connect(mapState, mapDispatch)(EventPure);
+export default compose(withCurrentRoute, connect(mapState, mapDispatch))(EventPure);

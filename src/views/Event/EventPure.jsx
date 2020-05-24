@@ -41,12 +41,12 @@ export default class EventPure extends PureComponent {
             endDate: pt.string,
             users: pt.array,
         }),
-        navigateBack: pt.func,
-        navigateToPurchase: pt.func,
+        navigateTo: pt.func,
         showBalanceActions: pt.func,
         showEventMembers: pt.func,
         fetchEvent: pt.func,
         eventId: pt.string,
+        route: pt.object,
         id: pt.string,
     };
 
@@ -64,14 +64,38 @@ export default class EventPure extends PureComponent {
         showEventMembers({ title: 'Участники', users: event.users });
     };
 
+    navigateToSettings = () => {
+        const { eventId, navigateTo } = this.props;
+
+        navigateTo('event.settings', { eventId });
+    };
+
+    navigateToCreatePurchase = () => {
+        const { eventId, navigateTo } = this.props;
+
+        navigateTo('event.create-purchase', { eventId });
+    };
+
+    navigateToPurchase = (purchaseId) => () => {
+        const { eventId, navigateTo } = this.props;
+
+        navigateTo('event.purchase', { eventId, purchaseId });
+    };
+
+    navigateBack = () => {
+        const { navigateTo } = this.props;
+
+        navigateTo('events');
+    };
+
     render() {
-        const { id, showBalanceActions, navigateBack, navigateToPurchase, event } = this.props;
+        const { showBalanceActions, event } = this.props;
 
         if (!event) {
             return (
-                <Panel id={id}>
+                <Panel id="event">
                     <PanelHeader
-                        left={<PanelHeaderBack onClick={navigateBack} />}
+                        left={<PanelHeaderBack onClick={this.navigateBack} />}
                         right={
                             <PanelHeaderButton>
                                 <Icon28SettingsOutline />
@@ -88,11 +112,11 @@ export default class EventPure extends PureComponent {
         const { tab } = this.state;
 
         return (
-            <Panel id={id}>
+            <Panel id="event">
                 <PanelHeader
-                    left={<PanelHeaderBack onClick={navigateBack} />}
+                    left={<PanelHeaderBack onClick={this.navigateBack} />}
                     right={
-                        <PanelHeaderButton>
+                        <PanelHeaderButton onClick={this.navigateToSettings}>
                             <Icon28SettingsOutline />
                         </PanelHeaderButton>
                     }
@@ -164,7 +188,12 @@ export default class EventPure extends PureComponent {
                 {tab === 'purchases' && (
                     <Group>
                         <Div>
-                            <Button before={<Icon24Add />} size="xl" mode="secondary">
+                            <Button
+                                before={<Icon24Add />}
+                                size="xl"
+                                mode="secondary"
+                                onClick={this.navigateToCreatePurchase}
+                            >
                                 Добавить покупку
                             </Button>
                         </Div>
@@ -179,7 +208,7 @@ export default class EventPure extends PureComponent {
                                 text={title}
                                 caption={format(date, 'dd.mm.YYYY', { locale: ru })}
                                 after={price.value + price.currency}
-                                onClick={() => navigateToPurchase(`events/${event.id}/${id}`)}
+                                onClick={this.navigateToPurchase(id)}
                             >
                                 {user.firstName} {user.lastName}
                             </RichCell>
