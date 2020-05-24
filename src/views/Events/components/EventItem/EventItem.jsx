@@ -12,7 +12,7 @@ import Avatar from '../../../../components/Avatar/Avatar';
 const EventItem = ({ event }) => {
     const dispatch = useDispatch();
     const { id, title, photo, startDate, endDate, users } = event;
-    const navigateToEvent = useCallback(() => dispatch(navigateTo(`events/${id}`)), [id]);
+    const navigateToEvent = useCallback(() => dispatch(navigateTo('event', { eventId: id })), [id]);
 
     return (
         <RichCell
