@@ -11,21 +11,17 @@
     flex-shrink: 0;
     background: var(--landing_field_background);
     cursor: pointer;
+    position: relative;
 }
 
 .file {
     display: none;
 }
 
-.caption {
-    margin-top: 4px;
-}
-
-.createButton {
-    background: white;
-    padding: 8px;
-}
-
-.container {
-    padding-bottom: 60px;
+.spinner {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

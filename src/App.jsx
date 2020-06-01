@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { View } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ModalRoot from './modals/ModalRoot';
 import { getPopouts } from './core/popout';
 import Events from './views/Events/Events';
@@ -9,12 +9,19 @@ import CreateEvent from './views/CreateEvent/CreateEvent';
 import Event from './views/Event/Event';
 import EventSettings from './views/EventSettings/EventSettings';
 import CreatePurchase from './views/CreatePurchase/CreatePurchase';
+import getUserInfo from './actions/vk/getUserInfo';
 
 const App = () => {
     const { name } = useSelector(({ router }) => router.route);
+    const dispatch = useDispatch();
+    const fetchUserInfo = useCallback(() => dispatch(getUserInfo()), []);
     const popouts = getPopouts();
     const popout = useSelector(({ popout }) => popout.popout);
     const PopoutComponent = popouts[popout.name];
+
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
 
     return (
         <View
