@@ -36,7 +36,7 @@ registerPopout('UPLOADED_AVATAR_ACTIONS', UploadedAvatarActions);
 
 export const router = configureRouter();
 
-const store = configureStore(router);
+export const store = configureStore(router);
 
 store.dispatch(vkInfoLoaded(parse(window.location.search)));
 
