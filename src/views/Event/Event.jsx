@@ -8,10 +8,11 @@ import closeModal from '../../actions/closeModal';
 import compose from '@tinkoff/utils/function/compose';
 import { withCurrentRoute } from '../../core/router';
 
-const mapState = ({ event }, { route }) => {
+const mapState = ({ event, user }, { route }) => {
     const { params } = route;
 
     return {
+        user,
         eventId: params.eventId,
         event: event[params.eventId],
     };

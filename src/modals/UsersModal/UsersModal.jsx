@@ -3,14 +3,16 @@ import {
     ModalPage,
     ModalPageHeader,
     PanelHeaderButton,
-    Search,
+    Group,
     List,
     SimpleCell,
     Avatar,
 } from '@vkontakte/vkui';
+import { useSelector } from 'react-redux';
 
 const UsersModal = ({ id, payload }) => {
     const { title, users, onClose } = payload;
+    const user = useSelector(({ user }) => user);
 
     return (
         <ModalPage
@@ -23,14 +25,22 @@ const UsersModal = ({ id, payload }) => {
                 </ModalPageHeader>
             }
         >
-            <Search />
-            <List>
-                {users.map(({ id, firstName, lastName, avatar }) => (
-                    <SimpleCell key={id} before={<Avatar size={40} src={avatar} />}>
-                        {firstName} {lastName}
-                    </SimpleCell>
-                ))}
-            </List>
+            <Group>
+                <List>
+                    {users.map((id) => {
+                        const currentUser = user[id];
+
+                        return (
+                            <SimpleCell
+                                key={id}
+                                before={<Avatar size={40} src={currentUser?.photo_100} />}
+                            >
+                                {currentUser?.first_name} {currentUser?.last_name}
+                            </SimpleCell>
+                        );
+                    })}
+                </List>
+            </Group>
         </ModalPage>
     );
 };

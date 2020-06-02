@@ -1,7 +1,7 @@
-import makeRequest from '../../core/makeRequest';
+import { makeEventsRequest } from '../../core/makeRequest';
 import { eventLoaded } from '../../reducers/event';
 
 export default (id) => (dispatch) =>
-    makeRequest({
+    makeEventsRequest({
         method: `events/${id}`,
-    }).then((event) => dispatch(eventLoaded(event)));
+    }).then(({ event }) => dispatch(eventLoaded(event)));

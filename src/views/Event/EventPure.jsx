@@ -19,6 +19,7 @@ import {
     Div,
     Text,
     SimpleCell,
+    PullToRefresh,
 } from '@vkontakte/vkui';
 import styles from './Event.module.css';
 import { plural } from '../../plural';
@@ -33,6 +34,7 @@ export default class EventPure extends PureComponent {
     };
 
     static propTypes = {
+        user: pt.object,
         event: pt.shape({
             id: pt.number,
             title: pt.string,
@@ -40,6 +42,7 @@ export default class EventPure extends PureComponent {
             startDate: pt.string,
             endDate: pt.string,
             users: pt.array,
+            purchases: pt.array,
         }),
         navigateTo: pt.func,
         showBalanceActions: pt.func,
@@ -88,8 +91,16 @@ export default class EventPure extends PureComponent {
         navigateTo('events');
     };
 
+    handleRefreshEvent = () => {
+        const { fetchEvent, eventId } = this.props;
+
+        this.setState({ isFetching: true });
+        fetchEvent(eventId).finally(() => this.setState({ isFetching: false }));
+    };
+
     render() {
-        const { showBalanceActions, event } = this.props;
+        const { showBalanceActions, event, user } = this.props;
+        const { isFetching } = this.state;
 
         if (!event) {
             return (
@@ -108,7 +119,7 @@ export default class EventPure extends PureComponent {
             );
         }
 
-        const { title, users, startDate, endDate, photo, purchases = [] } = event;
+        const { title, users, startDate, endDate, photo, purchases } = event;
         const { tab } = this.state;
 
         return (
@@ -156,7 +167,7 @@ export default class EventPure extends PureComponent {
                             <UsersStack
                                 style={{ padding: '0 0 0 6px' }}
                                 size="s"
-                                photos={users.map(({ avatar }) => avatar)}
+                                photos={users.map((userId) => user[userId]?.photo_100)}
                             />
                         </div>
                     </SimpleCell>
@@ -170,50 +181,61 @@ export default class EventPure extends PureComponent {
                     >
                         <div className={styles.inactive}>
                             <Text>
-                                {format(new Date(startDate), 'd MMM hh:mm', { locale: ru })}
+                                {format(new Date(startDate), 'd MMM HH:mm', { locale: ru })}
                                 &nbsp;&mdash;&nbsp;
-                                {format(new Date(endDate), 'd MMM hh:mm', { locale: ru })}
+                                {format(new Date(endDate), 'd MMM HH:mm', { locale: ru })}
                             </Text>
                         </div>
                     </SimpleCell>
                 </Group>
-                <Tabs>
-                    <TabsItem onClick={this.handlePurchasesTabClick} selected={tab === 'purchases'}>
-                        Покупки
-                    </TabsItem>
-                    <TabsItem onClick={this.handleBalanceTabClick} selected={tab === 'balance'}>
-                        Долги
-                    </TabsItem>
-                </Tabs>
+                <Group separator="hide">
+                    <Tabs>
+                        <TabsItem
+                            onClick={this.handlePurchasesTabClick}
+                            selected={tab === 'purchases'}
+                        >
+                            Покупки
+                        </TabsItem>
+                        <TabsItem onClick={this.handleBalanceTabClick} selected={tab === 'balance'}>
+                            Долги
+                        </TabsItem>
+                    </Tabs>
+                </Group>
                 {tab === 'purchases' && (
-                    <Group>
-                        <Div>
-                            <Button
-                                before={<Icon24Add />}
-                                size="xl"
-                                mode="secondary"
-                                onClick={this.navigateToCreatePurchase}
-                            >
-                                Добавить покупку
-                            </Button>
-                        </Div>
-                        {purchases.map(({ id, title, user, price, date }) => (
-                            <RichCell
-                                key={id}
-                                before={
-                                    <div className={styles.avatar}>
-                                        <Avatar size={48} src={user.avatar} />
-                                    </div>
-                                }
-                                text={title}
-                                caption={format(date, 'dd.mm.YYYY', { locale: ru })}
-                                after={price.value + price.currency}
-                                onClick={this.navigateToPurchase(id)}
-                            >
-                                {user.firstName} {user.lastName}
-                            </RichCell>
-                        ))}
-                    </Group>
+                    <PullToRefresh onRefresh={this.handleRefreshEvent} isFetching={isFetching}>
+                        <Group>
+                            <Div>
+                                <Button
+                                    before={<Icon24Add />}
+                                    size="xl"
+                                    mode="secondary"
+                                    onClick={this.navigateToCreatePurchase}
+                                >
+                                    Добавить покупку
+                                </Button>
+                            </Div>
+                            {purchases.map(({ id, title, creator, price, date }) => {
+                                const currentUser = user[creator];
+
+                                return (
+                                    <RichCell
+                                        key={id}
+                                        before={
+                                            <div className={styles.avatar}>
+                                                <Avatar size={48} src={currentUser?.photo_100} />
+                                            </div>
+                                        }
+                                        text={title}
+                                        caption={format(date, 'dd.mm.YYYY', { locale: ru })}
+                                        after={`${price.value} ${price.currency}`}
+                                        onClick={this.navigateToPurchase(id)}
+                                    >
+                                        {currentUser?.first_name} {currentUser?.last_name}
+                                    </RichCell>
+                                );
+                            })}
+                        </Group>
+                    </PullToRefresh>
                 )}
                 {tab === 'balance' && (
                     <Group>

@@ -26,8 +26,8 @@ const EventItem = ({ event }) => {
             caption={
                 <div className={styles.calendar}>
                     <Icon20CalendarOutline />
-                    &nbsp;{format(new Date(startDate), 'd MMM hh:mm', { locale: ru })}
-                    &nbsp;&mdash;&nbsp;{format(new Date(endDate), 'd MMM hh:mm', { locale: ru })}
+                    &nbsp;{format(new Date(startDate), 'd MMM HH:mm', { locale: ru })}
+                    &nbsp;&mdash;&nbsp;{format(new Date(endDate), 'd MMM HH:mm', { locale: ru })}
                 </div>
             }
             bottom={
