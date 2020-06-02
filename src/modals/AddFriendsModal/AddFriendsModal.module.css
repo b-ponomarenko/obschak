@@ -3,6 +3,8 @@
     display: inline-flex;
     margin-left: 12px;
     flex-direction: column;
+    width: 60px;
+    flex-shrink: 0;
 }
 
 .user:first-child {
@@ -14,6 +16,10 @@
     top: -3px;
     right: -3px;
     z-index: 1;
+    background: white;
+    border-radius: 50%;
+    border: 2px solid white;
+    color: var(--icon_secondary);
 }
 
 .name {
