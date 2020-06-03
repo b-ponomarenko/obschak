@@ -1,23 +1,25 @@
-import React, { useCallback } from 'react';
-import { Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
-import { useCurrentRoute } from '../../core/router';
-import { useDispatch } from 'react-redux';
-import { actions } from 'redux-router5';
+import { connect } from 'react-redux';
+import CreatePurchasePure from './CreatePurchasePure';
+import navigateTo from '../../actions/navigateTo';
+import { compose } from 'redux';
+import { withCurrentRoute } from '../../core/router';
+import openPopout from '../../actions/openPopout';
+import createPurchase from '../../actions/events/createPurchase';
 
-const CreatePurchase = (props) => {
-    const { params } = useCurrentRoute();
-    const dispatch = useDispatch();
-    const { eventId } = params;
-    const { navigateTo } = actions;
-    const navigateBack = useCallback(() => dispatch(navigateTo('event', { eventId })), []);
+const mapState = ({ event, user }, { route }) => {
+    const { eventId } = route.params;
 
-    return (
-        <Panel id="event.create-purchase">
-            <PanelHeader left={<PanelHeaderBack onClick={navigateBack} />}>
-                Новая покупка {eventId}
-            </PanelHeader>
-        </Panel>
-    );
+    return {
+        event: event[eventId],
+        user,
+    };
 };
 
-export default CreatePurchase;
+const mapDispatch = (dispatch) => ({
+    navigateTo: (routeName, routeParams) => dispatch(navigateTo(routeName, routeParams)),
+    openNotificationPopout: (payload) =>
+        dispatch(openPopout({ name: 'NOTIFICATION_POPOUT', payload })),
+    createPurchase: (eventId, payload) => dispatch(createPurchase(eventId, payload)),
+});
+
+export default compose(withCurrentRoute, connect(mapState, mapDispatch))(CreatePurchasePure);

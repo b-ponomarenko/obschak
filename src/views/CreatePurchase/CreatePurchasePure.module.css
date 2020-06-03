@@ -1,0 +1,11 @@
+.value {
+    position: relative;
+}
+
+.currency {
+    position: absolute;
+    right: 27px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
