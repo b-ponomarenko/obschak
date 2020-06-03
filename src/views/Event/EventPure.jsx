@@ -214,8 +214,8 @@ export default class EventPure extends PureComponent {
                                     Добавить покупку
                                 </Button>
                             </Div>
-                            {purchases.map(({ id, title, creator, price, date }) => {
-                                const currentUser = user[creator];
+                            {purchases.map(({ id, name, creatorId, value, currency, date }) => {
+                                const currentUser = user[creatorId];
 
                                 return (
                                     <RichCell
@@ -225,9 +225,11 @@ export default class EventPure extends PureComponent {
                                                 <Avatar size={48} src={currentUser?.photo_100} />
                                             </div>
                                         }
-                                        text={title}
-                                        caption={format(date, 'dd.mm.YYYY', { locale: ru })}
-                                        after={`${price.value} ${price.currency}`}
+                                        text={name}
+                                        caption={format(new Date(date), "d MMM' в 'HH:mm", {
+                                            locale: ru,
+                                        })}
+                                        after={`${value} ${currency}`}
                                         onClick={this.navigateToPurchase(id)}
                                     >
                                         {currentUser?.first_name} {currentUser?.last_name}

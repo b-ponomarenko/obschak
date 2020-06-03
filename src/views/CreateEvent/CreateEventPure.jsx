@@ -100,7 +100,14 @@ export default class CreateEventPure extends PureComponent {
 
         if (isEmpty(friends)) {
             isValid = false;
-            openPopout({ name: 'NO_FRIENDS_SELECTED' });
+            openPopout({
+                name: 'NOTIFICATION_POPOUT',
+                payload: {
+                    title: 'Ни одного друга не выбрано',
+                    description:
+                        'Для того, чтобы создать событие Вам необходимо добавить хотя бы одного друга',
+                },
+            });
         }
 
         if (!isValid) {
