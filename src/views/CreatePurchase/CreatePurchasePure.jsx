@@ -14,6 +14,8 @@ import {
     Header,
     Cell,
     Avatar,
+    Div,
+    Button,
 } from '@vkontakte/vkui';
 import numberInputHOC from '../../components/numberInputHOC';
 import equal from '@tinkoff/utils/is/equal';
@@ -121,14 +123,7 @@ export default class CreatePurchasePure extends PureComponent {
 
         return (
             <Panel id="event.create-purchase">
-                <PanelHeader
-                    left={<PanelHeaderBack onClick={this.navigateBack} />}
-                    right={
-                        <PanelHeaderButton onClick={this.handleCreatePurchase}>
-                            <Icon28WriteSquareOutline />
-                        </PanelHeaderButton>
-                    }
-                >
+                <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
                     Новая покупка
                 </PanelHeader>
                 <Group>
@@ -183,6 +178,11 @@ export default class CreatePurchasePure extends PureComponent {
                         );
                     })}
                 </Group>
+                <Div>
+                    <Button size="xl" onClick={this.handleCreatePurchase}>
+                        Добавить покупку
+                    </Button>
+                </Div>
             </Panel>
         );
     }

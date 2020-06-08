@@ -3,13 +3,12 @@ import cx from 'classnames';
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 import Icon20FollowersOutline from '@vkontakte/icons/dist/20/followers_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
-import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
+import Icon24Settings from '@vkontakte/icons/dist/24/settings';
 import Icon16Down from '@vkontakte/icons/dist/16/down';
 import {
     Panel,
     PanelHeader,
     Button,
-    PanelHeaderButton,
     PanelHeaderBack,
     RichCell,
     Tabs,
@@ -19,6 +18,7 @@ import {
     Div,
     Text,
     SimpleCell,
+    CellButton,
     PullToRefresh,
 } from '@vkontakte/vkui';
 import styles from './Event.module.css';
@@ -111,14 +111,7 @@ export default class EventPure extends PureComponent {
         if (!event) {
             return (
                 <Panel id="event">
-                    <PanelHeader
-                        left={<PanelHeaderBack onClick={this.navigateBack} />}
-                        right={
-                            <PanelHeaderButton>
-                                <Icon28SettingsOutline />
-                            </PanelHeaderButton>
-                        }
-                    >
+                    <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
                         Событие
                     </PanelHeader>
                 </Panel>
@@ -130,14 +123,7 @@ export default class EventPure extends PureComponent {
 
         return (
             <Panel id="event">
-                <PanelHeader
-                    left={<PanelHeaderBack onClick={this.navigateBack} />}
-                    right={
-                        <PanelHeaderButton onClick={this.navigateToSettings}>
-                            <Icon28SettingsOutline />
-                        </PanelHeaderButton>
-                    }
-                >
+                <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
                     Событие
                 </PanelHeader>
                 <Group>
@@ -193,6 +179,11 @@ export default class EventPure extends PureComponent {
                             </Text>
                         </div>
                     </SimpleCell>
+                </Group>
+                <Group>
+                    <CellButton before={<Icon24Settings />} onClick={this.navigateToSettings}>
+                        Настройки
+                    </CellButton>
                 </Group>
                 <Group separator="hide">
                     <Tabs>
