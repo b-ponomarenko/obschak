@@ -29,8 +29,6 @@ const mapDispatch = (dispatch) => ({
     navigateTo: (routeName, routeParams) => dispatch(navigateTo(routeName, routeParams)),
     fetchEvent: (id) => dispatch(fetchEventWithUsers(id)),
     fetchEvents: () => dispatch(events()),
-    openEventSettingsPopout: (payload) =>
-        dispatch(openPopout({ name: 'EVENT_SETTINGS_POPOUT', payload })),
     openAddFriendsModal: (payload) => dispatch(openModal({ name: 'ADD_FRIENDS_MODAL', payload })),
     fetchFriends: (search) => dispatch(getFriends(search)),
     fetchUsers: (users) => dispatch(getUsers({ users })),

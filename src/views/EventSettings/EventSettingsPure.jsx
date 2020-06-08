@@ -27,7 +27,6 @@ export default class EventSettingsPure extends PureComponent {
 
     static propTypes = {
         navigateTo: pt.func,
-        openEventSettingsPopout: pt.func,
         openAddFriendsModal: pt.func,
         fetchFriends: pt.func,
         fetchUsers: pt.func,
@@ -69,15 +68,6 @@ export default class EventSettingsPure extends PureComponent {
         const { eventId } = route.params;
 
         navigateTo('event', { eventId });
-    };
-
-    handleShowOptions = () => {
-        const { openEventSettingsPopout } = this.props;
-
-        openEventSettingsPopout({
-            onSave: this.handleSaveEvent,
-            onDelete: this.handleOpenDeleteEventConfirmationPopup,
-        });
     };
 
     handleRemove = (userId) =>
@@ -180,14 +170,7 @@ export default class EventSettingsPure extends PureComponent {
 
         return (
             <Panel id="event.settings">
-                <PanelHeader
-                    left={<PanelHeaderBack onClick={this.navigateBack} />}
-                    right={
-                        <PanelHeaderButton onClick={this.handleShowOptions}>
-                            <Icon28MoreHorizontal />
-                        </PanelHeaderButton>
-                    }
-                >
+                <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
                     Настройки события
                 </PanelHeader>
                 <RichCell
@@ -229,9 +212,20 @@ export default class EventSettingsPure extends PureComponent {
                             </Cell>
                         );
                     })}
+                </Group>
+                <Group>
+                    <CellButton onClick={this.handleSaveEvent}>Сохранить событие</CellButton>
                     <CellButton mode="danger" onClick={this.handleOpenLeaveEventConfirmationPopup}>
                         Покинуть событие
                     </CellButton>
+                    {currentUser.id === event.creatorId && (
+                        <CellButton
+                            mode="danger"
+                            onClick={this.handleOpenDeleteEventConfirmationPopup}
+                        >
+                            Удалить событие
+                        </CellButton>
+                    )}
                 </Group>
             </Panel>
         );
