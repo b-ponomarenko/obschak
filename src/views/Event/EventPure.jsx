@@ -47,6 +47,8 @@ export default class EventPure extends PureComponent {
         navigateTo: pt.func,
         showBalanceActions: pt.func,
         showEventMembers: pt.func,
+        showLoader: pt.func,
+        closePopout: pt.func,
         fetchEvent: pt.func,
         eventId: pt.string,
         route: pt.object,
@@ -54,9 +56,13 @@ export default class EventPure extends PureComponent {
     };
 
     componentDidMount() {
-        const { fetchEvent, eventId } = this.props;
+        const { fetchEvent, event, eventId, closePopout, showLoader } = this.props;
 
-        fetchEvent(eventId);
+        if (!event) {
+            showLoader();
+        }
+
+        fetchEvent(eventId).finally(closePopout);
     }
 
     handlePurchasesTabClick = () => this.setState({ tab: 'purchases' });

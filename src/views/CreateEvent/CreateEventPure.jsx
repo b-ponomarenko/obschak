@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import pt from 'prop-types';
 import isEmpty from '@tinkoff/utils/is/empty';
 import { format } from 'date-fns';
+import Icon28UserAddOutline from '@vkontakte/icons/dist/28/user_add_outline';
 import {
     Panel,
     PanelHeaderBack,
@@ -16,6 +17,7 @@ import {
     FixedLayout,
     Button,
     SimpleCell,
+    CellButton,
 } from '@vkontakte/vkui';
 import styles from './CreateEvent.module.css';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
@@ -184,27 +186,20 @@ export default class CreateEventPure extends PureComponent {
                                 status={endDateError && 'error'}
                             />
                         </FormLayoutGroup>
-                        <FormLayoutGroup>
-                            <Button
-                                align="center"
-                                size="xl"
-                                mode="secondary"
-                                onClick={this.handleOpenModal}
-                            >
-                                Добавить друзей
-                            </Button>
-                        </FormLayoutGroup>
                     </FormLayout>
-                    {!isEmpty(friends) && (
-                        <Group>
-                            <Header mode="secondary">Участники</Header>
-                            {friends.map(({ id, photo_100, first_name, last_name }) => (
-                                <SimpleCell key={id} before={<Avatar size={40} src={photo_100} />}>
-                                    {first_name} {last_name}
-                                </SimpleCell>
-                            ))}
-                        </Group>
-                    )}
+                    <Group header={<Header mode="secondary">Участники</Header>}>
+                        <CellButton
+                            onClick={this.handleOpenModal}
+                            before={<Icon28UserAddOutline />}
+                        >
+                            Добавить участника
+                        </CellButton>
+                        {friends.map(({ id, photo_100, first_name, last_name }) => (
+                            <SimpleCell key={id} before={<Avatar size={40} src={photo_100} />}>
+                                {first_name} {last_name}
+                            </SimpleCell>
+                        ))}
+                    </Group>
                 </div>
                 <FixedLayout vertical="bottom">
                     <div className={styles.createButton}>

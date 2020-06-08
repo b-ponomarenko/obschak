@@ -28,6 +28,7 @@ export default class CreatePurchasePure extends PureComponent {
         route: pt.object,
         navigateTo: pt.func,
         openNotificationPopout: pt.func,
+        fetchEvent: pt.func,
         createPurchase: pt.func,
         event: pt.object,
         user: pt.object,
@@ -37,6 +38,13 @@ export default class CreatePurchasePure extends PureComponent {
         currency: 'RUB',
         selectedParticipants: [...this.props.event.users],
     };
+
+    componentDidMount() {
+        const { route, fetchEvent } = this.props;
+        const { eventId } = route.params;
+
+        fetchEvent(eventId);
+    }
 
     navigateBack = () => {
         const { route, navigateTo } = this.props;
