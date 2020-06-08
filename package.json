@@ -6,9 +6,11 @@
     "scripts": {
         "start": "cross-env PORT=10888 HTTPS=true react-scripts start -- --no-cache",
         "build": "react-scripts build",
+        "eject": "react-scripts eject",
         "predeploy": "npm run build",
         "deploy": "vk-miniapps-deploy",
-        "serve": "env NODE_TLS_REJECT_UNAUTHORIZED=0 PROXY_HTTP_PROTO=https PROXY_WS_PROTO=wss PROXY_HOST=localhost PROXY_PORT=10888 vk-tunnel"
+        "serve": "env NODE_TLS_REJECT_UNAUTHORIZED=0 PROXY_HTTP_PROTO=https PROXY_WS_PROTO=wss PROXY_HOST=localhost PROXY_PORT=10888 vk-tunnel",
+        "devtools": "react-devtools"
     },
     "keywords": [],
     "author": "",
