@@ -19,6 +19,9 @@ import { vkInfoLoaded } from './reducers/vk';
 import { parse } from 'query-string';
 import UploadedAvatarActions from './components/UploadedAvatar/UploadedAvatarActions';
 import NotificationPopout from './popouts/NotificationPopout/NotificationPopout';
+import EventSettingsPopout from './views/EventSettings/popouts/EventSettingsPopout/EventSettingsPopout';
+import LeaveEventConfirmation from './views/EventSettings/popouts/LeaveEventConfirmation/LeaveEventConfirmation';
+import DeleteEventConfirmation from './views/EventSettings/popouts/DeleteEventConfirmation/DeleteEventConfirmation';
 console.log('href', window.location.href, window.location.pathname);
 
 // Init VK  Mini App
@@ -33,6 +36,9 @@ registerPopout('PAYMENT_CONFIRMATION', PaymentConfirmation);
 registerPopout('PAYMENT_CONFIRMATION', PaymentRequest);
 registerPopout('UPLOADED_AVATAR_ACTIONS', UploadedAvatarActions);
 registerPopout('NOTIFICATION_POPOUT', NotificationPopout);
+registerPopout('EVENT_SETTINGS_POPOUT', EventSettingsPopout);
+registerPopout('LEAVE_EVENT_CONFIRMATION', LeaveEventConfirmation);
+registerPopout('DELETE_EVENT_CONFIRMATION', DeleteEventConfirmation);
 
 export const router = configureRouter();
 

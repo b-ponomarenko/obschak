@@ -8,7 +8,7 @@
         "build": "react-scripts build",
         "predeploy": "npm run build",
         "deploy": "vk-miniapps-deploy",
-        "mock-server": "json-server ./public/mock.js -H 0.0.0.0 --watch"
+        "serve": "env NODE_TLS_REJECT_UNAUTHORIZED=0 PROXY_HTTP_PROTO=https PROXY_WS_PROTO=wss PROXY_HOST=localhost PROXY_PORT=10888 vk-tunnel"
     },
     "keywords": [],
     "author": "",
