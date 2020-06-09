@@ -21,6 +21,7 @@ import UploadedAvatarActions from './components/UploadedAvatar/UploadedAvatarAct
 import NotificationPopout from './popouts/NotificationPopout/NotificationPopout';
 import LeaveEventConfirmation from './views/EventSettings/popouts/LeaveEventConfirmation/LeaveEventConfirmation';
 import DeleteEventConfirmation from './views/EventSettings/popouts/DeleteEventConfirmation/DeleteEventConfirmation';
+import DeletePurchaseConfirmation from './views/CreatePurchase/popouts/DeletePurchaseConfirmation/DeletePurchaseConfirmation';
 console.log('href', window.location.href, window.location.pathname);
 
 // Init VK  Mini App
@@ -37,6 +38,7 @@ registerPopout('UPLOADED_AVATAR_ACTIONS', UploadedAvatarActions);
 registerPopout('NOTIFICATION_POPOUT', NotificationPopout);
 registerPopout('LEAVE_EVENT_CONFIRMATION', LeaveEventConfirmation);
 registerPopout('DELETE_EVENT_CONFIRMATION', DeleteEventConfirmation);
+registerPopout('DELETE_PURCHASE_CONFIRMATION', DeletePurchaseConfirmation);
 
 export const router = configureRouter();
 
