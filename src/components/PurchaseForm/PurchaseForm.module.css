@@ -1,0 +1,28 @@
+.creator {
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.creatorAvatar {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.creatorName {
+    margin-left: 36px;
+}
+
+.value {
+    position: relative;
+}
+
+.currency {
+    position: absolute;
+    right: 27px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}

@@ -6,21 +6,20 @@ import { withCurrentRoute } from '../../core/router';
 import openPopout from '../../actions/openPopout';
 import createPurchase from '../../actions/events/createPurchase';
 import fetchEventWithUsers from '../../actions/fetchEventWithUsers';
+import currentUser from '../../selectors/currentUser';
 
-const mapState = ({ event, user }, { route }) => {
+const mapState = ({ event, user, vk }, { route }) => {
     const { eventId } = route.params;
 
     return {
         event: event[eventId],
-        user,
+        currentUser: currentUser({ vk, user }),
     };
 };
 
 const mapDispatch = (dispatch) => ({
     fetchEvent: (id) => dispatch(fetchEventWithUsers(id)),
     navigateTo: (routeName, routeParams) => dispatch(navigateTo(routeName, routeParams)),
-    openNotificationPopout: (payload) =>
-        dispatch(openPopout({ name: 'NOTIFICATION_POPOUT', payload })),
     createPurchase: (eventId, payload) => dispatch(createPurchase(eventId, payload)),
 });
 

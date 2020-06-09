@@ -18,7 +18,7 @@ import {
     Div,
     Text,
     SimpleCell,
-    CellButton,
+    Cell,
     PullToRefresh,
 } from '@vkontakte/vkui';
 import styles from './Event.module.css';
@@ -27,6 +27,10 @@ import { format } from 'date-fns';
 import ru from 'date-fns/locale/ru';
 import pt from 'prop-types';
 import Avatar from '../../components/Avatar/Avatar';
+
+const currencies = {
+    RUB: '₽',
+};
 
 export default class EventPure extends PureComponent {
     state = {
@@ -181,9 +185,9 @@ export default class EventPure extends PureComponent {
                     </SimpleCell>
                 </Group>
                 <Group>
-                    <CellButton before={<Icon24Settings />} onClick={this.navigateToSettings}>
+                    <Cell before={<Icon24Settings />} onClick={this.navigateToSettings} expandable>
                         Настройки
-                    </CellButton>
+                    </Cell>
                 </Group>
                 <Group separator="hide">
                     <Tabs>
@@ -226,7 +230,9 @@ export default class EventPure extends PureComponent {
                                         caption={format(new Date(date), "d MMM' в 'HH:mm", {
                                             locale: ru,
                                         })}
-                                        after={`${value} ${currency}`}
+                                        after={`${value.toLocaleString('ru')} ${
+                                            currencies[currency]
+                                        }`}
                                         onClick={this.navigateToPurchase(id)}
                                     >
                                         {currentUser?.first_name} {currentUser?.last_name}

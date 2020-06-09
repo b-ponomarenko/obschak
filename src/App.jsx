@@ -10,6 +10,7 @@ import Event from './views/Event/Event';
 import EventSettings from './views/EventSettings/EventSettings';
 import CreatePurchase from './views/CreatePurchase/CreatePurchase';
 import getUserInfo from './actions/vk/getUserInfo';
+import Purchase from './views/Purchase/Purchase';
 
 const App = () => {
     const { name } = useSelector(({ router }) => router.route);
@@ -34,6 +35,7 @@ const App = () => {
             <Event id="event" />
             <EventSettings id="event.settings" />
             <CreatePurchase id="event.create-purchase" />
+            <Purchase id="event.purchase" />
         </View>
     );
 };
