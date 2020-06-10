@@ -12,6 +12,7 @@ export default class PurchasePure extends PureComponent {
         user: pt.object,
         navigateTo: pt.object,
         purchase: pt.object,
+        event: pt.object,
         fetchPurchase: pt.func,
         updatePurchase: pt.func,
         deletePurchase: pt.func,
@@ -41,7 +42,8 @@ export default class PurchasePure extends PureComponent {
         const { updatePurchase, purchase } = this.props;
         const { name, value, currency, creatorId, users } = values;
 
-        return updatePurchase(purchase.id, {
+        return updatePurchase({
+            id: purchase.id,
             name,
             value,
             currency,
@@ -66,7 +68,7 @@ export default class PurchasePure extends PureComponent {
     };
 
     render() {
-        const { purchase } = this.props;
+        const { purchase, event } = this.props;
 
         if (!purchase) {
             return (
@@ -90,7 +92,8 @@ export default class PurchasePure extends PureComponent {
                     name={name}
                     value={value}
                     currency={currency}
-                    users={participants}
+                    users={event.users}
+                    selectedUsers={participants}
                     submitText="Сохранить"
                     onSubmit={this.handleSubmit}
                 />

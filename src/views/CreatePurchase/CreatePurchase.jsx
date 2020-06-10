@@ -3,7 +3,6 @@ import CreatePurchasePure from './CreatePurchasePure';
 import navigateTo from '../../actions/navigateTo';
 import { compose } from 'redux';
 import { withCurrentRoute } from '../../core/router';
-import openPopout from '../../actions/openPopout';
 import createPurchase from '../../actions/events/createPurchase';
 import fetchEventWithUsers from '../../actions/fetchEventWithUsers';
 import currentUser from '../../selectors/currentUser';

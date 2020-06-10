@@ -6,18 +6,21 @@ import purchaseById from '../../actions/events/purchaseById';
 import openPopout from '../../actions/openPopout';
 import closePopout from '../../actions/closePopout';
 import navigateTo from '../../actions/navigateTo';
+import deletePurchase from '../../actions/events/deletePurchase';
+import updatePurchase from '../../actions/events/updatePurchase';
 
-const mapState = ({ purchase }, { route }) => {
-    const { purchaseId } = route.params;
+const mapState = ({ purchase, event }, { route }) => {
+    const { purchaseId, eventId } = route.params;
 
     return {
         purchase: purchase[purchaseId],
+        event: event[eventId],
     };
 };
 
 const mapDispatch = (dispatch) => ({
-    updatePurchase: (purchase) => {},
-    deletePurchase: (purchaseId) => {},
+    updatePurchase: (purchase) => dispatch(updatePurchase(purchase)),
+    deletePurchase: (purchaseId) => dispatch(deletePurchase(purchaseId)),
     fetchPurchase: (purchaseId) => dispatch(purchaseById(purchaseId)),
     openPopout: ({ name, payload }) => dispatch(openPopout({ name, payload })),
     closePopout: () => dispatch(closePopout()),
