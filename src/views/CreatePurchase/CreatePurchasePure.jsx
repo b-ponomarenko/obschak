@@ -58,6 +58,7 @@ export default class CreatePurchasePure extends PureComponent {
                 <PurchaseForm
                     creatorId={currentUser.id}
                     users={users}
+                    selectedUsers={users}
                     onSubmit={this.handleSubmit}
                     submitText="Добавить покупку"
                 />

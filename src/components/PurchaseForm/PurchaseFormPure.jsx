@@ -24,6 +24,7 @@ export default class PurchaseFormPure extends PureComponent {
     static propTypes = {
         user: pt.object,
         users: pt.array,
+        selectedUsers: pt.array,
         name: pt.string,
         submitText: pt.string,
         value: pt.number,
@@ -35,14 +36,14 @@ export default class PurchaseFormPure extends PureComponent {
 
     state = {
         creatorId: this.props.creatorId,
-        selectedUsers: [...this.props.users],
+        selectedUsers: [...this.props.selectedUsers],
         name: this.props.name,
         value: this.props.value,
         currency: 'RUB',
     };
 
     static defaultProps = {
-        users: [],
+        selectedUsers: [],
     };
 
     handleValueChange = (value) => this.setState({ value, valueError: false });
@@ -70,14 +71,14 @@ export default class PurchaseFormPure extends PureComponent {
     };
 
     handleOpenMemberModal = () => {
-        const { openModal } = this.props;
-        const { creatorId, selectedUsers } = this.state;
+        const { openModal, users } = this.props;
+        const { creatorId } = this.state;
 
         openModal({
             name: 'USERS_MODAL',
             payload: {
+                users,
                 title: 'Выберите покупателя',
-                users: selectedUsers,
                 selectable: true,
                 value: creatorId,
                 onClose: this.handleSelectCreator,

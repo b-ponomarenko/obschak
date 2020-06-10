@@ -1,10 +1,10 @@
 import { makeEventsRequest } from '../../core/makeRequest';
-import { eventLoaded } from '../../reducers/event';
+import { purchaseLoaded } from '../../reducers/purchase';
 import tap from '@tinkoff/utils/function/tap';
 
 export default (payload) => (dispatch) =>
     makeEventsRequest({
-        method: `events/${payload.id}`,
+        method: `purchases/${payload.id}`,
         httpMethod: 'PUT',
         payload,
-    }).then(tap(({ event }) => dispatch(eventLoaded(event))));
+    }).then(tap(({ purchase }) => dispatch(purchaseLoaded(purchase))));
