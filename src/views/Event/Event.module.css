@@ -14,33 +14,3 @@
 .cell {
     margin-left: -10px;
 }
-
-.avatarContainer {
-    position: relative;
-}
-
-.userFrom,
-.userTo {
-    border-radius: 50%;
-    border: 3px solid white;
-}
-
-.userFrom {
-    width: 45px;
-}
-
-.userTo {
-    position: absolute;
-    top: 0;
-    right: -20px;
-    z-index: 1;
-}
-
-.balanceContent {
-    display: flex;
-    padding-left: 24px;
-}
-
-.icon {
-    transform: rotate(-90deg);
-}

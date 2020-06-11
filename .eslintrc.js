@@ -2,6 +2,7 @@ module.exports = {
     env: {
         browser: true,
         es6: true,
+        'jest/globals': true,
     },
     extends: ['eslint:recommended', 'plugin:react/recommended', 'eslint-config-prettier'],
     globals: {
@@ -16,7 +17,7 @@ module.exports = {
         ecmaVersion: 11,
         sourceType: 'module',
     },
-    plugins: ['react', 'eslint-plugin-prettier'],
+    plugins: ['react', 'eslint-plugin-prettier', 'jest'],
     rules: {
         indent: ['error', 4],
         'linebreak-style': ['error', 'unix'],
