@@ -20,7 +20,7 @@ import Icon16Fire from '@vkontakte/icons/dist/16/fire';
 import EventItem from './components/EventItem/EventItem';
 import styles from './EventsPure.module.css';
 import isEmpty from '@tinkoff/utils/is/empty';
-import memoize from 'memoize-one';
+import memoize from '@tinkoff/utils/function/memoize/one';
 import { plural } from '../../plural';
 
 const groupEvents = memoize((events) => {

@@ -24,7 +24,6 @@ const mapDispatch = (dispatch) => ({
     navigateTo: (routeName, routeParams) => dispatch(navigateTo(routeName, routeParams)),
     showLoader: () => dispatch(openPopout({ name: 'SCREEN_SPINNER' })),
     closePopout: () => dispatch(closePopout()),
-    showBalanceActions: () => dispatch(openPopout({ name: 'BALANCE_ACTIONS' })),
     showEventMembers: (payload) =>
         dispatch(
             openModal({

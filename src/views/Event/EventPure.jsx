@@ -4,7 +4,6 @@ import Icon24Add from '@vkontakte/icons/dist/24/add';
 import Icon20FollowersOutline from '@vkontakte/icons/dist/20/followers_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 import Icon24Settings from '@vkontakte/icons/dist/24/settings';
-import Icon16Down from '@vkontakte/icons/dist/16/down';
 import {
     Panel,
     PanelHeader,
@@ -27,10 +26,8 @@ import { format } from 'date-fns';
 import ru from 'date-fns/locale/ru';
 import pt from 'prop-types';
 import Avatar from '../../components/Avatar/Avatar';
-
-const currencies = {
-    RUB: '₽',
-};
+import BalanceList from './components/BalanceList/BalanceList';
+import { currencies } from '../../conts/currencies';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -49,7 +46,6 @@ export default class EventPure extends PureComponent {
             purchases: pt.array,
         }),
         navigateTo: pt.func,
-        showBalanceActions: pt.func,
         showEventMembers: pt.func,
         showLoader: pt.func,
         closePopout: pt.func,
@@ -109,7 +105,7 @@ export default class EventPure extends PureComponent {
     };
 
     render() {
-        const { showBalanceActions, event, user } = this.props;
+        const { event, user } = this.props;
         const { isFetching } = this.state;
 
         if (!event) {
@@ -242,38 +238,7 @@ export default class EventPure extends PureComponent {
                         </Group>
                     </PullToRefresh>
                 )}
-                {tab === 'balance' && (
-                    <Group>
-                        <RichCell
-                            onClick={showBalanceActions}
-                            before={
-                                <div className={styles.avatarContainer}>
-                                    <div className={styles.userFrom}>
-                                        <Avatar
-                                            size={44}
-                                            src="https://sun9-22.userapi.com/c638922/v638922920/5bd0a/z4F2vpLqYYE.jpg?ava=1"
-                                        />
-                                    </div>
-                                    <div className={styles.userTo}>
-                                        <Avatar
-                                            size={44}
-                                            src="https://sun9-16.userapi.com/c847216/v847216292/14ad40/DrQnejTNpBk.jpg?ava=1"
-                                        />
-                                    </div>
-                                </div>
-                            }
-                            after="+ 1 500 ₽"
-                        >
-                            <div className={styles.balanceContent}>
-                                Александр&nbsp;
-                                <div className={styles.icon}>
-                                    <Icon16Down />
-                                </div>
-                                &nbsp;Константин
-                            </div>
-                        </RichCell>
-                    </Group>
-                )}
+                {tab === 'balance' && <BalanceList />}
             </Panel>
         );
     }
