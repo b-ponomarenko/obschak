@@ -22,7 +22,8 @@ import NotificationPopout from './popouts/NotificationPopout/NotificationPopout'
 import LeaveEventConfirmation from './views/EventSettings/popouts/LeaveEventConfirmation/LeaveEventConfirmation';
 import DeleteEventConfirmation from './views/EventSettings/popouts/DeleteEventConfirmation/DeleteEventConfirmation';
 import DeletePurchaseConfirmation from './views/CreatePurchase/popouts/DeletePurchaseConfirmation/DeletePurchaseConfirmation';
-console.log('href', window.location.href, window.location.pathname);
+import TransferActions from './views/Event/popupts/TransferActions/TransferActions';
+import CancelTransferConfirmation from './views/Event/popupts/CancelTransferConfirmation/CancelTransferConfirmation';
 
 // Init VK  Mini App
 bridge.send('VKWebAppInit');
@@ -39,9 +40,10 @@ registerPopout('NOTIFICATION_POPOUT', NotificationPopout);
 registerPopout('LEAVE_EVENT_CONFIRMATION', LeaveEventConfirmation);
 registerPopout('DELETE_EVENT_CONFIRMATION', DeleteEventConfirmation);
 registerPopout('DELETE_PURCHASE_CONFIRMATION', DeletePurchaseConfirmation);
+registerPopout('TRANSFER_ACTIONS', TransferActions);
+registerPopout('CANCEL_TRANSFER_CONFIRMATION', CancelTransferConfirmation);
 
 export const router = configureRouter();
-
 export const store = configureStore(router);
 
 store.dispatch(vkInfoLoaded(parse(window.location.search)));

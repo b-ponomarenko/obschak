@@ -5,15 +5,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import closePopout from '../../../../actions/closePopout';
 import useCurrentUser from '../../../../hooks/useCurrentUser';
 import { currencies } from '../../../../conts/currencies';
+import fetchEventWithUsers from '../../../../actions/fetchEventWithUsers';
+import createTransfer from '../../../../actions/events/createTransfer';
+import useCurrentEvent from '../../../../hooks/useCurrentEvent';
+import openPopout from '../../../../actions/openPopout';
 
 const PaymentConfirmation = ({ payload }) => {
     const dispatch = useDispatch();
     const handleClose = useCallback(() => dispatch(closePopout()), []);
-    const user = useSelector(({ user }) => user);
-    const currentUser = useCurrentUser();
+    const event = useCurrentEvent();
     const { from, to, value, currency } = payload;
+    const user = useSelector(({ user }) => user);
     const userFrom = user[from];
     const userTo = user[to];
+    const handleCreateTransfer = useCallback(() => {
+        dispatch(openPopout({ name: 'SCREEN_SPINNER' }));
+        dispatch(createTransfer(event.id, payload))
+            .then(() => dispatch(fetchEventWithUsers(event.id)))
+            .finally(() => dispatch(closePopout()));
+    }, [event, payload]);
+    const currentUser = useCurrentUser();
 
     return (
         <Alert
@@ -26,7 +37,7 @@ const PaymentConfirmation = ({ payload }) => {
                 {
                     title: 'Да',
                     autoclose: true,
-                    action: () => console.log('Право на модерацию контента добавлено.'),
+                    action: handleCreateTransfer,
                 },
             ]}
             onClose={handleClose}

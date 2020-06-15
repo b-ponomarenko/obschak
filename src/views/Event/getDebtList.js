@@ -1,49 +1,46 @@
+import compose from '@tinkoff/utils/function/compose';
+import filter from '@tinkoff/utils/array/filter';
+import flatten from '@tinkoff/utils/array/flatten';
+import map from '@tinkoff/utils/array/map';
+import sort from '@tinkoff/utils/array/sort';
+
 const round = (value) => Number(value.toFixed(2));
 
-export default (purchases = [], currentUserId) =>
+const getDebtsFromPurchases = (purchases) =>
+    purchases.map(({ creatorId, participants, value, currency }) => {
+        const averageSum = round(value / participants.length);
+
+        return participants.map((participantId) => ({
+            from: participantId,
+            to: creatorId,
+            value: averageSum,
+            currency,
+        }));
+    });
+
+const unionDebts = (debts) =>
     Object.entries(
-        purchases.reduce((memo, { creatorId, participants, value, currency }) => {
-            const averageSum = round(value / participants.length);
-
-            return participants.reduce((memo, participantId) => {
-                const from = participantId > creatorId ? participantId : creatorId;
-                const to = participantId > creatorId ? creatorId : participantId;
-                const value = participantId > creatorId ? averageSum : -averageSum;
-                const key = [from, to];
-                const { value: currentValue = 0 } = memo[key] || {};
-
-                return { ...memo, [key]: { currency, value: value + currentValue } };
-            }, memo);
-        }, {})
-    )
-        .map(([key, value]) => {
-            const [from, to] = key.split(',').map(Number);
+        debts.reduce((memo, { from, to, value, currency }) => {
+            const userFrom = from > to ? from : to;
+            const userTo = from > to ? to : from;
+            const key = [userFrom, userTo];
+            const { value: currentValue = 0 } = memo[key] || {};
 
             return {
-                ...value,
-                from,
-                to,
-            };
-        })
-        .filter(({ from, to, value }) => from !== to && value !== 0)
-        .map(({ from, to, currency, value }) => {
-            if (value < 0) {
-                return {
-                    from: to,
-                    to: from,
+                ...memo,
+                [key]: {
+                    from: userFrom,
+                    to: userTo,
                     currency,
-                    value: -value,
-                };
-            }
-
-            return {
-                from,
-                to,
-                currency,
-                value,
+                    value: (from > to ? value : -value) + currentValue,
+                },
             };
-        })
-        .sort((a, b) => {
+        }, {})
+    ).map(([, value]) => value);
+
+export default (purchases, currentUserId, transfers = []) =>
+    compose(
+        sort((a, b) => {
             if (a.to === currentUserId && b.to === currentUserId) {
                 return b.value - a.value;
             }
@@ -69,4 +66,30 @@ export default (purchases = [], currentUserId) =>
             }
 
             return b.value - a.value;
-        });
+        }),
+        map(({ from, to, currency, value }) => {
+            if (value < 0) {
+                return {
+                    from: to,
+                    to: from,
+                    currency,
+                    value: -value,
+                };
+            }
+
+            return {
+                from,
+                to,
+                currency,
+                value,
+            };
+        }),
+        filter(({ from, to, value }) => from !== to && value !== 0),
+        (purchases) =>
+            unionDebts([
+                ...purchases,
+                ...transfers.map(({ from, to, ...rest }) => ({ ...rest, from: to, to: from })),
+            ]),
+        flatten,
+        getDebtsFromPurchases
+    )(purchases);

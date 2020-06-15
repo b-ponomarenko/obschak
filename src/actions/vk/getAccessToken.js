@@ -1,6 +1,8 @@
 import bridge from '@vkontakte/vk-bridge';
+import { store } from '../../index';
 
-// TODO: выпилить захардкоженный идентификатор
 export default (scope) => {
-    return bridge.send('VKWebAppGetAuthToken', { app_id: 7473655, scope }).catch(console.log);
+    const { vk } = store.getState();
+
+    return bridge.send('VKWebAppGetAuthToken', { app_id: Number(vk.vk_app_id), scope });
 };
