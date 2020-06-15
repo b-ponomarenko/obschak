@@ -19,6 +19,8 @@ import {
     SimpleCell,
     Cell,
     PullToRefresh,
+    Header,
+    Footer,
 } from '@vkontakte/vkui';
 import styles from './Event.module.css';
 import { plural } from '../../plural';
@@ -28,6 +30,8 @@ import pt from 'prop-types';
 import Avatar from '../../components/Avatar/Avatar';
 import BalanceList from './components/BalanceList/BalanceList';
 import { currencies } from '../../conts/currencies';
+import TransferList from './components/TransferList/TransferList';
+import isEmpty from '@tinkoff/utils/is/empty';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -44,6 +48,7 @@ export default class EventPure extends PureComponent {
             endDate: pt.string,
             users: pt.array,
             purchases: pt.array,
+            transfers: pt.array,
         }),
         navigateTo: pt.func,
         showEventMembers: pt.func,
@@ -238,7 +243,18 @@ export default class EventPure extends PureComponent {
                         </Group>
                     </PullToRefresh>
                 )}
-                {tab === 'balance' && <BalanceList />}
+                {tab === 'balance' && (
+                    <>
+                        <Div />
+                        <BalanceList />
+                        {!isEmpty(event.transfers) && (
+                            <Group header={<Header mode="secondary">Выполненные переводы</Header>}>
+                                <TransferList />
+                            </Group>
+                        )}
+                    </>
+                )}
+                <Footer />
             </Panel>
         );
     }

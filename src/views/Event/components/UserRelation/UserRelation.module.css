@@ -1,0 +1,34 @@
+.turnIcon {
+    width: 20px;
+    height: 20px;
+    color: var(--icon_secondary);
+    transform: scale(-1, 1) translateY(-50%);
+    position: absolute;
+    top: 50%;
+    right: 12px;
+}
+
+.container {
+    padding: 6px 0;
+}
+
+.userContainer {
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.money {
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+    font-size: 28px;
+    font-weight: 300;
+}
+
+.positive {
+    color: var(--dynamic_green);
+}
+
+.negative {
+    color: var(--dynamic_red);
+}
