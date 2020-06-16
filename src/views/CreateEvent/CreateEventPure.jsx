@@ -19,6 +19,7 @@ import {
     SimpleCell,
     CellButton,
 } from '@vkontakte/vkui';
+import { isBefore } from 'date-fns';
 import styles from './CreateEvent.module.css';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import debounce from '@tinkoff/utils/function/debounce';
@@ -83,6 +84,7 @@ export default class CreateEventPure extends PureComponent {
     handleCreateEvent = () => {
         const { openPopout, createEvent, user, navigateToEvent } = this.props;
         const { friends, startDate, endDate, title, image } = this.state;
+        const now = new Date();
         let isValid = true;
 
         if (!title) {
@@ -92,12 +94,34 @@ export default class CreateEventPure extends PureComponent {
 
         if (!startDate) {
             isValid = false;
-            this.setState({ startDateError: true });
+            this.setState({
+                startDateError: true,
+                startDateErrorMessage: 'Укажите дату начала события',
+            });
+        }
+
+        if (isBefore(startDate, now)) {
+            isValid = false;
+            this.setState({
+                startDateError: true,
+                startDateErrorMessage: 'Дата начала должна быть позже текущей даты',
+            });
         }
 
         if (!endDate) {
             isValid = false;
-            this.setState({ endDateError: true });
+            this.setState({
+                endDateError: true,
+                endDateErrorMessage: 'Укажите дату окончания события',
+            });
+        }
+
+        if (isBefore(endDate, startDate)) {
+            isValid = false;
+            this.setState({
+                endDateError: true,
+                endDateErrorMessage: 'Дата окончания должна быть позже даты начала события',
+            });
         }
 
         if (isEmpty(friends)) {
@@ -139,6 +163,8 @@ export default class CreateEventPure extends PureComponent {
             titleError,
             startDateError,
             endDateError,
+            startDateErrorMessage,
+            endDateErrorMessage,
         } = this.state;
         const now = new Date();
 
@@ -169,7 +195,11 @@ export default class CreateEventPure extends PureComponent {
                         />
                     </RichCell>
                     <FormLayout>
-                        <FormLayoutGroup top="Время начала">
+                        <FormLayoutGroup
+                            top="Время начала"
+                            status={startDateError && 'error'}
+                            bottom={startDateErrorMessage}
+                        >
                             <Input
                                 type="datetime-local"
                                 min={getDateTimeString(now)}
@@ -178,7 +208,11 @@ export default class CreateEventPure extends PureComponent {
                                 status={startDateError && 'error'}
                             />
                         </FormLayoutGroup>
-                        <FormLayoutGroup top="Время окончания">
+                        <FormLayoutGroup
+                            top="Время окончания"
+                            status={endDateError && 'error'}
+                            bottom={endDateErrorMessage}
+                        >
                             <Input
                                 type="datetime-local"
                                 min={getDateTimeString(startDate || now)}
