@@ -131,80 +131,87 @@ export default class EventPure extends PureComponent {
                 <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
                     Событие
                 </PanelHeader>
-                <Group>
-                    <RichCell
-                        multiline
-                        disabled
-                        before={
-                            <div className={styles.avatar}>
-                                <Avatar src={photo} letter={title} size={72} />
-                            </div>
-                        }
-                    >
-                        {title}
-                    </RichCell>
-                </Group>
-                <Group>
-                    <SimpleCell
-                        disabled
-                        before={
-                            <div className={styles.inactive}>
-                                <Icon20FollowersOutline style={{ padding: '0 6px 0 0' }} />
-                            </div>
-                        }
-                    >
-                        <div
-                            className={cx(styles.info, styles.inactive)}
-                            onClick={this.handleMembersClick}
+                <PullToRefresh onRefresh={this.handleRefreshEvent} isFetching={isFetching}>
+                    <Group>
+                        <RichCell
+                            multiline
+                            disabled
+                            before={
+                                <div className={styles.avatar}>
+                                    <Avatar src={photo} letter={title} size={72} />
+                                </div>
+                            }
                         >
-                            <Text>
-                                {users.length}{' '}
-                                {plural(users.length, ['участник', 'участника', 'участников'])}
-                            </Text>
-                            <UsersStack
-                                style={{ padding: '0 0 0 6px' }}
-                                size="s"
-                                photos={users.map((userId) => user[userId]?.photo_100)}
-                            />
-                        </div>
-                    </SimpleCell>
-                    <SimpleCell
-                        disabled
-                        before={
-                            <div className={styles.inactive}>
-                                <Icon20CalendarOutline style={{ padding: '0 6px 0 0' }} />
-                            </div>
-                        }
-                    >
-                        <div className={styles.inactive}>
-                            <Text>
-                                {format(new Date(startDate), 'd MMM HH:mm', { locale: ru })}
-                                &nbsp;&mdash;&nbsp;
-                                {format(new Date(endDate), 'd MMM HH:mm', { locale: ru })}
-                            </Text>
-                        </div>
-                    </SimpleCell>
-                </Group>
-                <Group>
-                    <Cell before={<Icon24Settings />} onClick={this.navigateToSettings} expandable>
-                        Настройки
-                    </Cell>
-                </Group>
-                <Group separator="hide">
-                    <Tabs>
-                        <TabsItem
-                            onClick={this.handlePurchasesTabClick}
-                            selected={tab === 'purchases'}
+                            {title}
+                        </RichCell>
+                    </Group>
+                    <Group>
+                        <SimpleCell
+                            disabled
+                            before={
+                                <div className={styles.inactive}>
+                                    <Icon20FollowersOutline style={{ padding: '0 6px 0 0' }} />
+                                </div>
+                            }
                         >
-                            Покупки
-                        </TabsItem>
-                        <TabsItem onClick={this.handleBalanceTabClick} selected={tab === 'balance'}>
-                            Долги
-                        </TabsItem>
-                    </Tabs>
-                </Group>
-                {tab === 'purchases' && (
-                    <PullToRefresh onRefresh={this.handleRefreshEvent} isFetching={isFetching}>
+                            <div
+                                className={cx(styles.info, styles.inactive)}
+                                onClick={this.handleMembersClick}
+                            >
+                                <Text>
+                                    {users.length}{' '}
+                                    {plural(users.length, ['участник', 'участника', 'участников'])}
+                                </Text>
+                                <UsersStack
+                                    style={{ padding: '0 0 0 6px' }}
+                                    size="s"
+                                    photos={users.map((userId) => user[userId]?.photo_100)}
+                                />
+                            </div>
+                        </SimpleCell>
+                        <SimpleCell
+                            disabled
+                            before={
+                                <div className={styles.inactive}>
+                                    <Icon20CalendarOutline style={{ padding: '0 6px 0 0' }} />
+                                </div>
+                            }
+                        >
+                            <div className={styles.inactive}>
+                                <Text>
+                                    {format(new Date(startDate), 'd MMM HH:mm', { locale: ru })}
+                                    &nbsp;&mdash;&nbsp;
+                                    {format(new Date(endDate), 'd MMM HH:mm', { locale: ru })}
+                                </Text>
+                            </div>
+                        </SimpleCell>
+                    </Group>
+                    <Group>
+                        <Cell
+                            before={<Icon24Settings />}
+                            onClick={this.navigateToSettings}
+                            expandable
+                        >
+                            Настройки
+                        </Cell>
+                    </Group>
+                    <Group separator="hide">
+                        <Tabs>
+                            <TabsItem
+                                onClick={this.handlePurchasesTabClick}
+                                selected={tab === 'purchases'}
+                            >
+                                Покупки
+                            </TabsItem>
+                            <TabsItem
+                                onClick={this.handleBalanceTabClick}
+                                selected={tab === 'balance'}
+                            >
+                                Долги
+                            </TabsItem>
+                        </Tabs>
+                    </Group>
+                    {tab === 'purchases' && (
                         <Group>
                             <Div>
                                 <Button
@@ -241,20 +248,22 @@ export default class EventPure extends PureComponent {
                                 );
                             })}
                         </Group>
-                    </PullToRefresh>
-                )}
-                {tab === 'balance' && (
-                    <>
-                        <Div />
-                        <BalanceList />
-                        {!isEmpty(event.transfers) && (
-                            <Group header={<Header mode="secondary">Выполненные переводы</Header>}>
-                                <TransferList />
-                            </Group>
-                        )}
-                    </>
-                )}
-                <Footer />
+                    )}
+                    {tab === 'balance' && (
+                        <>
+                            <Div />
+                            <BalanceList />
+                            {!isEmpty(event.transfers) && (
+                                <Group
+                                    header={<Header mode="secondary">Выполненные переводы</Header>}
+                                >
+                                    <TransferList />
+                                </Group>
+                            )}
+                        </>
+                    )}
+                    <Footer />
+                </PullToRefresh>
             </Panel>
         );
     }

@@ -22,7 +22,7 @@
 }
 
 .createButton {
-    background: white;
+    background: var(--background_content);
     padding: 8px;
 }
 

@@ -32,3 +32,7 @@
 .negative {
     color: var(--dynamic_red);
 }
+
+.wrapper {
+    margin-bottom: 18px;
+}
