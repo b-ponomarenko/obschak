@@ -15,37 +15,42 @@ const UserRelation = ({ relation, type, onClick }) => {
     const handleClick = useCallback(() => onClick(relation), [relation]);
 
     return (
-        <CardGrid>
-            <Card mode="shadow" size="l" onClick={handleClick}>
-                <div className={styles.container}>
-                    <div className={styles.userContainer}>
-                        <SimpleCell
-                            before={<Avatar src={userFrom?.photo_100} size={40} />}
-                            after={
-                                <div className={styles.turnIcon}>
-                                    <TurnIcon />
-                                </div>
-                            }
-                            disabled
+        <div className={styles.wrapper}>
+            <CardGrid>
+                <Card mode="shadow" size="l" onClick={handleClick}>
+                    <div className={styles.container}>
+                        <div className={styles.userContainer}>
+                            <SimpleCell
+                                before={<Avatar src={userFrom?.photo_100} size={40} />}
+                                after={
+                                    <div className={styles.turnIcon}>
+                                        <TurnIcon />
+                                    </div>
+                                }
+                                disabled
+                            >
+                                {userFrom?.first_name} {userFrom?.last_name}
+                            </SimpleCell>
+                            <SimpleCell
+                                disabled
+                                before={<Avatar src={userTo?.photo_100} size={40} />}
+                            >
+                                {userTo?.first_name} {userTo?.last_name}
+                            </SimpleCell>
+                        </div>
+                        <Separator />
+                        <div
+                            className={cx(styles.money, {
+                                [styles.positive]: type === 'positive',
+                                [styles.negative]: type === 'negative',
+                            })}
                         >
-                            {userFrom?.first_name} {userFrom?.last_name}
-                        </SimpleCell>
-                        <SimpleCell disabled before={<Avatar src={userTo?.photo_100} size={40} />}>
-                            {userTo?.first_name} {userTo?.last_name}
-                        </SimpleCell>
+                            {value.toLocaleString('ru')} {currencies[currency]}
+                        </div>
                     </div>
-                    <Separator />
-                    <div
-                        className={cx(styles.money, {
-                            [styles.positive]: type === 'positive',
-                            [styles.negative]: type === 'negative',
-                        })}
-                    >
-                        {value.toLocaleString('ru')} {currencies[currency]}
-                    </div>
-                </div>
-            </Card>
-        </CardGrid>
+                </Card>
+            </CardGrid>
+        </div>
     );
 };
 

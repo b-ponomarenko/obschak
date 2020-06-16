@@ -32,7 +32,7 @@ const unionDebts = (debts) =>
                     from: userFrom,
                     to: userTo,
                     currency,
-                    value: (from > to ? value : -value) + currentValue,
+                    value: round((from > to ? value : -value) + currentValue),
                 },
             };
         }, {})

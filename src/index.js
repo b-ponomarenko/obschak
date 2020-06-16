@@ -28,6 +28,13 @@ import CancelTransferConfirmation from './views/Event/popupts/CancelTransferConf
 // Init VK  Mini App
 bridge.send('VKWebAppInit');
 
+// Подписываемся на изменение темы приложения
+bridge.subscribe((e) => {
+    if (e.detail.type === 'VKWebAppUpdateConfig') {
+        document.body.setAttribute('scheme', e.detail.data.scheme);
+    }
+});
+
 registerModal('ADD_FRIENDS_MODAL', AddFriendsModal);
 registerModal('USERS_MODAL', UsersModal);
 
