@@ -75,7 +75,7 @@ export default class EventPure extends PureComponent {
     handleMembersClick = () => {
         const { showEventMembers, event } = this.props;
 
-        showEventMembers({ title: 'Участники', users: event.users });
+        showEventMembers({ title: 'Участники', users: event.users, showCreator: true });
     };
 
     navigateToSettings = () => {

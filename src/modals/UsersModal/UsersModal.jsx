@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Icon28DoneOutline from '@vkontakte/icons/dist/28/done_outline';
+import Icon20UserOutline from '@vkontakte/icons/dist/20/user_outline';
 import pt from 'prop-types';
 import {
     ModalPage,
@@ -12,9 +13,10 @@ import {
 } from '@vkontakte/vkui';
 import { useDispatch, useSelector } from 'react-redux';
 import closeModal from '../../actions/closeModal';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 
 const UsersModal = ({ id, payload }) => {
-    const { title, users, onClose, selectable, value } = payload;
+    const { title, users, onClose, selectable, value, showCreator } = payload;
     const dispatch = useDispatch();
     const [selected, setSelected] = useState(selectable ? value : undefined);
     const user = useSelector(({ user }) => user);
@@ -22,6 +24,7 @@ const UsersModal = ({ id, payload }) => {
         onClose(selectable ? selected : undefined);
         dispatch(closeModal());
     }, [selected]);
+    const event = useCurrentEvent();
 
     return (
         <ModalPage
@@ -44,7 +47,14 @@ const UsersModal = ({ id, payload }) => {
                                 key={id}
                                 before={<Avatar size={40} src={currentUser?.photo_100} />}
                                 onClick={() => setSelected(id)}
-                                after={selectable && id === selected && <Icon28DoneOutline />}
+                                after={
+                                    selectable && id === selected ? (
+                                        <Icon28DoneOutline />
+                                    ) : (
+                                        showCreator &&
+                                        event.creatorId === id && <Icon20UserOutline />
+                                    )
+                                }
                             >
                                 {currentUser?.first_name} {currentUser?.last_name}
                             </SimpleCell>
