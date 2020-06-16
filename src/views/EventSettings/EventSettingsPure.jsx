@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import pt from 'prop-types';
-import Icon28MoreHorizontal from '@vkontakte/icons/dist/28/more_horizontal';
+import Icon20UserOutline from '@vkontakte/icons/dist/20/user_outline';
 import Icon28UserAddOutline from '@vkontakte/icons/dist/28/user_add_outline';
 import {
     Header,
@@ -10,13 +10,13 @@ import {
     Group,
     Cell,
     Avatar,
-    PanelHeaderButton,
     CellButton,
     Input,
     RichCell,
 } from '@vkontakte/vkui';
 import debounce from '@tinkoff/utils/function/debounce';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
+import styles from './EventSettingsPure.module.css';
 
 const initialState = ({ event }) => ({
     ...event,
@@ -207,6 +207,13 @@ export default class EventSettingsPure extends PureComponent {
                                 }
                                 before={<Avatar size={40} src={member?.photo_100} />}
                                 onRemove={() => this.handleRemove(userId)}
+                                asideContent={
+                                    userId === creatorId && (
+                                        <div className={styles.userIcon}>
+                                            <Icon20UserOutline />
+                                        </div>
+                                    )
+                                }
                             >
                                 {member?.first_name} {member?.last_name}
                             </Cell>
