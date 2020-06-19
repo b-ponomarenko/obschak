@@ -26,12 +26,12 @@ const BalanceActions = (props) => {
 
     return (
         <ActionSheet onClose={handleClose}>
-            {currentUser.id === from && (
-                <ActionSheetItem onClick={openVkPayFrom}>Отправить деньги</ActionSheetItem>
-            )}
             <ActionSheetItem onClick={openPaymentConfirmationPopout}>
                 Подтвердить оплату
             </ActionSheetItem>
+            {currentUser.id === from && (
+                <ActionSheetItem onClick={openVkPayFrom}>Отправить деньги</ActionSheetItem>
+            )}
             <ActionSheetItem autoclose mode="cancel">
                 Отменить
             </ActionSheetItem>

@@ -13,7 +13,6 @@ import BalanceActions from './views/Event/popupts/BalanceActions/BalanceActions'
 import { ScreenSpinner } from '@vkontakte/vkui';
 import UsersModal from './modals/UsersModal/UsersModal';
 import PaymentConfirmation from './views/Event/popupts/PaymentConfirmation/PaymentConfirmation';
-import PaymentRequest from './views/Event/popupts/PaymentRequest/PaymentRequest';
 import { configureRouter } from './core/router';
 import { vkInfoLoaded } from './reducers/vk';
 import { parse } from 'query-string';
@@ -24,6 +23,8 @@ import DeleteEventConfirmation from './views/EventSettings/popouts/DeleteEventCo
 import DeletePurchaseConfirmation from './views/CreatePurchase/popouts/DeletePurchaseConfirmation/DeletePurchaseConfirmation';
 import TransferActions from './views/Event/popupts/TransferActions/TransferActions';
 import CancelTransferConfirmation from './views/Event/popupts/CancelTransferConfirmation/CancelTransferConfirmation';
+import SuccessTransfer from './views/Event/modals/SuccessTransfer/SuccessTransfer';
+import NotificationCard from './modals/NotificationCard/NotificationCard';
 
 // Init VK  Mini App
 bridge.send('VKWebAppInit');
@@ -37,11 +38,12 @@ bridge.subscribe((e) => {
 
 registerModal('ADD_FRIENDS_MODAL', AddFriendsModal);
 registerModal('USERS_MODAL', UsersModal);
+registerModal('SUCCESS_TRANSFER', SuccessTransfer);
+registerModal('NOTIFICATION_CARD', NotificationCard);
 
 registerPopout('BALANCE_ACTIONS', BalanceActions);
 registerPopout('SCREEN_SPINNER', ScreenSpinner);
 registerPopout('PAYMENT_CONFIRMATION', PaymentConfirmation);
-registerPopout('PAYMENT_REQUEST', PaymentRequest);
 registerPopout('UPLOADED_AVATAR_ACTIONS', UploadedAvatarActions);
 registerPopout('NOTIFICATION_POPOUT', NotificationPopout);
 registerPopout('LEAVE_EVENT_CONFIRMATION', LeaveEventConfirmation);

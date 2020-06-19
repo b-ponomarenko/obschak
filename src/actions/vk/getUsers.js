@@ -8,7 +8,7 @@ export default ({ users }) => (dispatch) =>
             params: {
                 access_token: process.env.REACT_APP_SERVICE_KEY,
                 user_ids: users.join(','),
-                fields: 'photo_100,',
+                fields: 'photo_100,screen_name,sex',
                 v: '5.100',
             },
         })

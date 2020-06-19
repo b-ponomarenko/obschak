@@ -9,6 +9,9 @@ import fetchEventWithUsers from '../../../../actions/fetchEventWithUsers';
 import createTransfer from '../../../../actions/events/createTransfer';
 import useCurrentEvent from '../../../../hooks/useCurrentEvent';
 import openPopout from '../../../../actions/openPopout';
+import sendNotification from '../../../../actions/vk/sendNotification';
+import petrovich from 'petrovich';
+import openModal from '../../../../actions/openModal';
 
 const PaymentConfirmation = ({ payload }) => {
     const dispatch = useDispatch();
@@ -18,13 +21,48 @@ const PaymentConfirmation = ({ payload }) => {
     const user = useSelector(({ user }) => user);
     const userFrom = user[from];
     const userTo = user[to];
+    const currentUser = useCurrentUser();
     const handleCreateTransfer = useCallback(() => {
         dispatch(openPopout({ name: 'SCREEN_SPINNER' }));
         dispatch(createTransfer(event.id, payload))
+            .then(() => {
+                if (userTo.id === currentUser.id) {
+                    return;
+                }
+
+                dispatch(
+                    sendNotification({
+                        userId: userTo.id,
+                        message: `${userFrom.first_name} ${userFrom.last_name} отправил${
+                            userFrom.sex === 1 ? 'а' : ''
+                        } Вам ${value.toLocaleString('ru')} ${
+                            currencies[currency]
+                        }. Проверьте баланс своего счета`,
+                    })
+                );
+            })
+            .then(() => {
+                if (userTo.id === currentUser.id) {
+                    return;
+                }
+
+                return dispatch(
+                    openModal({
+                        name: 'SUCCESS_TRANSFER',
+                        payload: { user: userTo },
+                    })
+                );
+            })
             .then(() => dispatch(fetchEventWithUsers(event.id)))
             .finally(() => dispatch(closePopout()));
-    }, [event, payload]);
-    const currentUser = useCurrentUser();
+    }, [event, payload, currentUser]);
+    const personTo = petrovich(
+        {
+            first: userTo.first_name,
+            gender: userTo.sex === 1 ? 'female' : 'male',
+        },
+        'dative'
+    ).first;
 
     return (
         <Alert
@@ -45,8 +83,9 @@ const PaymentConfirmation = ({ payload }) => {
             <h2>Подтвердите оплату</h2>
             <p>
                 Вы подтверждаете, что {userFrom.id === currentUser.id ? 'Вы' : userFrom.first_name}{' '}
-                отправил {userTo.id === currentUser.id ? 'Вам' : userTo?.first_name}{' '}
-                {value.toLocaleString('ru')} {currencies[currency]}?
+                отправил{userFrom.id === currentUser.id ? 'и' : userFrom.sex === 1 ? 'а' : ''}{' '}
+                {userTo.id === currentUser.id ? 'Вам' : personTo} {value.toLocaleString('ru')}{' '}
+                {currencies[currency]}?
             </p>
         </Alert>
     );

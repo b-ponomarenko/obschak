@@ -11,6 +11,8 @@ import EventSettings from './views/EventSettings/EventSettings';
 import CreatePurchase from './views/CreatePurchase/CreatePurchase';
 import getUserInfo from './actions/vk/getUserInfo';
 import Purchase from './views/Purchase/Purchase';
+import Notifications from './views/Notifications/Notifications';
+import openNotificationModal from './actions/openNotificationModal';
 
 const App = () => {
     const { name } = useSelector(({ router }) => router.route);
@@ -22,6 +24,7 @@ const App = () => {
 
     useEffect(() => {
         fetchUserInfo();
+        dispatch(openNotificationModal());
     }, []);
 
     return (
@@ -36,6 +39,7 @@ const App = () => {
             <EventSettings id="event.settings" />
             <CreatePurchase id="event.create-purchase" />
             <Purchase id="event.purchase" />
+            <Notifications id="event.notifications" />
         </View>
     );
 };
