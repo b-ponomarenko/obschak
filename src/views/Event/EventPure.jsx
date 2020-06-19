@@ -3,7 +3,9 @@ import cx from 'classnames';
 import Icon24Add from '@vkontakte/icons/dist/24/add';
 import Icon20FollowersOutline from '@vkontakte/icons/dist/20/followers_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
-import Icon24Settings from '@vkontakte/icons/dist/24/settings';
+import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
+import Icon24MarketOutline from '@vkontakte/icons/dist/24/market_outline';
+import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
 import {
     Panel,
     PanelHeader,
@@ -17,10 +19,11 @@ import {
     Div,
     Text,
     SimpleCell,
-    Cell,
     PullToRefresh,
     Header,
     Footer,
+    Subhead,
+    TabbarItem,
 } from '@vkontakte/vkui';
 import styles from './Event.module.css';
 import { plural } from '../../plural';
@@ -82,6 +85,12 @@ export default class EventPure extends PureComponent {
         const { eventId, navigateTo } = this.props;
 
         navigateTo('event.settings', { eventId });
+    };
+
+    navigateToNotifications = () => {
+        const { eventId, navigateTo } = this.props;
+
+        navigateTo('event.notifications', { eventId });
     };
 
     navigateToCreatePurchase = () => {
@@ -187,16 +196,32 @@ export default class EventPure extends PureComponent {
                         </SimpleCell>
                     </Group>
                     <Group>
-                        <Cell
-                            before={<Icon24Settings />}
-                            onClick={this.navigateToSettings}
-                            expandable
-                        >
-                            Настройки
-                        </Cell>
+                        <div className={styles.menu}>
+                            <TabbarItem>
+                                <div className={styles.menuItem} onClick={this.navigateToSettings}>
+                                    <Icon28SettingsOutline />
+                                    <Subhead weight="regular">Настройки</Subhead>
+                                </div>
+                            </TabbarItem>
+                            <TabbarItem>
+                                <div
+                                    className={styles.menuItem}
+                                    onClick={this.navigateToNotifications}
+                                >
+                                    <Icon28Notifications />
+                                    <Subhead weight="regular">Уведомления</Subhead>
+                                </div>
+                            </TabbarItem>
+                            <TabbarItem>
+                                <div className={styles.menuItem}>
+                                    <Icon24MarketOutline />
+                                    <Subhead weight="regular">Список</Subhead>
+                                </div>
+                            </TabbarItem>
+                        </div>
                     </Group>
                     <Group separator="hide">
-                        <Tabs>
+                        <Tabs mode="segmented">
                             <TabsItem
                                 onClick={this.handlePurchasesTabClick}
                                 selected={tab === 'purchases'}

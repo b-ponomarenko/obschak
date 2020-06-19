@@ -6,6 +6,7 @@ import event from './event';
 import user from './user';
 import purchase from './purchase';
 import vk from './vk';
+import notifications from './notifications';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { router5Middleware, router5Reducer } from 'redux-router5';
@@ -21,6 +22,7 @@ export default (router) =>
             user,
             vk,
             purchase,
+            notifications,
         }),
         composeWithDevTools(applyMiddleware(thunk, router5Middleware(router)))
     );

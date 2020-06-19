@@ -14,3 +14,15 @@
 .cell {
     margin-left: -10px;
 }
+
+.menu {
+    display: flex;
+}
+
+.menuItem {
+    color: var(--header_tint);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
