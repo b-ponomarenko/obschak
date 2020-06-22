@@ -12,9 +12,9 @@ import {
     ModalPageHeader,
     PanelHeaderButton,
     Search,
-    HorizontalScroll,
 } from '@vkontakte/vkui';
 import isEmpty from '@tinkoff/utils/is/empty';
+import HorizontalScroll from '../../components/HorizontallScroll/HorizontallScroll';
 
 export default class AddFriendsModalPure extends PureComponent {
     state = {
@@ -82,7 +82,7 @@ export default class AddFriendsModalPure extends PureComponent {
                 <Search onChange={this.handleSearch} />
                 {!isEmpty(selectedFriends) && (
                     <HorizontalScroll>
-                        <Div style={{ display: 'flex' }}>
+                        <Div>
                             {selectedFriends.map((friend) => {
                                 const { id, photo_100, first_name } = friend;
 
