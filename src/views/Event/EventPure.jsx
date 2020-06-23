@@ -6,7 +6,6 @@ import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
 import Icon24MarketOutline from '@vkontakte/icons/dist/24/market_outline';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
 import {
-    Panel,
     PanelHeader,
     PanelHeaderBack,
     RichCell,
@@ -33,6 +32,7 @@ import BalanceList from './components/BalanceList/BalanceList';
 import TransferList from './components/TransferList/TransferList';
 import isEmpty from '@tinkoff/utils/is/empty';
 import PurchaseList from './components/PurchaseList/PurchaseList';
+import Panel from '../../components/Panel/Panel';
 
 export default class EventPure extends PureComponent {
     state = {
