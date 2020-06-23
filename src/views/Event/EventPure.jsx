@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import cx from 'classnames';
-import Icon24Add from '@vkontakte/icons/dist/24/add';
 import Icon20FollowersOutline from '@vkontakte/icons/dist/20/followers_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
@@ -9,7 +8,6 @@ import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
 import {
     Panel,
     PanelHeader,
-    Button,
     PanelHeaderBack,
     RichCell,
     Tabs,
@@ -32,9 +30,9 @@ import ru from 'date-fns/locale/ru';
 import pt from 'prop-types';
 import Avatar from '../../components/Avatar/Avatar';
 import BalanceList from './components/BalanceList/BalanceList';
-import { currencies } from '../../conts/currencies';
 import TransferList from './components/TransferList/TransferList';
 import isEmpty from '@tinkoff/utils/is/empty';
+import PurchaseList from './components/PurchaseList/PurchaseList';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -91,18 +89,6 @@ export default class EventPure extends PureComponent {
         const { eventId, navigateTo } = this.props;
 
         navigateTo('event.notifications', { eventId });
-    };
-
-    navigateToCreatePurchase = () => {
-        const { eventId, navigateTo } = this.props;
-
-        navigateTo('event.create-purchase', { eventId });
-    };
-
-    navigateToPurchase = (purchaseId) => () => {
-        const { eventId, navigateTo } = this.props;
-
-        navigateTo('event.purchase', { eventId, purchaseId });
     };
 
     navigateBack = () => {
@@ -221,59 +207,24 @@ export default class EventPure extends PureComponent {
                         </div>
                     </Group>
                     <Group separator="hide">
-                        <Tabs mode="segmented">
-                            <TabsItem
-                                onClick={this.handlePurchasesTabClick}
-                                selected={tab === 'purchases'}
-                            >
-                                Покупки
-                            </TabsItem>
-                            <TabsItem
-                                onClick={this.handleBalanceTabClick}
-                                selected={tab === 'balance'}
-                            >
-                                Долги
-                            </TabsItem>
-                        </Tabs>
-                    </Group>
-                    {tab === 'purchases' && (
-                        <Group>
-                            <Div>
-                                <Button
-                                    before={<Icon24Add />}
-                                    size="xl"
-                                    mode="secondary"
-                                    onClick={this.navigateToCreatePurchase}
+                        {!isEmpty(purchases) && (
+                            <Tabs mode="segmented">
+                                <TabsItem
+                                    onClick={this.handlePurchasesTabClick}
+                                    selected={tab === 'purchases'}
                                 >
-                                    Добавить покупку
-                                </Button>
-                            </Div>
-                            {purchases.map(({ id, name, creatorId, value, currency, date }) => {
-                                const currentUser = user[creatorId];
-
-                                return (
-                                    <RichCell
-                                        key={id}
-                                        before={
-                                            <div className={styles.avatar}>
-                                                <Avatar size={48} src={currentUser?.photo_100} />
-                                            </div>
-                                        }
-                                        text={name}
-                                        caption={format(new Date(date), "d MMM' в 'HH:mm", {
-                                            locale: ru,
-                                        })}
-                                        after={`${value.toLocaleString('ru')} ${
-                                            currencies[currency]
-                                        }`}
-                                        onClick={this.navigateToPurchase(id)}
-                                    >
-                                        {currentUser?.first_name} {currentUser?.last_name}
-                                    </RichCell>
-                                );
-                            })}
-                        </Group>
-                    )}
+                                    Покупки
+                                </TabsItem>
+                                <TabsItem
+                                    onClick={this.handleBalanceTabClick}
+                                    selected={tab === 'balance'}
+                                >
+                                    Долги
+                                </TabsItem>
+                            </Tabs>
+                        )}
+                    </Group>
+                    {tab === 'purchases' && <PurchaseList />}
                     {tab === 'balance' && (
                         <>
                             <Div />
