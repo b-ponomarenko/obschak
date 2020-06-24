@@ -5,6 +5,7 @@ import events from './events';
 import event from './event';
 import user from './user';
 import purchase from './purchase';
+import snackbar from './snackbar';
 import vk from './vk';
 import notifications from './notifications';
 import thunk from 'redux-thunk';
@@ -23,6 +24,7 @@ export default (router) =>
             vk,
             purchase,
             notifications,
+            snackbar,
         }),
         composeWithDevTools(applyMiddleware(thunk, router5Middleware(router)))
     );
