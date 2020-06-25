@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import pt from 'prop-types';
-import Icon20UserOutline from '@vkontakte/icons/dist/20/user_outline';
+import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 import Icon28UserAddOutline from '@vkontakte/icons/dist/28/user_add_outline';
 import {
     Header,
@@ -219,7 +219,7 @@ export default class EventSettingsPure extends PureComponent {
                                 asideContent={
                                     userId === creatorId && (
                                         <div className={styles.userIcon}>
-                                            <Icon20UserOutline />
+                                            <Icon24Favorite width={16} height={16} />
                                         </div>
                                     )
                                 }
