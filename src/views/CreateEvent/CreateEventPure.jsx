@@ -18,8 +18,9 @@ import {
     Button,
     SimpleCell,
     CellButton,
+    Switch,
 } from '@vkontakte/vkui';
-import { isBefore } from 'date-fns';
+import { isBefore, addDays } from 'date-fns';
 import styles from './CreateEvent.module.css';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import debounce from '@tinkoff/utils/function/debounce';
@@ -38,6 +39,8 @@ const getDateTimeString = (dateTime) => {
 export default class CreateEventPure extends PureComponent {
     state = {
         friends: [],
+        startDate: addDays(new Date(), 2),
+        endDate: addDays(new Date(), 5),
     };
 
     static propTypes = {
@@ -152,6 +155,8 @@ export default class CreateEventPure extends PureComponent {
         }).then(({ event }) => navigateToEvent(event.id));
     };
 
+    handleDateSwitchClick = () => this.setState({ showDates: !this.state.showDates });
+
     render() {
         const { navigateBack } = this.props;
         const {
@@ -165,6 +170,7 @@ export default class CreateEventPure extends PureComponent {
             endDateError,
             startDateErrorMessage,
             endDateErrorMessage,
+            showDates,
         } = this.state;
         const now = new Date();
 
@@ -194,33 +200,43 @@ export default class CreateEventPure extends PureComponent {
                             bottom={titleError && 'Введите название события'}
                         />
                     </RichCell>
-                    <FormLayout>
-                        <FormLayoutGroup
-                            top="Время начала"
-                            status={startDateError && 'error'}
-                            bottom={startDateErrorMessage}
-                        >
-                            <Input
-                                type="datetime-local"
-                                min={getDateTimeString(now)}
-                                max={getDateTimeString(endDate)}
-                                onChange={this.handleStartDateChange}
+                    <SimpleCell
+                        disabled
+                        after={<Switch checked={showDates} onClick={this.handleDateSwitchClick} />}
+                    >
+                        Указать даты
+                    </SimpleCell>
+                    {showDates && (
+                        <FormLayout>
+                            <FormLayoutGroup
+                                top="Время начала"
                                 status={startDateError && 'error'}
-                            />
-                        </FormLayoutGroup>
-                        <FormLayoutGroup
-                            top="Время окончания"
-                            status={endDateError && 'error'}
-                            bottom={endDateErrorMessage}
-                        >
-                            <Input
-                                type="datetime-local"
-                                min={getDateTimeString(startDate || now)}
-                                onChange={this.handleEndDateChange}
+                                bottom={startDateErrorMessage}
+                            >
+                                <Input
+                                    type="datetime-local"
+                                    min={getDateTimeString(now)}
+                                    max={getDateTimeString(endDate)}
+                                    onChange={this.handleStartDateChange}
+                                    status={startDateError && 'error'}
+                                    value={getDateTimeString(startDate)}
+                                />
+                            </FormLayoutGroup>
+                            <FormLayoutGroup
+                                top="Время окончания"
                                 status={endDateError && 'error'}
-                            />
-                        </FormLayoutGroup>
-                    </FormLayout>
+                                bottom={endDateErrorMessage}
+                            >
+                                <Input
+                                    type="datetime-local"
+                                    min={getDateTimeString(startDate || now)}
+                                    onChange={this.handleEndDateChange}
+                                    status={endDateError && 'error'}
+                                    value={getDateTimeString(endDate)}
+                                />
+                            </FormLayoutGroup>
+                        </FormLayout>
+                    )}
                     <Group header={<Header mode="secondary">Участники</Header>}>
                         <CellButton
                             onClick={this.handleOpenModal}
