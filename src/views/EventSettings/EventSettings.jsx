@@ -13,6 +13,7 @@ import updateEvent from '../../actions/events/updateEvent';
 import closePopout from '../../actions/closePopout';
 import events from '../../actions/events/events';
 import deleteEvent from '../../actions/events/deleteEvent';
+import { hideSpinner, showSpinner } from '../../actions/spinner';
 
 const mapState = ({ event, user, vk }, { route }) => {
     const { params } = route;
@@ -36,6 +37,8 @@ const mapDispatch = (dispatch) => ({
     openPopout: ({ name, payload }) => dispatch(openPopout({ name, payload })),
     closePopout: () => dispatch(closePopout()),
     deleteEvent: (eventId) => dispatch(deleteEvent(eventId)),
+    showSpinner: () => dispatch(showSpinner()),
+    hideSpinner: () => dispatch(hideSpinner()),
 });
 
 export default compose(withCurrentRoute, connect(mapState, mapDispatch))(EventSettingsPure);

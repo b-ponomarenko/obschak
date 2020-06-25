@@ -11,6 +11,8 @@ export default class CreatePurchasePure extends PureComponent {
         fetchEvent: pt.func,
         createPurchase: pt.func,
         event: pt.object,
+        showSpinner: pt.func,
+        hideSpinner: pt.func,
     };
 
     state = {
@@ -33,17 +35,20 @@ export default class CreatePurchasePure extends PureComponent {
     };
 
     handleSubmit = (purchase) => {
-        const { createPurchase, route } = this.props;
+        const { createPurchase, route, showSpinner, hideSpinner } = this.props;
         const { eventId } = route.params;
         const { name, value, currency, creatorId, users } = purchase;
 
+        showSpinner();
         return createPurchase(eventId, {
             creatorId,
             name,
             value,
             currency,
             participants: users,
-        }).then(this.navigateBack);
+        })
+            .then(this.navigateBack)
+            .finally(hideSpinner);
     };
 
     render() {

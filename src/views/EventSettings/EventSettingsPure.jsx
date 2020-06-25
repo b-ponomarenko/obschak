@@ -40,6 +40,8 @@ export default class EventSettingsPure extends PureComponent {
         updateEvent: pt.func,
         openPopout: pt.func,
         closePopout: pt.func,
+        showSpinner: pt.func,
+        hideSpinner: pt.func,
     };
 
     componentDidMount() {
@@ -117,42 +119,49 @@ export default class EventSettingsPure extends PureComponent {
         const {
             updateEvent,
             fetchEvents,
-            openPopout,
-            closePopout,
             currentUser,
             event,
             navigateTo,
+            showSpinner,
+            hideSpinner,
         } = this.props;
 
-        openPopout({ name: 'SCREEN_SPINNER' });
+        showSpinner();
         updateEvent({
             ...event,
             users: event.users.filter((userId) => userId !== currentUser.id),
         })
             .then(fetchEvents)
             .then(() => navigateTo('events'))
-            .finally(closePopout);
+            .finally(hideSpinner);
     };
 
     handleDeleteEvent = () => {
-        const { deleteEvent, event, closePopout, fetchEvents, navigateTo, openPopout } = this.props;
+        const {
+            deleteEvent,
+            event,
+            fetchEvents,
+            navigateTo,
+            showSpinner,
+            hideSpinner,
+        } = this.props;
 
-        openPopout({ name: 'SCREEN_SPINNER' });
+        showSpinner();
         return deleteEvent(event.id)
             .then(fetchEvents)
             .then(() => navigateTo('events'))
-            .finally(closePopout);
+            .finally(hideSpinner);
     };
 
     handleSaveEvent = () => {
-        const { updateEvent, event, openPopout, closePopout } = this.props;
+        const { updateEvent, event, showSpinner, hideSpinner } = this.props;
         const { users, photo, title } = this.state;
 
         if (!title) {
             return this.setState({ titleError: true });
         }
 
-        openPopout({ name: 'SCREEN_SPINNER' });
+        showSpinner();
         return updateEvent({
             ...event,
             users,
@@ -160,7 +169,7 @@ export default class EventSettingsPure extends PureComponent {
             title,
         })
             .then(this.navigateBack)
-            .finally(closePopout);
+            .finally(hideSpinner);
     };
 
     render() {

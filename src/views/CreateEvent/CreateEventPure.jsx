@@ -52,6 +52,8 @@ export default class CreateEventPure extends PureComponent {
         navigateToEvent: pt.func,
         uploadImage: pt.func,
         user: pt.object,
+        showSpinner: pt.func,
+        hideSpinner: pt.func,
     };
 
     fetchFriends = (search) => {
@@ -85,7 +87,14 @@ export default class CreateEventPure extends PureComponent {
     handleImageChange = (image) => this.setState({ image });
 
     handleCreateEvent = () => {
-        const { openPopout, createEvent, user, navigateToEvent } = this.props;
+        const {
+            openPopout,
+            createEvent,
+            user,
+            navigateToEvent,
+            showSpinner,
+            hideSpinner,
+        } = this.props;
         const { friends, startDate, endDate, title, image } = this.state;
         const now = new Date();
         let isValid = true;
@@ -145,6 +154,7 @@ export default class CreateEventPure extends PureComponent {
 
         const friendsIds = friends.map(({ id }) => id);
 
+        showSpinner();
         createEvent({
             title,
             startDate,
@@ -152,7 +162,9 @@ export default class CreateEventPure extends PureComponent {
             users: friendsIds,
             creatorId: user.id,
             photo: image,
-        }).then(({ event }) => navigateToEvent(event.id));
+        })
+            .then(({ event }) => navigateToEvent(event.id))
+            .finally(hideSpinner);
     };
 
     handleDateSwitchClick = () => this.setState({ showDates: !this.state.showDates });

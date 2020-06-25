@@ -3,6 +3,7 @@ import pt from 'prop-types';
 import { Panel, PanelHeader, PanelHeaderBack, Button, Div } from '@vkontakte/vkui';
 import PurchaseForm from '../../components/PurchaseForm/PurchaseForm';
 import Icon28DeleteOutline from '@vkontakte/icons/dist/28/delete_outline';
+import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
 
 export default class PurchasePure extends PureComponent {
     state = {};
@@ -18,17 +19,15 @@ export default class PurchasePure extends PureComponent {
         deletePurchase: pt.func,
         openPopout: pt.func,
         closePopout: pt.func,
+        showSpinner: pt.func,
+        hideSpinner: pt.func,
     };
 
     componentDidMount() {
-        const { fetchPurchase, route, purchase, openPopout, closePopout } = this.props;
+        const { fetchPurchase, route } = this.props;
         const { purchaseId } = route.params;
 
-        if (!purchase) {
-            openPopout({ name: 'SCREEN_SPINNER' });
-        }
-
-        return fetchPurchase(purchaseId).finally(closePopout);
+        return fetchPurchase(purchaseId);
     }
 
     navigateBack = () => {
@@ -39,9 +38,10 @@ export default class PurchasePure extends PureComponent {
     };
 
     handleSubmit = (values) => {
-        const { updatePurchase, purchase } = this.props;
+        const { updatePurchase, purchase, showSpinner, hideSpinner } = this.props;
         const { name, value, currency, creatorId, users } = values;
 
+        showSpinner();
         return updatePurchase({
             id: purchase.id,
             name,
@@ -49,7 +49,9 @@ export default class PurchasePure extends PureComponent {
             currency,
             creatorId,
             participants: users,
-        }).then(this.navigateBack);
+        })
+            .then(this.navigateBack)
+            .finally(hideSpinner);
     };
 
     handleDeleteClick = () => {
@@ -62,51 +64,50 @@ export default class PurchasePure extends PureComponent {
     };
 
     handleDelete = () => {
-        const { deletePurchase, purchase } = this.props;
+        const { deletePurchase, purchase, showSpinner, hideSpinner } = this.props;
 
-        return deletePurchase(purchase.id).then(this.navigateBack);
+        showSpinner();
+        return deletePurchase(purchase.id).then(this.navigateBack).finally(hideSpinner);
     };
 
     render() {
         const { purchase, event } = this.props;
-
-        if (!purchase) {
-            return (
-                <Panel id="event.purchase">
-                    <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
-                        Покупка
-                    </PanelHeader>
-                </Panel>
-            );
-        }
-
-        const { name, value, currency, participants, creatorId } = purchase;
 
         return (
             <Panel id="event.purchase">
                 <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
                     Покупка
                 </PanelHeader>
-                <PurchaseForm
-                    creatorId={creatorId}
-                    name={name}
-                    value={value}
-                    currency={currency}
-                    users={event.users}
-                    selectedUsers={participants}
-                    submitText="Сохранить"
-                    onSubmit={this.handleSubmit}
-                />
-                <Div>
-                    <Button
-                        size="xl"
-                        mode="destructive"
-                        before={<Icon28DeleteOutline />}
-                        onClick={this.handleDeleteClick}
-                    >
-                        Удалить
-                    </Button>
-                </Div>
+                <DelayedLoader loading={!purchase}>
+                    {() => {
+                        const { name, value, currency, participants, creatorId } = purchase;
+
+                        return (
+                            <>
+                                <PurchaseForm
+                                    creatorId={creatorId}
+                                    name={name}
+                                    value={value}
+                                    currency={currency}
+                                    users={event.users}
+                                    selectedUsers={participants}
+                                    submitText="Сохранить"
+                                    onSubmit={this.handleSubmit}
+                                />
+                                <Div>
+                                    <Button
+                                        size="xl"
+                                        mode="destructive"
+                                        before={<Icon28DeleteOutline />}
+                                        onClick={this.handleDeleteClick}
+                                    >
+                                        Удалить
+                                    </Button>
+                                </Div>
+                            </>
+                        );
+                    }}
+                </DelayedLoader>
             </Panel>
         );
     }

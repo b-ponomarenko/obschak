@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import pt from 'prop-types';
 import Icon56MoneyTransferOutline from '@vkontakte/icons/dist/56/money_transfer_outline';
 import { ModalCard } from '@vkontakte/vkui';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import closeModal from '../../../../actions/closeModal';
 
 const SuccessTransfer = ({ payload }) => {
