@@ -1,11 +1,15 @@
 .userIcon {
     border-radius: 50%;
     overflow: hidden;
-    background: var(--header_tint);
-    color: var(--white);
     width: 20px;
     height: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: var(--header_tint);
+}
+
+.icon {
+    color: var(--white) !important;
+    padding: 0 !important;
 }

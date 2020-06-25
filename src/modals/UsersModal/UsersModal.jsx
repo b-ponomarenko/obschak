@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Icon28DoneOutline from '@vkontakte/icons/dist/28/done_outline';
-import Icon20UserOutline from '@vkontakte/icons/dist/20/user_outline';
+import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 import pt from 'prop-types';
 import {
     ModalPage,
@@ -14,6 +14,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import closeModal from '../../actions/closeModal';
 import useCurrentEvent from '../../hooks/useCurrentEvent';
+import styles from './UsersModal.module.css';
 
 const UsersModal = ({ id, payload }) => {
     const { title, users, onClose, selectable, value, showCreator } = payload;
@@ -52,7 +53,15 @@ const UsersModal = ({ id, payload }) => {
                                         <Icon28DoneOutline />
                                     ) : (
                                         showCreator &&
-                                        event.creatorId === id && <Icon20UserOutline />
+                                        event.creatorId === id && (
+                                            <div className={styles.userIcon}>
+                                                <Icon24Favorite
+                                                    width={16}
+                                                    height={16}
+                                                    className={styles.icon}
+                                                />
+                                            </div>
+                                        )
                                     )
                                 }
                             >
