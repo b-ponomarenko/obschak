@@ -8,6 +8,7 @@ import closePopout from '../../actions/closePopout';
 import navigateTo from '../../actions/navigateTo';
 import deletePurchase from '../../actions/events/deletePurchase';
 import updatePurchase from '../../actions/events/updatePurchase';
+import { hideSpinner, showSpinner } from '../../actions/spinner';
 
 const mapState = ({ purchase, event }, { route }) => {
     const { purchaseId, eventId } = route.params;
@@ -25,6 +26,8 @@ const mapDispatch = (dispatch) => ({
     openPopout: ({ name, payload }) => dispatch(openPopout({ name, payload })),
     closePopout: () => dispatch(closePopout()),
     navigateTo: (routeName, routeParams) => dispatch(navigateTo(routeName, routeParams)),
+    showSpinner: () => dispatch(showSpinner()),
+    hideSpinner: () => dispatch(hideSpinner()),
 });
 
 export default compose(withCurrentRoute, connect(mapState, mapDispatch))(PurchasePure);

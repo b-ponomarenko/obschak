@@ -11,6 +11,7 @@ import createTransfer from '../../../../actions/events/createTransfer';
 import openModal from '../../../../actions/openModal';
 import fetchEventWithUsers from '../../../../actions/fetchEventWithUsers';
 import openSnackbar from '../../../../actions/openSnackbar';
+import { hideSpinner, showSpinner } from '../../../../actions/spinner';
 
 const BalanceActions = (props) => {
     const { payload } = props;
@@ -40,7 +41,8 @@ const BalanceActions = (props) => {
                     return;
                 }
 
-                dispatch(createTransfer(event.id, payload))
+                dispatch(showSpinner());
+                return dispatch(createTransfer(event.id, payload))
                     .then(() =>
                         dispatch(
                             openModal({
@@ -49,7 +51,8 @@ const BalanceActions = (props) => {
                             })
                         )
                     )
-                    .then(() => dispatch(fetchEventWithUsers(event.id)));
+                    .then(() => dispatch(fetchEventWithUsers(event.id)))
+                    .finally(() => dispatch(hideSpinner()));
             })
             .catch(() =>
                 dispatch(

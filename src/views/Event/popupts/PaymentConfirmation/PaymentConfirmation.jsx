@@ -8,10 +8,10 @@ import { currencies } from '../../../../conts/currencies';
 import fetchEventWithUsers from '../../../../actions/fetchEventWithUsers';
 import createTransfer from '../../../../actions/events/createTransfer';
 import useCurrentEvent from '../../../../hooks/useCurrentEvent';
-import openPopout from '../../../../actions/openPopout';
 import sendNotification from '../../../../actions/vk/sendNotification';
 import petrovich from 'petrovich';
 import openModal from '../../../../actions/openModal';
+import { hideSpinner, showSpinner } from '../../../../actions/spinner';
 
 const PaymentConfirmation = ({ payload }) => {
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const PaymentConfirmation = ({ payload }) => {
     const userTo = user[to];
     const currentUser = useCurrentUser();
     const handleCreateTransfer = useCallback(() => {
-        dispatch(openPopout({ name: 'SCREEN_SPINNER' }));
+        dispatch(showSpinner());
         dispatch(createTransfer(event.id, payload))
             .then(() => {
                 if (userTo.id === currentUser.id) {
@@ -54,7 +54,7 @@ const PaymentConfirmation = ({ payload }) => {
                 );
             })
             .then(() => dispatch(fetchEventWithUsers(event.id)))
-            .finally(() => dispatch(closePopout()));
+            .finally(() => dispatch(hideSpinner()));
     }, [event, payload, currentUser]);
     const personTo = petrovich(
         {

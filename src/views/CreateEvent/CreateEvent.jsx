@@ -7,6 +7,7 @@ import openPopout from '../../actions/openPopout';
 import createEvent from '../../actions/events/createEvent';
 import currentUser from '../../selectors/currentUser';
 import uploadImage from '../../actions/uploadImage';
+import { hideSpinner, showSpinner } from '../../actions/spinner';
 
 const mapState = ({ user, vk }) => {
     return {
@@ -22,6 +23,8 @@ const mapContext = (dispatch) => ({
     navigateToEvent: (eventId) => dispatch(navigateTo('event', { eventId })),
     createEvent: (payload) => dispatch(createEvent(payload)),
     uploadImage: (image) => dispatch(uploadImage(image)),
+    showSpinner: () => dispatch(showSpinner()),
+    hideSpinner: () => dispatch(hideSpinner()),
 });
 
 export default connect(mapState, mapContext)(CreateEventPure);

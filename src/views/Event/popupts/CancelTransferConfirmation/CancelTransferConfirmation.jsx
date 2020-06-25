@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import deleteTransfer from '../../../../actions/events/deleteTransfer';
 import useCurrentEvent from '../../../../hooks/useCurrentEvent';
 import eventById from '../../../../actions/events/eventById';
-import openPopout from '../../../../actions/openPopout';
+import { hideSpinner, showSpinner } from '../../../../actions/spinner';
 
 const CancelTransferConfirmation = ({ payload }) => {
     const dispatch = useDispatch();
@@ -14,10 +14,10 @@ const CancelTransferConfirmation = ({ payload }) => {
     const handleClose = useCallback(() => dispatch(closePopout()), []);
     const event = useCurrentEvent();
     const handleDeleteTransfer = useCallback(() => {
-        dispatch(openPopout({ name: 'SCREEN_SPINNER' }));
+        dispatch(showSpinner());
         return dispatch(deleteTransfer(id))
             .then(() => dispatch(eventById(event.id)))
-            .finally(() => dispatch(closePopout()));
+            .finally(() => dispatch(hideSpinner()));
     }, [id, event]);
 
     return (

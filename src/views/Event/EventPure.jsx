@@ -33,6 +33,7 @@ import TransferList from './components/TransferList/TransferList';
 import isEmpty from '@tinkoff/utils/is/empty';
 import PurchaseList from './components/PurchaseList/PurchaseList';
 import Panel from '../../components/Panel/Panel';
+import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -53,8 +54,6 @@ export default class EventPure extends PureComponent {
         }),
         navigateTo: pt.func,
         showEventMembers: pt.func,
-        showLoader: pt.func,
-        closePopout: pt.func,
         fetchEvent: pt.func,
         eventId: pt.string,
         route: pt.object,
@@ -62,13 +61,9 @@ export default class EventPure extends PureComponent {
     };
 
     componentDidMount() {
-        const { fetchEvent, event, eventId, closePopout, showLoader } = this.props;
+        const { fetchEvent, eventId } = this.props;
 
-        if (!event) {
-            showLoader();
-        }
-
-        fetchEvent(eventId).finally(closePopout);
+        fetchEvent(eventId);
     }
 
     handlePurchasesTabClick = () => this.setState({ tab: 'purchases' });
@@ -108,138 +103,158 @@ export default class EventPure extends PureComponent {
         const { event, user } = this.props;
         const { isFetching } = this.state;
 
-        if (!event) {
-            return (
-                <Panel id="event">
-                    <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
-                        Событие
-                    </PanelHeader>
-                </Panel>
-            );
-        }
-
-        const { title, users, startDate, endDate, photo, purchases } = event;
-        const { tab } = this.state;
-
         return (
             <Panel id="event">
                 <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
                     Событие
                 </PanelHeader>
-                <PullToRefresh onRefresh={this.handleRefreshEvent} isFetching={isFetching}>
-                    <Group>
-                        <RichCell
-                            multiline
-                            disabled
-                            before={
-                                <div className={styles.avatar}>
-                                    <Avatar src={photo} letter={title} size={72} />
-                                </div>
-                            }
-                        >
-                            {title}
-                        </RichCell>
-                    </Group>
-                    <Group>
-                        <SimpleCell
-                            disabled
-                            before={
-                                <div className={styles.inactive}>
-                                    <Icon20FollowersOutline style={{ padding: '0 6px 0 0' }} />
-                                </div>
-                            }
-                        >
-                            <div
-                                className={cx(styles.info, styles.inactive)}
-                                onClick={this.handleMembersClick}
+                <DelayedLoader loading={!event}>
+                    {() => {
+                        const { title, users, startDate, endDate, photo, purchases } = event;
+                        const { tab } = this.state;
+
+                        return (
+                            <PullToRefresh
+                                onRefresh={this.handleRefreshEvent}
+                                isFetching={isFetching}
                             >
-                                <Text>
-                                    {users.length}{' '}
-                                    {plural(users.length, ['участник', 'участника', 'участников'])}
-                                </Text>
-                                <UsersStack
-                                    style={{ padding: '0 0 0 6px' }}
-                                    size="s"
-                                    photos={users.map((userId) => user[userId]?.photo_100)}
-                                />
-                            </div>
-                        </SimpleCell>
-                        <SimpleCell
-                            disabled
-                            before={
-                                <div className={styles.inactive}>
-                                    <Icon20CalendarOutline style={{ padding: '0 6px 0 0' }} />
-                                </div>
-                            }
-                        >
-                            <div className={styles.inactive}>
-                                <Text>
-                                    {format(new Date(startDate), 'd MMM HH:mm', { locale: ru })}
-                                    &nbsp;&mdash;&nbsp;
-                                    {format(new Date(endDate), 'd MMM HH:mm', { locale: ru })}
-                                </Text>
-                            </div>
-                        </SimpleCell>
-                    </Group>
-                    <Group>
-                        <div className={styles.menu}>
-                            <TabbarItem>
-                                <div className={styles.menuItem} onClick={this.navigateToSettings}>
-                                    <Icon28SettingsOutline />
-                                    <Subhead weight="regular">Настройки</Subhead>
-                                </div>
-                            </TabbarItem>
-                            <TabbarItem>
-                                <div
-                                    className={styles.menuItem}
-                                    onClick={this.navigateToNotifications}
-                                >
-                                    <Icon28Notifications />
-                                    <Subhead weight="regular">Уведомления</Subhead>
-                                </div>
-                            </TabbarItem>
-                            <TabbarItem>
-                                <div className={styles.menuItem}>
-                                    <Icon24MarketOutline />
-                                    <Subhead weight="regular">Список</Subhead>
-                                </div>
-                            </TabbarItem>
-                        </div>
-                    </Group>
-                    <Group separator="hide">
-                        {!isEmpty(purchases) && (
-                            <Tabs mode="segmented">
-                                <TabsItem
-                                    onClick={this.handlePurchasesTabClick}
-                                    selected={tab === 'purchases'}
-                                >
-                                    Покупки
-                                </TabsItem>
-                                <TabsItem
-                                    onClick={this.handleBalanceTabClick}
-                                    selected={tab === 'balance'}
-                                >
-                                    Долги
-                                </TabsItem>
-                            </Tabs>
-                        )}
-                    </Group>
-                    {tab === 'purchases' && <PurchaseList />}
-                    {tab === 'balance' && (
-                        <>
-                            <Div />
-                            <BalanceList />
-                            {!isEmpty(event.transfers) && (
-                                <Group
-                                    header={<Header mode="secondary">Выполненные переводы</Header>}
-                                >
-                                    <TransferList />
+                                <Group>
+                                    <RichCell
+                                        multiline
+                                        disabled
+                                        before={
+                                            <div className={styles.avatar}>
+                                                <Avatar src={photo} letter={title} size={72} />
+                                            </div>
+                                        }
+                                    >
+                                        {title}
+                                    </RichCell>
                                 </Group>
-                            )}
-                        </>
-                    )}
-                    <Footer />
-                </PullToRefresh>
+                                <Group>
+                                    <SimpleCell
+                                        disabled
+                                        before={
+                                            <div className={styles.inactive}>
+                                                <Icon20FollowersOutline
+                                                    style={{ padding: '0 6px 0 0' }}
+                                                />
+                                            </div>
+                                        }
+                                    >
+                                        <div
+                                            className={cx(styles.info, styles.inactive)}
+                                            onClick={this.handleMembersClick}
+                                        >
+                                            <Text>
+                                                {users.length}{' '}
+                                                {plural(users.length, [
+                                                    'участник',
+                                                    'участника',
+                                                    'участников',
+                                                ])}
+                                            </Text>
+                                            <UsersStack
+                                                style={{ padding: '0 0 0 6px' }}
+                                                size="s"
+                                                photos={users.map(
+                                                    (userId) => user[userId]?.photo_100
+                                                )}
+                                            />
+                                        </div>
+                                    </SimpleCell>
+                                    <SimpleCell
+                                        disabled
+                                        before={
+                                            <div className={styles.inactive}>
+                                                <Icon20CalendarOutline
+                                                    style={{ padding: '0 6px 0 0' }}
+                                                />
+                                            </div>
+                                        }
+                                    >
+                                        <div className={styles.inactive}>
+                                            <Text>
+                                                {format(new Date(startDate), 'd MMM HH:mm', {
+                                                    locale: ru,
+                                                })}
+                                                &nbsp;&mdash;&nbsp;
+                                                {format(new Date(endDate), 'd MMM HH:mm', {
+                                                    locale: ru,
+                                                })}
+                                            </Text>
+                                        </div>
+                                    </SimpleCell>
+                                </Group>
+                                <Group>
+                                    <div className={styles.menu}>
+                                        <TabbarItem>
+                                            <div
+                                                className={styles.menuItem}
+                                                onClick={this.navigateToSettings}
+                                            >
+                                                <Icon28SettingsOutline />
+                                                <Subhead weight="regular">Настройки</Subhead>
+                                            </div>
+                                        </TabbarItem>
+                                        <TabbarItem>
+                                            <div
+                                                className={styles.menuItem}
+                                                onClick={this.navigateToNotifications}
+                                            >
+                                                <Icon28Notifications />
+                                                <Subhead weight="regular">Уведомления</Subhead>
+                                            </div>
+                                        </TabbarItem>
+                                        <TabbarItem>
+                                            <div className={styles.menuItem}>
+                                                <Icon24MarketOutline />
+                                                <Subhead weight="regular">Список</Subhead>
+                                            </div>
+                                        </TabbarItem>
+                                    </div>
+                                </Group>
+                                <Group separator="hide">
+                                    {!isEmpty(purchases) && (
+                                        <Tabs mode="segmented">
+                                            <TabsItem
+                                                onClick={this.handlePurchasesTabClick}
+                                                selected={tab === 'purchases'}
+                                            >
+                                                Покупки
+                                            </TabsItem>
+                                            <TabsItem
+                                                onClick={this.handleBalanceTabClick}
+                                                selected={tab === 'balance'}
+                                            >
+                                                Долги
+                                            </TabsItem>
+                                        </Tabs>
+                                    )}
+                                </Group>
+                                {tab === 'purchases' && <PurchaseList />}
+                                {tab === 'balance' && (
+                                    <>
+                                        <Div />
+                                        <BalanceList />
+                                        {!isEmpty(event.transfers) && (
+                                            <Group
+                                                header={
+                                                    <Header mode="secondary">
+                                                        Выполненные переводы
+                                                    </Header>
+                                                }
+                                            >
+                                                <TransferList />
+                                            </Group>
+                                        )}
+                                    </>
+                                )}
+                                <Footer />
+                            </PullToRefresh>
+                        );
+                    }}
+                </DelayedLoader>
             </Panel>
         );
     }
