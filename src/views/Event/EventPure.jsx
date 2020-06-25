@@ -3,7 +3,8 @@ import cx from 'classnames';
 import Icon20FollowersOutline from '@vkontakte/icons/dist/20/followers_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
 import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
-import Icon24MarketOutline from '@vkontakte/icons/dist/24/market_outline';
+import Icon28MarketOutline from '@vkontakte/icons/dist/28/market_outline';
+import Icon28ShareExternalOutline from '@vkontakte/icons/dist/28/share_external_outline';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
 import {
     PanelHeader,
@@ -34,6 +35,7 @@ import isEmpty from '@tinkoff/utils/is/empty';
 import PurchaseList from './components/PurchaseList/PurchaseList';
 import Panel from '../../components/Panel/Panel';
 import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
+import { encodeBase64 } from '../../utils/base64';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -56,14 +58,17 @@ export default class EventPure extends PureComponent {
         showEventMembers: pt.func,
         fetchEvent: pt.func,
         eventId: pt.string,
+        appId: pt.string,
         route: pt.object,
+        openSnackbar: pt.func,
+        copyTextToClipboard: pt.func,
         id: pt.string,
     };
 
     componentDidMount() {
         const { fetchEvent, eventId } = this.props;
 
-        fetchEvent(eventId);
+        fetchEvent(eventId).catch(this.navigateBack);
     }
 
     handlePurchasesTabClick = () => this.setState({ tab: 'purchases' });
@@ -97,6 +102,16 @@ export default class EventPure extends PureComponent {
 
         this.setState({ isFetching: true });
         fetchEvent(eventId).finally(() => this.setState({ isFetching: false }));
+    };
+
+    handleShareClick = () => {
+        const { openSnackbar, copyTextToClipboard, appId, event } = this.props;
+
+        return copyTextToClipboard(
+            `https://vk.com/app${appId}#${encodeBase64(
+                JSON.stringify({ route: 'event', params: { eventId: event.id } })
+            )}`
+        ).then(() => openSnackbar({ type: 'info', children: 'Ссылка на событие скопирована' }));
     };
 
     render() {
@@ -207,9 +222,12 @@ export default class EventPure extends PureComponent {
                                             </div>
                                         </TabbarItem>
                                         <TabbarItem>
-                                            <div className={styles.menuItem}>
-                                                <Icon24MarketOutline />
-                                                <Subhead weight="regular">Список</Subhead>
+                                            <div
+                                                className={styles.menuItem}
+                                                onClick={this.handleShareClick}
+                                            >
+                                                <Icon28ShareExternalOutline />
+                                                <Subhead weight="regular">Поделиться</Subhead>
                                             </div>
                                         </TabbarItem>
                                     </div>

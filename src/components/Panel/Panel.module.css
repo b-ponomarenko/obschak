@@ -1,3 +1,15 @@
 .errorIcon {
     color: var(--dynamic_red);
 }
+
+.infoIcon {
+    color: var(--white);
+    background: var(--dynamic_blue);
+    border-radius: 50%;
+    overflow: hidden;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
