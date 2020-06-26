@@ -39,7 +39,7 @@ export default class PurchasePure extends PureComponent {
 
     handleSubmit = (values) => {
         const { updatePurchase, purchase, showSpinner, hideSpinner } = this.props;
-        const { name, value, currency, creatorId, users } = values;
+        const { name, value, currency, creatorId, receipts, users } = values;
 
         showSpinner();
         return updatePurchase({
@@ -48,6 +48,7 @@ export default class PurchasePure extends PureComponent {
             value,
             currency,
             creatorId,
+            receipts,
             participants: users,
         })
             .then(this.navigateBack)
@@ -80,12 +81,20 @@ export default class PurchasePure extends PureComponent {
                 </PanelHeader>
                 <DelayedLoader loading={!purchase}>
                     {() => {
-                        const { name, value, currency, participants, creatorId } = purchase;
+                        const {
+                            name,
+                            value,
+                            currency,
+                            participants,
+                            receipts,
+                            creatorId,
+                        } = purchase;
 
                         return (
                             <>
                                 <PurchaseForm
                                     creatorId={creatorId}
+                                    receipts={receipts}
                                     name={name}
                                     value={value}
                                     currency={currency}

@@ -36,6 +36,7 @@ import PurchaseList from './components/PurchaseList/PurchaseList';
 import Panel from '../../components/Panel/Panel';
 import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
 import { encodeBase64 } from '../../utils/base64';
+import { getImage } from '../../utils/image';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -139,7 +140,11 @@ export default class EventPure extends PureComponent {
                                         disabled
                                         before={
                                             <div className={styles.avatar}>
-                                                <Avatar src={photo} letter={title} size={72} />
+                                                <Avatar
+                                                    src={getImage(photo, 'xs')}
+                                                    letter={title}
+                                                    size={72}
+                                                />
                                             </div>
                                         }
                                     >
