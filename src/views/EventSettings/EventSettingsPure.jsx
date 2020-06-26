@@ -17,6 +17,7 @@ import {
 import debounce from '@tinkoff/utils/function/debounce';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import styles from './EventSettingsPure.module.css';
+import { getImage } from '../../utils/image';
 
 const initialState = ({ event }) => ({
     ...event,
@@ -185,7 +186,12 @@ export default class EventSettingsPure extends PureComponent {
                 <RichCell
                     multiline
                     disabled
-                    before={<UploadedAvatar image={photo} onImageChange={this.handleImageChange} />}
+                    before={
+                        <UploadedAvatar
+                            image={getImage(photo, 'xs')}
+                            onImageChange={this.handleImageChange}
+                        />
+                    }
                 >
                     <Input
                         placeholder="Название события"

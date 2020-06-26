@@ -1,5 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { createRef, PureComponent } from 'react';
+import cx from 'classnames';
 import pt from 'prop-types';
+import Icon28CameraOutline from '@vkontakte/icons/dist/28/camera_outline';
+import Icon24DismissDark from '@vkontakte/icons/dist/24/dismiss_dark';
 import {
     Avatar,
     Button,
@@ -12,10 +15,14 @@ import {
     Input,
     SelectMimicry,
     Title,
+    HorizontalScroll,
 } from '@vkontakte/vkui';
 import numberInputHOC from '../numberInputHOC';
 import equal from '@tinkoff/utils/is/equal';
+import isEmpty from '@tinkoff/utils/is/empty';
 import styles from './PurchaseForm.module.css';
+import { getImage } from '../../utils/image';
+import { showSpinner } from '../../actions/spinner';
 
 const NumberInput = numberInputHOC(Input);
 const isArrayEqual = (a, b) => equal([...a].sort(), [...b].sort());
@@ -25,13 +32,18 @@ export default class PurchaseFormPure extends PureComponent {
         user: pt.object,
         users: pt.array,
         selectedUsers: pt.array,
+        receipts: pt.array,
         name: pt.string,
         submitText: pt.string,
         value: pt.number,
         creatorId: pt.number,
         onSubmit: pt.func,
         openNotificationPopout: pt.func,
+        uploadImage: pt.func,
+        showFullImages: pt.func,
         openModal: pt.func,
+        showSpinner: pt.func,
+        hideSpinner: pt.func,
     };
 
     state = {
@@ -39,12 +51,16 @@ export default class PurchaseFormPure extends PureComponent {
         selectedUsers: [...this.props.selectedUsers],
         name: this.props.name,
         value: this.props.value,
+        receipts: this.props.receipts,
         currency: 'RUB',
     };
 
     static defaultProps = {
         selectedUsers: [],
+        receipts: [],
     };
+
+    fileRef = createRef();
 
     handleValueChange = (value) => this.setState({ value, valueError: false });
     handleNameChange = (e) => this.setState({ name: e.target.value, nameError: false });
@@ -90,7 +106,7 @@ export default class PurchaseFormPure extends PureComponent {
 
     handleSubmit = () => {
         const { openNotificationPopout, onSubmit } = this.props;
-        const { value, name, selectedUsers, currency, creatorId } = this.state;
+        const { value, name, selectedUsers, currency, creatorId, receipts } = this.state;
         let isValid = true;
 
         if (!name) {
@@ -121,13 +137,54 @@ export default class PurchaseFormPure extends PureComponent {
             value,
             currency,
             creatorId,
+            receipts,
             users: selectedUsers,
         });
     };
 
+    handlePhotoClick = () => {
+        this.fileRef.current.value = '';
+        this.fileRef.current.click();
+    };
+
+    handleInputFileChange = (e) => {
+        const { receipts } = this.state;
+        const { uploadImage, showSpinner, hideSpinner } = this.props;
+        const { files } = e.target;
+
+        showSpinner();
+        return Promise.all([...files].map((file) => uploadImage(file)))
+            .then((images) =>
+                this.setState({
+                    receipts: [...images.map(({ image }) => image).reverse(), ...receipts],
+                })
+            )
+            .finally(hideSpinner);
+    };
+
+    handleDeleteReceipt = (e, receipt) => {
+        e.stopPropagation();
+        this.setState({ receipts: this.state.receipts.filter((r) => r !== receipt) });
+    };
+
+    handleImageClick = (index) => {
+        const { receipts } = this.state;
+        const { showFullImages } = this.props;
+
+        showFullImages({ images: receipts.map((receipt) => getImage(receipt)), index });
+    };
+
     render() {
         const { user, submitText, users } = this.props;
-        const { nameError, valueError, name, value, selectedUsers, creatorId } = this.state;
+        const {
+            nameError,
+            valueError,
+            name,
+            value,
+            selectedUsers,
+            creatorId,
+            receipts,
+        } = this.state;
         const purchaseCreator = user[creatorId];
 
         return (
@@ -171,6 +228,54 @@ export default class PurchaseFormPure extends PureComponent {
                             </div>
                         </FormLayoutGroup>
                     </FormLayout>
+                </Group>
+                <Group header={<Header mode="secondary">Чеки</Header>}>
+                    <Div className={styles.div}>
+                        <div className={styles.baseContainer}>
+                            <div className={cx(styles.image, styles.imageContainer)}>
+                                <div onClick={this.handlePhotoClick}>
+                                    <Avatar mode="image" size={80}>
+                                        <Icon28CameraOutline width={40} height={40} />
+                                        <input
+                                            type="file"
+                                            multiple
+                                            className={styles.file}
+                                            ref={this.fileRef}
+                                            accept="image/*"
+                                            onChange={this.handleInputFileChange}
+                                        />
+                                    </Avatar>
+                                </div>
+                            </div>
+                            {!isEmpty(receipts) && (
+                                <HorizontalScroll>
+                                    <div className={styles.imageContainer}>
+                                        {receipts.map((receipt, i) => (
+                                            <div
+                                                className={styles.image}
+                                                key={receipt}
+                                                onClick={() => this.handleImageClick(i)}
+                                            >
+                                                <Avatar
+                                                    mode="image"
+                                                    size={80}
+                                                    src={getImage(receipt, 's')}
+                                                />
+                                                <div
+                                                    className={styles.deleteIcon}
+                                                    onClick={(e) =>
+                                                        this.handleDeleteReceipt(e, receipt)
+                                                    }
+                                                >
+                                                    <Icon24DismissDark />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </HorizontalScroll>
+                            )}
+                        </div>
+                    </Div>
                 </Group>
                 <Group header={<Header mode="secondary">Участники</Header>}>
                     <Cell

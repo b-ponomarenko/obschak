@@ -26,3 +26,41 @@
     transform: translateY(-50%);
     z-index: 1;
 }
+
+.div {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 0;
+}
+
+.baseContainer {
+    display: flex;
+    margin-top: -20px;
+}
+
+.imageContainer {
+    padding-top: 20px;
+    display: flex;
+}
+
+.image {
+    display: flex;
+    position: relative;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.deleteIcon {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--white);
+    z-index: 1;
+    border-radius: 50%;
+    border: 2px solid var(--background_content);
+    color: var(--icon_secondary);
+}
+
+.file {
+    display: none;
+}

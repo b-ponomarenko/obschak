@@ -8,6 +8,7 @@ import styles from './EventItem.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import navigateTo from '../../../../actions/navigateTo';
 import Avatar from '../../../../components/Avatar/Avatar';
+import { getImage } from '../../../../utils/image';
 
 const EventItem = ({ event }) => {
     const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const EventItem = ({ event }) => {
             onClick={navigateToEvent}
             before={
                 <div className={styles.avatar}>
-                    <Avatar size={72} src={photo} letter={title} />
+                    <Avatar size={72} src={getImage(photo, 'xs')} letter={title} />
                 </div>
             }
             caption={

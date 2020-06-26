@@ -24,6 +24,7 @@ import { isBefore, addDays } from 'date-fns';
 import styles from './CreateEvent.module.css';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import debounce from '@tinkoff/utils/function/debounce';
+import { getImage } from '../../utils/image';
 
 const getDateTimeString = (dateTime) => {
     if (!dateTime) {
@@ -196,7 +197,10 @@ export default class CreateEventPure extends PureComponent {
                         multiline
                         disabled
                         before={
-                            <UploadedAvatar image={image} onImageChange={this.handleImageChange} />
+                            <UploadedAvatar
+                                image={getImage(image, 'xs')}
+                                onImageChange={this.handleImageChange}
+                            />
                         }
                         caption={
                             <div className={styles.caption}>
