@@ -1,4 +1,4 @@
-import bridge from '@vkontakte/vk-bridge';
+import { bridge } from '../../core/bridge';
 
 export default ({ images, index }) => (dispatch) =>
     bridge.send('VKWebAppShowImages', {

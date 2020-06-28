@@ -1,6 +1,6 @@
 {
     "name": "obschak",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -9,6 +9,7 @@
         "eject": "react-scripts eject",
         "predeploy": "npm run build",
         "deploy": "vk-miniapps-deploy",
+        "postdeploy": "sh sentry-release.sh",
         "serve": "env NODE_TLS_REJECT_UNAUTHORIZED=0 PROXY_HTTP_PROTO=https PROXY_WS_PROTO=wss PROXY_HOST=localhost PROXY_PORT=10888 vk-tunnel",
         "devtools": "react-devtools"
     },
@@ -27,6 +28,9 @@
         "redux-devtools-extension": "^2.13.8"
     },
     "dependencies": {
+        "@sentry/browser": "^5.18.1",
+        "@sentry/cli": "^1.55.0",
+        "@sentry/react": "^5.19.2",
         "@tinkoff/request-core": "^0.8.6",
         "@tinkoff/request-plugin-protocol-http": "^0.10.11",
         "@tinkoff/utils": "^2.1.2",
@@ -75,5 +79,6 @@
             "pre-commit": "pretty-quick --staged",
             "prepare-commit-msg": "bash ./prepare-commit-msg.sh"
         }
-    }
+    },
+    "homepage": "./"
 }

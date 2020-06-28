@@ -1,4 +1,4 @@
-import bridge from '@vkontakte/vk-bridge';
+import { bridge } from '../../core/bridge';
 import openModal from '../../actions/openModal';
 import events from '../../actions/events/events';
 import { isBefore, isEqual, subDays, startOfDay } from 'date-fns';
