@@ -9,6 +9,7 @@ import navigateTo from '../../actions/navigateTo';
 import deletePurchase from '../../actions/events/deletePurchase';
 import updatePurchase from '../../actions/events/updatePurchase';
 import { hideSpinner, showSpinner } from '../../actions/spinner';
+import { withSwipeBack } from '../../hooks/useBack';
 
 const mapState = ({ purchase, event }, { route }) => {
     const { purchaseId, eventId } = route.params;
@@ -30,4 +31,8 @@ const mapDispatch = (dispatch) => ({
     hideSpinner: () => dispatch(hideSpinner()),
 });
 
-export default compose(withCurrentRoute, connect(mapState, mapDispatch))(PurchasePure);
+export default compose(
+    withCurrentRoute,
+    withSwipeBack,
+    connect(mapState, mapDispatch)
+)(PurchasePure);

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { View } from '@vkontakte/vkui';
+import { View, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalRoot from './modals/ModalRoot';
@@ -13,34 +13,43 @@ import getUserInfo from './actions/vk/getUserInfo';
 import Purchase from './views/Purchase/Purchase';
 import Notifications from './views/Notifications/Notifications';
 import openNotificationModal from './actions/openNotificationModal';
+import useBack from './hooks/useBack';
+import checkToRedirect from './actions/checkToRedirect';
 
 const App = () => {
     const { name } = useSelector(({ router }) => router.route);
+    const history = useSelector(({ history }) => history);
     const dispatch = useDispatch();
     const fetchUserInfo = useCallback(() => dispatch(getUserInfo()), []);
     const popouts = getPopouts();
     const popout = useSelector(({ popout }) => popout.popout);
     const PopoutComponent = popouts[popout.name];
+    const onSwipeBack = useBack();
 
     useEffect(() => {
         fetchUserInfo();
+        dispatch(checkToRedirect());
         dispatch(openNotificationModal());
     }, []);
 
     return (
-        <View
-            activePanel={name}
-            modal={<ModalRoot />}
-            popout={PopoutComponent ? <PopoutComponent payload={popout.payload} /> : undefined}
-        >
-            <Events id="events" />
-            <CreateEvent id="create-event" />
-            <Event id="event" />
-            <EventSettings id="event.settings" />
-            <CreatePurchase id="event.create-purchase" />
-            <Purchase id="event.purchase" />
-            <Notifications id="event.notifications" />
-        </View>
+        <ConfigProvider isWebView>
+            <View
+                activePanel={name}
+                modal={<ModalRoot />}
+                popout={PopoutComponent ? <PopoutComponent payload={popout.payload} /> : undefined}
+                history={history.map(({ name }) => name)}
+                onSwipeBack={onSwipeBack}
+            >
+                <Events id="events" />
+                <CreateEvent id="create-event" />
+                <Event id="event" />
+                <EventSettings id="event.settings" />
+                <CreatePurchase id="event.create-purchase" />
+                <Purchase id="event.purchase" />
+                <Notifications id="event.notifications" />
+            </View>
+        </ConfigProvider>
     );
 };
 

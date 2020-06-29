@@ -4,7 +4,6 @@ import isEmpty from '@tinkoff/utils/is/empty';
 import { format } from 'date-fns';
 import Icon28UserAddOutline from '@vkontakte/icons/dist/28/user_add_outline';
 import {
-    Panel,
     PanelHeaderBack,
     PanelHeader,
     RichCell,
@@ -25,6 +24,7 @@ import styles from './CreateEvent.module.css';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import debounce from '@tinkoff/utils/function/debounce';
 import { getImage } from '../../utils/image';
+import Panel from '../../components/Panel/Panel';
 
 const getDateTimeString = (dateTime) => {
     if (!dateTime) {
@@ -55,6 +55,7 @@ export default class CreateEventPure extends PureComponent {
         user: pt.object,
         showSpinner: pt.func,
         hideSpinner: pt.func,
+        onBack: pt.func,
     };
 
     fetchFriends = (search) => {
@@ -171,7 +172,7 @@ export default class CreateEventPure extends PureComponent {
     handleDateSwitchClick = () => this.setState({ showDates: !this.state.showDates });
 
     render() {
-        const { navigateBack } = this.props;
+        const { onBack } = this.props;
         const {
             friends,
             startDate,
@@ -189,9 +190,7 @@ export default class CreateEventPure extends PureComponent {
 
         return (
             <Panel id="create-event">
-                <PanelHeader left={<PanelHeaderBack onClick={navigateBack} />}>
-                    Новое событие
-                </PanelHeader>
+                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>Новое событие</PanelHeader>
                 <div className={styles.container}>
                     <RichCell
                         multiline
