@@ -1,7 +1,7 @@
 .userIcon {
     border-radius: 50%;
     overflow: hidden;
-    background: var(--header_tint);
+    background: var(--dynamic_blue);
     color: var(--white);
     width: 20px;
     height: 20px;

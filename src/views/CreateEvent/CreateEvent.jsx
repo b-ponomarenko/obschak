@@ -8,6 +8,8 @@ import createEvent from '../../actions/events/createEvent';
 import currentUser from '../../selectors/currentUser';
 import uploadImage from '../../actions/uploadImage';
 import { hideSpinner, showSpinner } from '../../actions/spinner';
+import { withSwipeBack } from '../../hooks/useBack';
+import compose from '@tinkoff/utils/function/compose';
 
 const mapState = ({ user, vk }) => {
     return {
@@ -27,4 +29,4 @@ const mapContext = (dispatch) => ({
     hideSpinner: () => dispatch(hideSpinner()),
 });
 
-export default connect(mapState, mapContext)(CreateEventPure);
+export default compose(withSwipeBack, connect(mapState, mapContext))(CreateEventPure);
