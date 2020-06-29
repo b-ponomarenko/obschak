@@ -15,10 +15,14 @@ import Notifications from './views/Notifications/Notifications';
 import openNotificationModal from './actions/openNotificationModal';
 import useBack from './hooks/useBack';
 import checkToRedirect from './actions/checkToRedirect';
+import openModal from './actions/openModal';
+import isEmpty from '@tinkoff/utils/is/empty';
+import offerShare from './modals/actions/offerShare';
 
 const App = () => {
     const { name } = useSelector(({ router }) => router.route);
     const history = useSelector(({ history }) => history);
+    const modal = useSelector(({ modals }) => modals.modal);
     const dispatch = useDispatch();
     const fetchUserInfo = useCallback(() => dispatch(getUserInfo()), []);
     const popouts = getPopouts();
@@ -29,7 +33,13 @@ const App = () => {
     useEffect(() => {
         fetchUserInfo();
         dispatch(checkToRedirect());
-        dispatch(openNotificationModal());
+        dispatch(openNotificationModal()).then(() => {
+            if (!isEmpty(modal)) {
+                return;
+            }
+
+            dispatch(offerShare());
+        });
     }, []);
 
     return (
