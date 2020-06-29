@@ -25,6 +25,7 @@ import TransferActions from './views/Event/popupts/TransferActions/TransferActio
 import CancelTransferConfirmation from './views/Event/popupts/CancelTransferConfirmation/CancelTransferConfirmation';
 import SuccessTransfer from './views/Event/modals/SuccessTransfer/SuccessTransfer';
 import NotificationCard from './modals/NotificationCard/NotificationCard';
+import ShareOfferCard from './modals/ShareOfferCard/ShareOfferCard';
 
 // Init VK  Mini App
 bridge.send('VKWebAppInit');
@@ -40,6 +41,7 @@ registerModal('ADD_FRIENDS_MODAL', AddFriendsModal);
 registerModal('USERS_MODAL', UsersModal);
 registerModal('SUCCESS_TRANSFER', SuccessTransfer);
 registerModal('NOTIFICATION_CARD', NotificationCard);
+registerModal('SHARE_OFFER_CARD', ShareOfferCard);
 
 registerPopout('BALANCE_ACTIONS', BalanceActions);
 registerPopout('SCREEN_SPINNER', ScreenSpinner);
