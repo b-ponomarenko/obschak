@@ -4,7 +4,7 @@ import Icon56MarketOutline from '@vkontakte/icons/dist/56/market_outline';
 import styles from './PurchaseList.module.css';
 import { Button, Div, Group, Placeholder, RichCell } from '@vkontakte/vkui';
 import Avatar from '../../../../components/Avatar/Avatar';
-import { format } from 'date-fns';
+import { format, startOfDay, addDays, isEqual } from 'date-fns';
 import ru from 'date-fns/locale/ru';
 import { currencies } from '../../../../conts/currencies';
 import useCurrentEvent from '../../../../hooks/useCurrentEvent';
@@ -12,6 +12,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import navigateTo from '../../../../actions/navigateTo';
 import isEmpty from '@tinkoff/utils/is/empty';
 import DelayedLoader from '../../../../components/DelayedLoader/DelayedLoader';
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const time = format(date, 'HH:mm');
+
+    switch (true) {
+        case isEqual(startOfDay(now), startOfDay(addDays(date, 1))):
+            return `Вчера в ${time}`;
+        case isEqual(startOfDay(date), startOfDay(now)):
+            return `Сегодня в ${time}`;
+        default:
+            return format(date, "d MMM' в 'HH:mm", { locale: ru });
+    }
+};
 
 const PurchaseList = () => {
     const event = useCurrentEvent();
@@ -74,9 +89,7 @@ const PurchaseList = () => {
                                                 </div>
                                             }
                                             text={name}
-                                            caption={format(new Date(date), "d MMM' в 'HH:mm", {
-                                                locale: ru,
-                                            })}
+                                            caption={formatDate(date)}
                                             after={`${value.toLocaleString('ru')} ${
                                                 currencies[currency]
                                             }`}
