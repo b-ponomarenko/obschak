@@ -16,13 +16,13 @@ import {
     SelectMimicry,
     Title,
     HorizontalScroll,
+    Spinner,
 } from '@vkontakte/vkui';
 import numberInputHOC from '../numberInputHOC';
 import equal from '@tinkoff/utils/is/equal';
 import isEmpty from '@tinkoff/utils/is/empty';
 import styles from './PurchaseForm.module.css';
 import { getImage } from '../../utils/image';
-import { showSpinner } from '../../actions/spinner';
 
 const NumberInput = numberInputHOC(Input);
 const isArrayEqual = (a, b) => equal([...a].sort(), [...b].sort());
@@ -42,8 +42,6 @@ export default class PurchaseFormPure extends PureComponent {
         uploadImage: pt.func,
         showFullImages: pt.func,
         openModal: pt.func,
-        showSpinner: pt.func,
-        hideSpinner: pt.func,
     };
 
     state = {
@@ -149,17 +147,17 @@ export default class PurchaseFormPure extends PureComponent {
 
     handleInputFileChange = (e) => {
         const { receipts } = this.state;
-        const { uploadImage, showSpinner, hideSpinner } = this.props;
+        const { uploadImage } = this.props;
         const { files } = e.target;
 
-        showSpinner();
+        this.setState({ loading: true });
         return Promise.all([...files].map((file) => uploadImage(file)))
             .then((images) =>
                 this.setState({
                     receipts: [...images.map(({ image }) => image).reverse(), ...receipts],
                 })
             )
-            .finally(hideSpinner);
+            .finally(() => this.setState({ loading: false }));
     };
 
     handleDeleteReceipt = (e, receipt) => {
@@ -184,6 +182,7 @@ export default class PurchaseFormPure extends PureComponent {
             selectedUsers,
             creatorId,
             receipts,
+            loading,
         } = this.state;
         const purchaseCreator = user[creatorId];
 
@@ -235,7 +234,11 @@ export default class PurchaseFormPure extends PureComponent {
                             <div className={cx(styles.image, styles.imageContainer)}>
                                 <div onClick={this.handlePhotoClick}>
                                     <Avatar mode="image" size={80}>
-                                        <Icon28CameraOutline width={40} height={40} />
+                                        {loading ? (
+                                            <Spinner size="large" />
+                                        ) : (
+                                            <Icon28CameraOutline width={40} height={40} />
+                                        )}
                                         <input
                                             type="file"
                                             multiple

@@ -90,7 +90,7 @@ export default class EventSettingsPure extends PureComponent {
     handleSearch = (search) => this.setState({ search }, this.handleSearchDebounced);
 
     handleImageChange = (photo) => this.setState({ photo });
-    handleTitleChange = (title) => this.setState({ title, titleError: false });
+    handleTitleChange = (e) => this.setState({ title: e.target.value, titleError: false });
 
     handleOpenLeaveEventConfirmationPopup = () => {
         const { openPopout } = this.props;
