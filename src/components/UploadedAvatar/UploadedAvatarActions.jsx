@@ -7,13 +7,15 @@ import { ActionSheetItem, ActionSheet } from '@vkontakte/vkui';
 const UploadedAvatarActions = ({ payload }) => {
     const dispatch = useDispatch();
     const handleClose = useCallback(() => dispatch(closePopout()), []);
+    const handleLoadImage = useCallback(() => {
+        handleClose();
+        onChange();
+    }, []);
     const { onDelete, onChange } = payload;
 
     return (
         <ActionSheet onClose={handleClose}>
-            <ActionSheetItem autoclose onClick={onChange}>
-                Загрузить c устройства
-            </ActionSheetItem>
+            <ActionSheetItem onClick={handleLoadImage}>Загрузить c устройства</ActionSheetItem>
             <ActionSheetItem autoclose mode="destructive" onClick={onDelete}>
                 Удалить фото
             </ActionSheetItem>

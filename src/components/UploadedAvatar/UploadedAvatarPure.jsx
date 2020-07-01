@@ -59,17 +59,17 @@ export default class UploadedAvatarPure extends PureComponent {
                     accept="image/*"
                     onChange={this.handleInputFileChange}
                 />
-                {loading && (
-                    <div className={styles.spinner}>
-                        <Spinner size="large" />
-                    </div>
-                )}
                 {image ? (
                     <div onClick={this.handleOpenPopout}>
                         <Avatar size={72} src={image} />
                     </div>
                 ) : (
                     <Icon28CameraOutline />
+                )}
+                {loading && (
+                    <div className={styles.spinner}>
+                        <Spinner size="large" />
+                    </div>
                 )}
             </div>
         );
