@@ -22,7 +22,6 @@ const mapContext = (dispatch) => ({
     openModal: ({ name, payload }) => dispatch(openModal({ name, payload })),
     openPopout: ({ name, payload }) => dispatch(openPopout({ name, payload })),
     navigateBack: () => dispatch(navigateTo('events')),
-    navigateToEvent: (eventId) => dispatch(navigateTo('event', { eventId })),
     createEvent: (payload) => dispatch(createEvent(payload)),
     uploadImage: (image) => dispatch(uploadImage(image)),
     showSpinner: () => dispatch(showSpinner()),
