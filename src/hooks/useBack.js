@@ -11,23 +11,37 @@ const useBack = () => {
     const navigateTo = useNavigate();
     const dispatch = useDispatch();
 
-    return useCallback(() => {
-        if (history.length <= 1) {
-            return bridge.send('VKWebAppDisableSwipeBack');
-        }
+    return useCallback(
+        (routeName, routeParams) => {
+            const h = [...history];
+            h.pop();
+            const { name, params } = last(h);
 
-        const h = [...history];
-        h.pop();
-        const { name, params } = last(h);
-        dispatch(setHistory(h));
-        navigateTo(name, params, { swipeBack: true });
-    }, [history]);
+            if (h.length <= 1) {
+                bridge.send('VKWebAppDisableSwipeBack');
+            }
+
+            dispatch(setHistory(h));
+
+            if (typeof routeName === 'string') {
+                return navigateTo(routeName, routeParams);
+            }
+
+            return navigateTo(name, params, { swipeBack: true });
+        },
+        [history]
+    );
 };
 
 export const withSwipeBack = (WrappedComponent) => (props) => {
     const onBack = useBack();
 
-    return <WrappedComponent {...props} onBack={onBack} />;
+    return (
+        <WrappedComponent
+            {...props}
+            onBack={(routeName, routeParams) => onBack(routeName, routeParams)}
+        />
+    );
 };
 
 export default useBack;

@@ -50,7 +50,6 @@ export default class CreateEventPure extends PureComponent {
         openPopout: pt.func,
         createEvent: pt.func,
         navigateBack: pt.func,
-        navigateToEvent: pt.func,
         uploadImage: pt.func,
         user: pt.object,
         showSpinner: pt.func,
@@ -89,14 +88,7 @@ export default class CreateEventPure extends PureComponent {
     handleImageChange = (image) => this.setState({ image });
 
     handleCreateEvent = () => {
-        const {
-            openPopout,
-            createEvent,
-            user,
-            navigateToEvent,
-            showSpinner,
-            hideSpinner,
-        } = this.props;
+        const { openPopout, createEvent, user, showSpinner, hideSpinner, onBack } = this.props;
         const { friends, startDate, endDate, title, image } = this.state;
         const now = new Date();
         let isValid = true;
@@ -165,7 +157,7 @@ export default class CreateEventPure extends PureComponent {
             creatorId: user.id,
             photo: image,
         })
-            .then(({ event }) => navigateToEvent(event.id))
+            .then(({ event }) => onBack('event', { eventId: event.id }))
             .finally(hideSpinner);
     };
 
