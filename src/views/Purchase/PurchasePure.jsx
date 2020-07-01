@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import pt from 'prop-types';
-import { PanelHeader, PanelHeaderBack, Button, Div } from '@vkontakte/vkui';
+import { Panel, PanelHeader, PanelHeaderBack, Button, Div } from '@vkontakte/vkui';
 import PurchaseForm from '../../components/PurchaseForm/PurchaseForm';
 import Icon28DeleteOutline from '@vkontakte/icons/dist/28/delete_outline';
 import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
-import Panel from '../../components/Panel/Panel';
 
 export default class PurchasePure extends PureComponent {
     state = {};
@@ -22,7 +21,6 @@ export default class PurchasePure extends PureComponent {
         closePopout: pt.func,
         showSpinner: pt.func,
         hideSpinner: pt.func,
-        onBack: pt.func,
     };
 
     componentDidMount() {
@@ -32,8 +30,15 @@ export default class PurchasePure extends PureComponent {
         return fetchPurchase(purchaseId);
     }
 
+    navigateBack = () => {
+        const { navigateTo, route } = this.props;
+        const { eventId } = route.params;
+
+        navigateTo('event', { eventId });
+    };
+
     handleSubmit = (values) => {
-        const { updatePurchase, purchase, showSpinner, hideSpinner, onBack } = this.props;
+        const { updatePurchase, purchase, showSpinner, hideSpinner } = this.props;
         const { name, value, currency, creatorId, receipts, users } = values;
 
         showSpinner();
@@ -46,7 +51,7 @@ export default class PurchasePure extends PureComponent {
             receipts,
             participants: users,
         })
-            .then(onBack)
+            .then(this.navigateBack)
             .finally(hideSpinner);
     };
 
@@ -60,18 +65,20 @@ export default class PurchasePure extends PureComponent {
     };
 
     handleDelete = () => {
-        const { deletePurchase, purchase, showSpinner, hideSpinner, onBack } = this.props;
+        const { deletePurchase, purchase, showSpinner, hideSpinner } = this.props;
 
         showSpinner();
-        return deletePurchase(purchase.id).then(onBack).finally(hideSpinner);
+        return deletePurchase(purchase.id).then(this.navigateBack).finally(hideSpinner);
     };
 
     render() {
-        const { purchase, event, onBack } = this.props;
+        const { purchase, event } = this.props;
 
         return (
             <Panel id="event.purchase">
-                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>Покупка</PanelHeader>
+                <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
+                    Покупка
+                </PanelHeader>
                 <DelayedLoader loading={!purchase}>
                     {() => {
                         const {

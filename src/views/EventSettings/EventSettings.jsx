@@ -14,7 +14,6 @@ import closePopout from '../../actions/closePopout';
 import events from '../../actions/events/events';
 import deleteEvent from '../../actions/events/deleteEvent';
 import { hideSpinner, showSpinner } from '../../actions/spinner';
-import { withSwipeBack } from '../../hooks/useBack';
 
 const mapState = ({ event, user, vk }, { route }) => {
     const { params } = route;
@@ -42,8 +41,4 @@ const mapDispatch = (dispatch) => ({
     hideSpinner: () => dispatch(hideSpinner()),
 });
 
-export default compose(
-    withCurrentRoute,
-    withSwipeBack,
-    connect(mapState, mapDispatch)
-)(EventSettingsPure);
+export default compose(withCurrentRoute, connect(mapState, mapDispatch))(EventSettingsPure);

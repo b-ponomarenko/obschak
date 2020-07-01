@@ -63,7 +63,6 @@ export default class EventPure extends PureComponent {
         route: pt.object,
         openSnackbar: pt.func,
         copyTextToClipboard: pt.func,
-        onBack: pt.func,
         id: pt.string,
     };
 
@@ -117,12 +116,14 @@ export default class EventPure extends PureComponent {
     };
 
     render() {
-        const { event, user, onBack } = this.props;
+        const { event, user } = this.props;
         const { isFetching } = this.state;
 
         return (
             <Panel id="event">
-                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>Событие</PanelHeader>
+                <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
+                    Событие
+                </PanelHeader>
                 <DelayedLoader loading={!event}>
                     {() => {
                         const { title, users, startDate, endDate, photo, purchases } = event;

@@ -4,6 +4,7 @@ import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 import Icon28UserAddOutline from '@vkontakte/icons/dist/28/user_add_outline';
 import {
     Header,
+    Panel,
     PanelHeader,
     PanelHeaderBack,
     Group,
@@ -17,7 +18,6 @@ import debounce from '@tinkoff/utils/function/debounce';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import styles from './EventSettingsPure.module.css';
 import { getImage } from '../../utils/image';
-import Panel from '../../components/Panel/Panel';
 
 const initialState = ({ event }) => ({
     ...event,
@@ -43,7 +43,6 @@ export default class EventSettingsPure extends PureComponent {
         closePopout: pt.func,
         showSpinner: pt.func,
         hideSpinner: pt.func,
-        onBack: pt.func,
     };
 
     componentDidMount() {
@@ -65,6 +64,13 @@ export default class EventSettingsPure extends PureComponent {
                 onSearch: this.handleSearch,
             })
         );
+    };
+
+    navigateBack = () => {
+        const { navigateTo, route } = this.props;
+        const { eventId } = route.params;
+
+        navigateTo('event', { eventId });
     };
 
     handleRemove = (userId) =>
@@ -149,7 +155,7 @@ export default class EventSettingsPure extends PureComponent {
     };
 
     handleSaveEvent = () => {
-        const { updateEvent, event, showSpinner, hideSpinner, onBack } = this.props;
+        const { updateEvent, event, showSpinner, hideSpinner } = this.props;
         const { users, photo, title } = this.state;
 
         if (!title) {
@@ -163,18 +169,18 @@ export default class EventSettingsPure extends PureComponent {
             photo,
             title,
         })
-            .then(onBack)
+            .then(this.navigateBack)
             .finally(hideSpinner);
     };
 
     render() {
-        const { event, user, currentUser, onBack } = this.props;
+        const { event, user, currentUser } = this.props;
         const { creatorId } = event;
         const { users, photo, title, titleError } = this.state;
 
         return (
             <Panel id="event.settings">
-                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>
+                <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
                     Настройки события
                 </PanelHeader>
                 <RichCell

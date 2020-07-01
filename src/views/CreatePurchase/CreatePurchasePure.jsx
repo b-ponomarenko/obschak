@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import pt from 'prop-types';
-import { PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
+import { Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 import PurchaseForm from '../../components/PurchaseForm/PurchaseForm';
-import Panel from '../../components/Panel/Panel';
 
 export default class CreatePurchasePure extends PureComponent {
     static propTypes = {
@@ -14,7 +13,6 @@ export default class CreatePurchasePure extends PureComponent {
         event: pt.object,
         showSpinner: pt.func,
         hideSpinner: pt.func,
-        onBack: pt.func,
     };
 
     state = {
@@ -37,7 +35,7 @@ export default class CreatePurchasePure extends PureComponent {
     };
 
     handleSubmit = (purchase) => {
-        const { createPurchase, route, showSpinner, hideSpinner, onBack } = this.props;
+        const { createPurchase, route, showSpinner, hideSpinner } = this.props;
         const { eventId } = route.params;
         const { name, value, currency, creatorId, receipts, users } = purchase;
 
@@ -50,17 +48,19 @@ export default class CreatePurchasePure extends PureComponent {
             receipts,
             participants: users,
         })
-            .then(onBack)
+            .then(this.navigateBack)
             .finally(hideSpinner);
     };
 
     render() {
-        const { event, currentUser, onBack } = this.props;
+        const { event, currentUser } = this.props;
         const { users } = event;
 
         return (
             <Panel id="event.create-purchase">
-                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>Новая покупка</PanelHeader>
+                <PanelHeader left={<PanelHeaderBack onClick={this.navigateBack} />}>
+                    Новая покупка
+                </PanelHeader>
                 <PurchaseForm
                     creatorId={currentUser.id}
                     users={users}

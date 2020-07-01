@@ -6,7 +6,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--dynamic_blue);
+    background: var(--header_tint);
 }
 
 .icon {

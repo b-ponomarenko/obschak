@@ -8,8 +8,6 @@ import createEvent from '../../actions/events/createEvent';
 import currentUser from '../../selectors/currentUser';
 import uploadImage from '../../actions/uploadImage';
 import { hideSpinner, showSpinner } from '../../actions/spinner';
-import { withSwipeBack } from '../../hooks/useBack';
-import compose from '@tinkoff/utils/function/compose';
 
 const mapState = ({ user, vk }) => {
     return {
@@ -22,10 +20,11 @@ const mapContext = (dispatch) => ({
     openModal: ({ name, payload }) => dispatch(openModal({ name, payload })),
     openPopout: ({ name, payload }) => dispatch(openPopout({ name, payload })),
     navigateBack: () => dispatch(navigateTo('events')),
+    navigateToEvent: (eventId) => dispatch(navigateTo('event', { eventId })),
     createEvent: (payload) => dispatch(createEvent(payload)),
     uploadImage: (image) => dispatch(uploadImage(image)),
     showSpinner: () => dispatch(showSpinner()),
     hideSpinner: () => dispatch(hideSpinner()),
 });
 
-export default compose(withSwipeBack, connect(mapState, mapContext))(CreateEventPure);
+export default connect(mapState, mapContext)(CreateEventPure);

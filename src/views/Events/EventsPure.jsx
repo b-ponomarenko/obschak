@@ -9,6 +9,7 @@ import {
     Group,
     Header,
     List,
+    Panel,
     PanelHeader,
     Placeholder,
     Button,
@@ -22,7 +23,6 @@ import isEmpty from '@tinkoff/utils/is/empty';
 import memoize from '@tinkoff/utils/function/memoize/one';
 import { plural } from '../../plural';
 import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
-import Panel from '../../components/Panel/Panel';
 
 const groupEvents = memoize((events) => {
     const now = new Date();

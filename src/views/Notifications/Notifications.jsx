@@ -1,16 +1,19 @@
 import React, { useCallback, useState } from 'react';
-import { PanelHeader, PanelHeaderBack, Group, Cell, Switch } from '@vkontakte/vkui';
+import { Panel, PanelHeader, PanelHeaderBack, Group, Cell, Switch } from '@vkontakte/vkui';
+import useCurrentEvent from '../../hooks/useCurrentEvent';
 import { useDispatch, useSelector } from 'react-redux';
+import navigateTo from '../../actions/navigateTo';
 import disableNotifications from '../../actions/vk/disableNotifications';
 import enableNotifications from '../../actions/vk/enableNotifications';
-import useBack from '../../hooks/useBack';
-import Panel from '../../components/Panel/Panel';
 
 const Notifications = () => {
-    const onBack = useBack();
+    const event = useCurrentEvent();
     const notifications = useSelector(({ notifications }) => notifications);
     const [notificationEnabled, setNotificationEnabled] = useState(notifications.all);
     const dispatch = useDispatch();
+    const navigateBack = useCallback(() => dispatch(navigateTo('event', { eventId: event.id })), [
+        event,
+    ]);
     const handleClick = useCallback(() => {
         if (notificationEnabled) {
             setNotificationEnabled(false);
@@ -22,7 +25,7 @@ const Notifications = () => {
 
     return (
         <Panel id="event.notifications">
-            <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>Уведомления</PanelHeader>
+            <PanelHeader left={<PanelHeaderBack onClick={navigateBack} />}>Уведомления</PanelHeader>
             <Group>
                 <Cell asideContent={<Switch checked={notificationEnabled} onClick={handleClick} />}>
                     Уведомления
