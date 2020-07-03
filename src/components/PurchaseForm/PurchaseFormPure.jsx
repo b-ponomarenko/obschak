@@ -60,8 +60,15 @@ export default class PurchaseFormPure extends PureComponent {
 
     fileRef = createRef();
 
-    handleValueChange = (value) => this.setState({ value, valueError: false });
-    handleNameChange = (e) => this.setState({ name: e.target.value, nameError: false });
+    handleValueChange = (value) => {
+        if (value >= 1000000000) {
+            return;
+        }
+
+        this.setState({ value, valueError: false });
+    };
+    handleNameChange = (e) =>
+        this.setState({ name: e.target.value.slice(0, 30), nameError: false });
 
     toggleSelectAllUsers = () => {
         const { users } = this.props;

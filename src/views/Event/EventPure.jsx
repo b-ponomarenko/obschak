@@ -22,6 +22,7 @@ import {
     Footer,
     Subhead,
     TabbarItem,
+    IOS,
 } from '@vkontakte/vkui';
 import styles from './Event.module.css';
 import { plural } from '../../plural';
@@ -44,6 +45,7 @@ export default class EventPure extends PureComponent {
     };
 
     static propTypes = {
+        platform: pt.string,
         user: pt.object,
         event: pt.shape({
             id: pt.number,
@@ -117,7 +119,7 @@ export default class EventPure extends PureComponent {
     };
 
     render() {
-        const { event, user, onBack } = this.props;
+        const { event, user, onBack, platform } = this.props;
         const { isFetching } = this.state;
 
         return (
@@ -238,7 +240,7 @@ export default class EventPure extends PureComponent {
                                 </Group>
                                 <Group separator="hide">
                                     {!isEmpty(purchases) && (
-                                        <Tabs mode="segmented">
+                                        <Tabs mode={platform === IOS ? 'segmented' : 'default'}>
                                             <TabsItem
                                                 onClick={this.handlePurchasesTabClick}
                                                 selected={tab === 'purchases'}

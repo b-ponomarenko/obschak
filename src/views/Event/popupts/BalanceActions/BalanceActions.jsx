@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
+import { ActionSheet, ActionSheetItem, IOS, usePlatform } from '@vkontakte/vkui';
 import { useDispatch, useSelector } from 'react-redux';
 import openPopout from '../../../../actions/openPopout';
 import closePopout from '../../../../actions/closePopout';
@@ -14,6 +14,7 @@ import openSnackbar from '../../../../actions/openSnackbar';
 import { hideSpinner, showSpinner } from '../../../../actions/spinner';
 
 const BalanceActions = (props) => {
+    const platform = usePlatform();
     const { payload } = props;
     const dispatch = useDispatch();
     const handleClose = useCallback(() => dispatch(closePopout()), []);
@@ -72,9 +73,11 @@ const BalanceActions = (props) => {
             {currentUser.id === from && (
                 <ActionSheetItem onClick={openVkPayFrom}>Отправить деньги</ActionSheetItem>
             )}
-            <ActionSheetItem autoclose mode="cancel">
-                Отменить
-            </ActionSheetItem>
+            {platform === IOS && (
+                <ActionSheetItem autoclose mode="cancel">
+                    Отменить
+                </ActionSheetItem>
+            )}
         </ActionSheet>
     );
 };
