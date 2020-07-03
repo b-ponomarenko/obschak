@@ -1,15 +1,20 @@
 import React, { useCallback } from 'react';
+import pt from 'prop-types';
 import Icon56NotificationOutline from '@vkontakte/icons/dist/56/notification_outline';
 import { ModalCard } from '@vkontakte/vkui';
 import { useDispatch } from 'react-redux';
-import closeModal from '../../actions/closeModal';
-import enableNotifications from '../../actions/vk/enableNotifications';
+import closeModal from '../../../../actions/closeModal';
+import enableNotifications from '../../../../actions/vk/enableNotifications';
 
-const NotificationCard = (props) => {
+const NotificationCard = ({ payload }) => {
+    const { onSuccess } = payload;
     const dispatch = useDispatch();
     const handleClose = useCallback(() => {
         dispatch(closeModal());
-        dispatch(enableNotifications());
+    }, []);
+    const handleEnableNotifications = useCallback(() => {
+        handleClose();
+        dispatch(enableNotifications()).then(onSuccess);
     }, []);
 
     return (
@@ -23,13 +28,15 @@ const NotificationCard = (props) => {
                 {
                     title: 'Разрешить',
                     mode: 'primary',
-                    action: handleClose,
+                    action: handleEnableNotifications,
                 },
             ]}
         />
     );
 };
 
-NotificationCard.propTypes = {};
+NotificationCard.propTypes = {
+    payload: pt.object,
+};
 
 export default NotificationCard;

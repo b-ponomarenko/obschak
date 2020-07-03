@@ -33,7 +33,6 @@ export const configureRouter = () => {
                 path: '/events/:eventId',
                 children: [
                     { name: 'settings', path: '/settings' },
-                    { name: 'notifications', path: '/notifications' },
                     { name: 'purchase', path: '/purchased/:purchaseId' },
                     { name: 'create-purchase', path: '/create-purchase' },
                 ],
