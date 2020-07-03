@@ -83,7 +83,8 @@ export default class CreateEventPure extends PureComponent {
         this.setState({ startDate: new Date(e.target.value), startDateError: false });
     handleEndDateChange = (e) =>
         this.setState({ endDate: new Date(e.target.value), endDateError: false });
-    handleChangeTitle = (e) => this.setState({ title: e.target.value, titleError: false });
+    handleChangeTitle = (e) =>
+        this.setState({ title: e.target.value.slice(0, 30), titleError: false });
 
     handleImageChange = (image) => this.setState({ image });
 

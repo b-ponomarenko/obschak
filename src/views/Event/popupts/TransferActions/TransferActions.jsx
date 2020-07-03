@@ -1,11 +1,12 @@
 import React, { useCallback } from 'react';
 import pt from 'prop-types';
-import { ActionSheet, ActionSheetItem } from '@vkontakte/vkui';
+import { ActionSheet, ActionSheetItem, IOS, usePlatform } from '@vkontakte/vkui';
 import { useDispatch } from 'react-redux';
 import closePopout from '../../../../actions/closePopout';
 import openPopout from '../../../../actions/openPopout';
 
 const TransferActions = ({ payload }) => {
+    const platform = usePlatform();
     const dispatch = useDispatch();
     const { id } = payload;
     const handleClose = useCallback(() => dispatch(closePopout()), []);
@@ -17,9 +18,11 @@ const TransferActions = ({ payload }) => {
     return (
         <ActionSheet onClose={handleClose}>
             <ActionSheetItem onClick={handleCancelTransfer}>Отменить перевод</ActionSheetItem>
-            <ActionSheetItem autoclose mode="cancel">
-                Отменить
-            </ActionSheetItem>
+            {platform === IOS && (
+                <ActionSheetItem autoclose mode="cancel">
+                    Отменить
+                </ActionSheetItem>
+            )}
         </ActionSheet>
     );
 };

@@ -26,6 +26,7 @@ import CancelTransferConfirmation from './views/Event/popupts/CancelTransferConf
 import SuccessTransfer from './views/Event/modals/SuccessTransfer/SuccessTransfer';
 import NotificationCard from './modals/NotificationCard/NotificationCard';
 import ShareOfferCard from './modals/ShareOfferCard/ShareOfferCard';
+import './index.css';
 
 // Init VK  Mini App
 bridge.send('VKWebAppInit');

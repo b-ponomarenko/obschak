@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'TT Commons';
+    font-style: normal;
+    font-weight: 600;
+    src: url('./fonts/TTCommons-DemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'TT Commons';
+    font-style: normal;
+    font-weight: 500;
+    src: url('./fonts/TTCommons-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'TT Commons';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./fonts/TTCommons-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'TT Commons';
+    font-style: normal;
+    font-weight: 200;
+    src: url('./fonts/TTCommons-ExtraLight.ttf') format('truetype');
+}
