@@ -11,7 +11,6 @@ import EventSettings from './views/EventSettings/EventSettings';
 import CreatePurchase from './views/CreatePurchase/CreatePurchase';
 import getUserInfo from './actions/vk/getUserInfo';
 import Purchase from './views/Purchase/Purchase';
-import Notifications from './views/Notifications/Notifications';
 import useBack from './hooks/useBack';
 import checkToRedirect from './actions/checkToRedirect';
 import offerShare from './modals/actions/offerShare';
@@ -50,7 +49,6 @@ const App = () => {
                 <EventSettings id="event.settings" />
                 <CreatePurchase id="event.create-purchase" />
                 <Purchase id="event.purchase" />
-                <Notifications id="event.notifications" />
             </View>
         </ConfigProvider>
     );

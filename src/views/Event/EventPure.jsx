@@ -38,6 +38,7 @@ import Panel from '../../components/Panel/Panel';
 import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
 import { encodeBase64 } from '../../utils/base64';
 import { getImage } from '../../utils/image';
+import ContextNotifications from './components/ContextNotifications/ContextNotifications';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -221,20 +222,14 @@ export default class EventPure extends PureComponent {
                                         <TabbarItem>
                                             <div
                                                 className={styles.menuItem}
-                                                onClick={this.navigateToNotifications}
-                                            >
-                                                <Icon28Notifications />
-                                                <Subhead weight="regular">Уведомления</Subhead>
-                                            </div>
-                                        </TabbarItem>
-                                        <TabbarItem>
-                                            <div
-                                                className={styles.menuItem}
                                                 onClick={this.handleShareClick}
                                             >
                                                 <Icon28ShareExternalOutline />
                                                 <Subhead weight="regular">Поделиться</Subhead>
                                             </div>
+                                        </TabbarItem>
+                                        <TabbarItem>
+                                            <ContextNotifications />
                                         </TabbarItem>
                                     </div>
                                 </Group>
