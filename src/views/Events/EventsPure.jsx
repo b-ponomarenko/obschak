@@ -90,92 +90,111 @@ export default class EventsPure extends PureComponent {
                         const eventsCount =
                             pastEvents.length + currentEvents.length + futureEvents.length;
 
-                        return !isEmpty(events) ? (
+                        return (
                             <PullToRefresh onRefresh={this.handleRefresh} isFetching={fetching}>
-                                <Group>
-                                    <CellButton
-                                        before={<Icon28ListAddOutline />}
-                                        onClick={navigateToNewEvent}
-                                    >
-                                        Добавить событие
-                                    </CellButton>
-                                </Group>
-                                <List>
-                                    {!isEmpty(currentEvents) && (
-                                        <>
-                                            <Group
-                                                header={
-                                                    <Header mode="secondary">
-                                                        <div className={styles.title}>
-                                                            <div className={styles.iconFire}>
-                                                                <Icon16Fire />
-                                                            </div>
-                                                            &nbsp;Текущие события
-                                                        </div>
-                                                    </Header>
-                                                }
+                                {!isEmpty(events) ? (
+                                    <>
+                                        <Group>
+                                            <CellButton
+                                                before={<Icon28ListAddOutline />}
+                                                onClick={navigateToNewEvent}
                                             >
-                                                {currentEvents.map((event) => (
-                                                    <EventItem key={event.id} event={event} />
-                                                ))}
-                                            </Group>
-                                        </>
-                                    )}
-                                    {!isEmpty(futureEvents) && (
-                                        <>
-                                            <Group
-                                                header={
-                                                    <Header mode="secondary">
-                                                        Будущие события
-                                                    </Header>
-                                                }
-                                            >
-                                                {futureEvents.map((event) => (
-                                                    <EventItem key={event.id} event={event} />
-                                                ))}
-                                            </Group>
-                                        </>
-                                    )}
-                                    {!isEmpty(pastEvents) && (
-                                        <Group
-                                            header={
-                                                <Header mode="secondary">Прошедшие события</Header>
-                                            }
-                                        >
-                                            {pastEvents.map((event) => (
-                                                <EventItem key={event.id} event={event} />
-                                            ))}
+                                                Добавить событие
+                                            </CellButton>
                                         </Group>
-                                    )}
-                                    {eventsCount === 0 && (
-                                        <Placeholder
-                                            icon={<Icon56DoNotDisturbOutline />}
-                                            header="По Вашему запросу ничего не найдено"
-                                        >
-                                            Проверьте что нет ошибок и попробуйте изменить запрос
-                                        </Placeholder>
-                                    )}
-                                </List>
-                                {eventsCount > 0 && (
-                                    <Footer>
-                                        {eventsCount}{' '}
-                                        {plural(eventsCount, ['событие', 'события', 'событий'])}
-                                    </Footer>
+                                        <List>
+                                            {!isEmpty(currentEvents) && (
+                                                <>
+                                                    <Group
+                                                        header={
+                                                            <Header mode="secondary">
+                                                                <div className={styles.title}>
+                                                                    <div
+                                                                        className={styles.iconFire}
+                                                                    >
+                                                                        <Icon16Fire />
+                                                                    </div>
+                                                                    &nbsp;Текущие события
+                                                                </div>
+                                                            </Header>
+                                                        }
+                                                    >
+                                                        {currentEvents.map((event) => (
+                                                            <EventItem
+                                                                key={event.id}
+                                                                event={event}
+                                                            />
+                                                        ))}
+                                                    </Group>
+                                                </>
+                                            )}
+                                            {!isEmpty(futureEvents) && (
+                                                <>
+                                                    <Group
+                                                        header={
+                                                            <Header mode="secondary">
+                                                                Будущие события
+                                                            </Header>
+                                                        }
+                                                    >
+                                                        {futureEvents.map((event) => (
+                                                            <EventItem
+                                                                key={event.id}
+                                                                event={event}
+                                                            />
+                                                        ))}
+                                                    </Group>
+                                                </>
+                                            )}
+                                            {!isEmpty(pastEvents) && (
+                                                <Group
+                                                    header={
+                                                        <Header mode="secondary">
+                                                            Прошедшие события
+                                                        </Header>
+                                                    }
+                                                >
+                                                    {pastEvents.map((event) => (
+                                                        <EventItem key={event.id} event={event} />
+                                                    ))}
+                                                </Group>
+                                            )}
+                                            {eventsCount === 0 && (
+                                                <Placeholder
+                                                    icon={<Icon56DoNotDisturbOutline />}
+                                                    header="По Вашему запросу ничего не найдено"
+                                                >
+                                                    Проверьте что нет ошибок и попробуйте изменить
+                                                    запрос
+                                                </Placeholder>
+                                            )}
+                                        </List>
+                                        {eventsCount > 0 && (
+                                            <Footer>
+                                                {eventsCount}{' '}
+                                                {plural(eventsCount, [
+                                                    'событие',
+                                                    'события',
+                                                    'событий',
+                                                ])}
+                                            </Footer>
+                                        )}
+                                    </>
+                                ) : (
+                                    <Placeholder
+                                        icon={<Icon56ErrorOutline />}
+                                        header="У Вас пока нет ни одного события"
+                                        action={
+                                            <Button size="l" onClick={navigateToNewEvent}>
+                                                Добавить событие
+                                            </Button>
+                                        }
+                                    >
+                                        Для того, чтобы у Вас появилось первое событие нажмите
+                                        «Добавить событие»
+                                    </Placeholder>
                                 )}
                             </PullToRefresh>
-                        ) : (
-                            <Placeholder
-                                icon={<Icon56ErrorOutline />}
-                                header="У Вас пока нет ни одного события"
-                                action={
-                                    <Button size="l" onClick={navigateToNewEvent}>
-                                        Добавить событие
-                                    </Button>
-                                }
-                            >
-                                Для того, чтобы у Вас появилось первое событие нажмите «Добавить
-                                событие»
-                            </Placeholder>
                         );
                     }}
                 </DelayedLoader>
