@@ -7,6 +7,7 @@ import disableNotifications from '../../../../actions/vk/disableNotifications';
 import openModal from '../../../../actions/openModal';
 import styles from './ContextNotifications.module.css';
 import openSnackbar from '../../../../actions/openSnackbar';
+import { useBridge } from '../../../../core/bridge';
 
 const ContextNotifications = () => {
     const notifications = useSelector(({ notifications }) => notifications);
@@ -32,6 +33,13 @@ const ContextNotifications = () => {
             })
         );
     }, [notificationEnabled]);
+
+    useBridge('VKWebAppAllowNotificationsResult', () => {
+        setNotificationEnabled(true);
+    });
+    useBridge('VKWebAppDenyNotificationsResult', () => {
+        setNotificationEnabled(false);
+    });
 
     return (
         <div className={styles.menuItem} onClick={handleClick}>
