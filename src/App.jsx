@@ -15,6 +15,7 @@ import useBack from './hooks/useBack';
 import checkToRedirect from './actions/checkToRedirect';
 import offerShare from './modals/actions/offerShare';
 import closeSnackbar from './actions/closeSnackbar';
+import getNotifications from './actions/vk/getNotifications';
 
 const App = () => {
     const { name } = useSelector(({ router }) => router.route);
@@ -31,6 +32,7 @@ const App = () => {
         fetchUserInfo();
         dispatch(checkToRedirect());
         dispatch(offerShare());
+        dispatch(getNotifications());
     }, []);
 
     return (
