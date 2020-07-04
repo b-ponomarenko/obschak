@@ -37,11 +37,14 @@ const getDateTimeString = (dateTime) => {
     return `${date}T${time}`;
 };
 
+const defaultStartDate = addDays(new Date(), 2);
+const defaultEndDate = addDays(new Date(), 2);
+
 export default class CreateEventPure extends PureComponent {
     state = {
         friends: [],
-        startDate: addDays(new Date(), 2),
-        endDate: addDays(new Date(), 5),
+        startDate: defaultStartDate,
+        endDate: defaultEndDate,
     };
 
     static propTypes = {
@@ -79,10 +82,14 @@ export default class CreateEventPure extends PureComponent {
 
     handleSearchModal = debounce(500, (value) => this.fetchFriends(value));
 
-    handleStartDateChange = (e) =>
-        this.setState({ startDate: new Date(e.target.value), startDateError: false });
+    handleStartDateChange = (e) => {
+        this.setState({
+            startDate: new Date(e.target.value || defaultStartDate),
+            startDateError: false,
+        });
+    };
     handleEndDateChange = (e) =>
-        this.setState({ endDate: new Date(e.target.value), endDateError: false });
+        this.setState({ endDate: new Date(e.target.value || defaultEndDate), endDateError: false });
     handleChangeTitle = (e) =>
         this.setState({ title: e.target.value.slice(0, 30), titleError: false });
 

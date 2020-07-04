@@ -16,6 +16,7 @@ import checkToRedirect from './actions/checkToRedirect';
 import offerShare from './modals/actions/offerShare';
 import closeSnackbar from './actions/closeSnackbar';
 import getNotifications from './actions/vk/getNotifications';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 
 const App = () => {
     const { name } = useSelector(({ router }) => router.route);
@@ -37,21 +38,25 @@ const App = () => {
 
     return (
         <ConfigProvider isWebView>
-            <View
-                activePanel={name}
-                modal={<ModalRoot />}
-                popout={PopoutComponent ? <PopoutComponent payload={popout.payload} /> : undefined}
-                history={history.map(({ name }) => name)}
-                onSwipeBack={onSwipeBack}
-                onSwipeBackStart={handleSwipeStart}
-            >
-                <Events id="events" />
-                <CreateEvent id="create-event" />
-                <Event id="event" />
-                <EventSettings id="event.settings" />
-                <CreatePurchase id="event.create-purchase" />
-                <Purchase id="event.purchase" />
-            </View>
+            <ErrorBoundary>
+                <View
+                    activePanel={name}
+                    modal={<ModalRoot />}
+                    popout={
+                        PopoutComponent ? <PopoutComponent payload={popout.payload} /> : undefined
+                    }
+                    history={history.map(({ name }) => name)}
+                    onSwipeBack={onSwipeBack}
+                    onSwipeBackStart={handleSwipeStart}
+                >
+                    <Events id="events" />
+                    <CreateEvent id="create-event" />
+                    <Event id="event" />
+                    <EventSettings id="event.settings" />
+                    <CreatePurchase id="event.create-purchase" />
+                    <Purchase id="event.purchase" />
+                </View>
+            </ErrorBoundary>
         </ConfigProvider>
     );
 };
