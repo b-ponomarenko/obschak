@@ -9,6 +9,7 @@ export default class UploadedAvatarPure extends PureComponent {
         image: pt.string,
         uploadImage: pt.func,
         openPopout: pt.func,
+        openSnackbar: pt.func,
         onImageChange: pt.func,
     };
 
@@ -23,10 +24,17 @@ export default class UploadedAvatarPure extends PureComponent {
 
     handleInputFileChange = (e) => {
         const [image] = e.target.files;
-        const { uploadImage, onImageChange } = this.props;
+        const { uploadImage, openSnackbar, onImageChange } = this.props;
 
         if (!image) {
             return;
+        }
+
+        if (!/image\/.*$/g.test(image.type)) {
+            return openSnackbar({
+                type: 'error',
+                children: 'Загружаемый файл должен быть изображением',
+            });
         }
 
         this.setState({ loading: true });
