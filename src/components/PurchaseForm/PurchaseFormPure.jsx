@@ -39,6 +39,7 @@ export default class PurchaseFormPure extends PureComponent {
         creatorId: pt.number,
         onSubmit: pt.func,
         openNotificationPopout: pt.func,
+        openSnackbar: pt.func,
         uploadImage: pt.func,
         showFullImages: pt.func,
         openModal: pt.func,
@@ -154,8 +155,15 @@ export default class PurchaseFormPure extends PureComponent {
 
     handleInputFileChange = (e) => {
         const { receipts } = this.state;
-        const { uploadImage } = this.props;
+        const { uploadImage, openSnackbar } = this.props;
         const { files } = e.target;
+
+        if ([...files].some(({ type }) => !/image\/.*$/g.test(type))) {
+            return openSnackbar({
+                type: 'error',
+                children: 'Все загружаемые файлы должны быть изображениями',
+            });
+        }
 
         this.setState({ loading: true });
         return Promise.all([...files].map((file) => uploadImage(file)))
