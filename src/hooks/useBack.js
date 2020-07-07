@@ -23,7 +23,7 @@ const useBack = () => {
 
             dispatch(setHistory(h));
 
-            if (typeof routeName === 'string') {
+            if (routeName && typeof routeName === 'string') {
                 return navigateTo(routeName, routeParams);
             }
 
