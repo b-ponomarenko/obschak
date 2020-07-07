@@ -190,7 +190,7 @@ export default class EventsPure extends PureComponent {
                                             </Button>
                                         }
                                     >
-                                        Для того, чтобы у Вас появилось первое событие нажмите
+                                        Для того чтобы у Вас появилось первое событие, нажмите
                                         «Добавить событие»
                                     </Placeholder>
                                 )}
