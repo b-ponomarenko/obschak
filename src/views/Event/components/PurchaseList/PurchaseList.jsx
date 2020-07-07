@@ -48,14 +48,14 @@ const PurchaseList = () => {
                     return (
                         <Placeholder
                             icon={<Icon56MarketOutline />}
-                            header={<>В событии «{title}» пока нет ни одной покупки</>}
+                            header={<>В событии «{title}», пока нет ни одной покупки</>}
                             action={
                                 <Button size="l" onClick={navigateToCreatePurchase}>
                                     Добавить покупку
                                 </Button>
                             }
                         >
-                            Для того, чтобы добавить покупку нажмите «Добавить покупку»
+                            Для того чтобы добавить покупку, нажмите «Добавить покупку»
                         </Placeholder>
                     );
                 }
