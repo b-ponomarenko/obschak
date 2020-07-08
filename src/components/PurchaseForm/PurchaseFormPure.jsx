@@ -57,6 +57,7 @@ export default class PurchaseFormPure extends PureComponent {
     static defaultProps = {
         selectedUsers: [],
         receipts: [],
+        name: '',
     };
 
     fileRef = createRef();
@@ -115,7 +116,7 @@ export default class PurchaseFormPure extends PureComponent {
         const { value, name, selectedUsers, currency, creatorId, receipts } = this.state;
         let isValid = true;
 
-        if (!name) {
+        if (!name.trim()) {
             isValid = false;
             this.setState({ nameError: true });
         }
@@ -130,7 +131,7 @@ export default class PurchaseFormPure extends PureComponent {
             openNotificationPopout({
                 title: 'Ни одного участника не выбрано',
                 description:
-                    'Для продолжения Вам необходимо выбрать хотя бы одного участника покупки',
+                    'Для продолжения Вам необходимо выбрать хотя бы одного участника покупки.',
             });
         }
 
@@ -139,7 +140,7 @@ export default class PurchaseFormPure extends PureComponent {
         }
 
         return onSubmit({
-            name,
+            name: name.trim(),
             value,
             currency,
             creatorId,

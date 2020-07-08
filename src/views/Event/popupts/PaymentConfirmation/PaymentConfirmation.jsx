@@ -35,7 +35,7 @@ const PaymentConfirmation = ({ payload }) => {
                         userId: userTo.id,
                         message: `${userFrom.first_name} ${userFrom.last_name} отправил${
                             userFrom.sex === 1 ? 'а' : ''
-                        } Вам ${value.toLocaleString('ru')} ${
+                        } Вам ${value.toLocaleString('ru-RU')} ${
                             currencies[currency]
                         }. Проверьте баланс своего счета`,
                     })
@@ -84,7 +84,7 @@ const PaymentConfirmation = ({ payload }) => {
             <p>
                 Вы подтверждаете, что {userFrom.id === currentUser.id ? 'Вы' : userFrom.first_name}{' '}
                 отправил{userFrom.id === currentUser.id ? 'и' : userFrom.sex === 1 ? 'а' : ''}{' '}
-                {userTo.id === currentUser.id ? 'Вам' : personTo} {value.toLocaleString('ru')}{' '}
+                {userTo.id === currentUser.id ? 'Вам' : personTo} {value.toLocaleString('ru-RU')}{' '}
                 {currencies[currency]}?
             </p>
         </Alert>

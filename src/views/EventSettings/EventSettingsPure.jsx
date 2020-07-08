@@ -153,7 +153,7 @@ export default class EventSettingsPure extends PureComponent {
         const { updateEvent, event, showSpinner, hideSpinner, onBack } = this.props;
         const { users, photo, title } = this.state;
 
-        if (!title) {
+        if (!title.trim()) {
             return this.setState({ titleError: true });
         }
 
@@ -162,7 +162,7 @@ export default class EventSettingsPure extends PureComponent {
             ...event,
             users,
             photo,
-            title,
+            title: title.trim(),
         })
             .then(onBack)
             .finally(hideSpinner);

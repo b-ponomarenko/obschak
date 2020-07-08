@@ -45,7 +45,7 @@ const UserRelation = ({ relation, type, onClick }) => {
                                 [styles.negative]: type === 'negative',
                             })}
                         >
-                            {value.toLocaleString('ru')} {currencies[currency]}
+                            {value.toLocaleString('ru-RU')} {currencies[currency]}
                         </div>
                     </div>
                 </Card>
