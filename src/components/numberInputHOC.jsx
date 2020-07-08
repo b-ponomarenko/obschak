@@ -9,10 +9,12 @@ const getValidator = (precision) => {
     if (!precision) {
         regex = '^([0-9])*$';
     } else {
-        regex = `^(\\d{1,12})?(([.,]\\d{1,${precision}})|[.,])?$`;
+        regex = `^(\\d{1,12})(([.,]\\d{1,${precision}})|[.,])?$`;
     }
 
-    return (value) => !value.length || new RegExp(regex, 'g').test(value);
+    return (value) => {
+        return !value.length || new RegExp(regex, 'g').test(value);
+    };
 };
 
 const getDecimalPartLength = (value) => String(value).split('.')[1]?.length ?? 0;
@@ -96,7 +98,7 @@ export default (InputComponent) =>
             return (
                 <InputComponent
                     {...props}
-                    value={focused ? value : numberValue?.toLocaleString('ru')}
+                    value={focused ? value : numberValue?.toLocaleString('ru-RU')}
                     onBlur={this.handleBlur}
                     onFocus={this.handleFocus}
                     onChange={this.handleChange}

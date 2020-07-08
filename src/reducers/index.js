@@ -8,6 +8,7 @@ import purchase from './purchase';
 import snackbar from './snackbar';
 import history from './history';
 import vk from './vk';
+import storage from './storage';
 import notifications from './notifications';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -28,6 +29,7 @@ export default (router) => {
             notifications,
             snackbar,
             history,
+            storage,
         }),
         composeWithDevTools(applyMiddleware(thunk, router5Middleware(router)))
     );

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import Icon56UsersOutline from '@vkontakte/icons/dist/56/users_outline';
 import pt from 'prop-types';
 import styles from './AddFriendsModal.module.css';
 import Icon24DismissDark from '@vkontakte/icons/dist/24/dismiss_dark';
@@ -11,6 +12,7 @@ import {
     ModalPage,
     ModalPageHeader,
     PanelHeaderButton,
+    Placeholder,
     Search,
 } from '@vkontakte/vkui';
 import isEmpty from '@tinkoff/utils/is/empty';
@@ -80,7 +82,7 @@ export default class AddFriendsModalPure extends PureComponent {
                 }
             >
                 <Search onChange={this.handleSearch} />
-                {!isEmpty(selectedFriends) && (
+                {!isEmpty(selectedFriends) && !isEmpty(friends) && (
                     <HorizontalScroll>
                         <Div>
                             {selectedFriends.map((friend) => {
@@ -95,14 +97,19 @@ export default class AddFriendsModalPure extends PureComponent {
                                         >
                                             <Icon24DismissDark />
                                         </div>
-                                        <div className={styles.name}>
-                                            <Caption level="2">{first_name}</Caption>
-                                        </div>
+                                        <Caption className={styles.name} level="2">
+                                            {first_name}
+                                        </Caption>
                                     </div>
                                 );
                             })}
                         </Div>
                     </HorizontalScroll>
+                )}
+                {isEmpty(friends) && (
+                    <Placeholder icon={<Icon56UsersOutline />} header="Не найдено ни одного друга">
+                        Проверьте что нет ошибок и попробуйте изменить запрос
+                    </Placeholder>
                 )}
                 <List>
                     {friends.map((friend) => {

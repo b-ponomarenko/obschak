@@ -25,3 +25,8 @@
     font-weight: 200;
     src: url('./fonts/TTCommons-ExtraLight.ttf') format('truetype');
 }
+
+body,
+.Header {
+    user-select: none !important;
+}

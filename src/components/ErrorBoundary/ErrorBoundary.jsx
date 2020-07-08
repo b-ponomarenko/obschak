@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Icon56FireOutline from '@vkontakte/icons/dist/56/fire_outline';
-import { Placeholder, Button } from '@vkontakte/vkui';
+import { Placeholder, Button, View, Panel } from '@vkontakte/vkui';
 import styles from './ErrorBoundary.module.css';
 
 class ErrorBoundary extends PureComponent {
@@ -21,21 +21,25 @@ class ErrorBoundary extends PureComponent {
 
         if (hasError) {
             return (
-                <Placeholder
-                    icon={
-                        <div className={styles.fire}>
-                            <Icon56FireOutline />
-                        </div>
-                    }
-                    header="Что-то пошло не так"
-                    action={
-                        <Button size="l" onClick={this.handleReload}>
-                            Перезагрузить
-                        </Button>
-                    }
-                >
-                    Мы уже знаем о проблеме, попробуйте перезагрузить приложение
-                </Placeholder>
+                <View activePanel="error">
+                    <Panel id="error">
+                        <Placeholder
+                            icon={
+                                <div className={styles.fire}>
+                                    <Icon56FireOutline />
+                                </div>
+                            }
+                            header="Что-то пошло не так"
+                            action={
+                                <Button size="l" onClick={this.handleReload}>
+                                    Перезагрузить
+                                </Button>
+                            }
+                        >
+                            Мы уже знаем о проблеме, попробуйте перезагрузить приложение
+                        </Placeholder>
+                    </Panel>
+                </View>
             );
         }
 

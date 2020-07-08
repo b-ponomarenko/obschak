@@ -8,13 +8,19 @@ import openModal from '../../../../actions/openModal';
 import styles from './ContextNotifications.module.css';
 import openSnackbar from '../../../../actions/openSnackbar';
 import { useBridge } from '../../../../core/bridge';
+import enableNotifications from '../../../../actions/vk/enableNotifications';
+import setToStorage from '../../../../actions/vk/setToStorage';
 
 const ContextNotifications = () => {
     const notifications = useSelector(({ notifications }) => notifications);
     const [notificationEnabled, setNotificationEnabled] = useState(notifications.all);
+    const isNotificationShowed = useSelector(
+        ({ storage }) => storage.isNotificationShowed === 'true'
+    );
     const dispatch = useDispatch();
     const handleSuccess = useCallback(() => {
         setNotificationEnabled(true);
+        dispatch(setToStorage({ key: 'isNotificationShowed', value: 'true' }));
         dispatch(openSnackbar({ type: 'info', children: 'Уведомления подключены' }));
     }, []);
     const handleClick = useCallback(() => {
@@ -22,6 +28,10 @@ const ContextNotifications = () => {
             setNotificationEnabled(false);
             dispatch(openSnackbar({ type: 'info', children: 'Уведомления отключены' }));
             return dispatch(disableNotifications()).catch(() => setNotificationEnabled(true));
+        }
+
+        if (isNotificationShowed) {
+            return dispatch(enableNotifications()).then(handleSuccess);
         }
 
         return dispatch(
@@ -32,7 +42,7 @@ const ContextNotifications = () => {
                 },
             })
         );
-    }, [notificationEnabled]);
+    }, [notificationEnabled, isNotificationShowed]);
 
     useBridge('VKWebAppAllowNotificationsResult', () => {
         setNotificationEnabled(true);

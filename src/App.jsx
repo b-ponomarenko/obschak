@@ -17,6 +17,7 @@ import offerShare from './modals/actions/offerShare';
 import closeSnackbar from './actions/closeSnackbar';
 import getNotifications from './actions/vk/getNotifications';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
+import getFromStorage from './actions/vk/getFromStorage';
 
 const App = () => {
     const { name } = useSelector(({ router }) => router.route);
@@ -34,6 +35,7 @@ const App = () => {
         dispatch(checkToRedirect());
         dispatch(offerShare());
         dispatch(getNotifications());
+        dispatch(getFromStorage());
     }, []);
 
     return (

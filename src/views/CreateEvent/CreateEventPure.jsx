@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import pt from 'prop-types';
 import isEmpty from '@tinkoff/utils/is/empty';
-import { format } from 'date-fns';
+import { format, startOfHour, addHours, isBefore, addDays } from 'date-fns';
 import Icon28UserAddOutline from '@vkontakte/icons/dist/28/user_add_outline';
 import {
     PanelHeaderBack,
@@ -19,7 +19,6 @@ import {
     CellButton,
     Switch,
 } from '@vkontakte/vkui';
-import { isBefore, addDays } from 'date-fns';
 import styles from './CreateEvent.module.css';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import debounce from '@tinkoff/utils/function/debounce';
@@ -37,14 +36,15 @@ const getDateTimeString = (dateTime) => {
     return `${date}T${time}`;
 };
 
-const defaultStartDate = addDays(new Date(), 2);
-const defaultEndDate = addDays(new Date(), 2);
+const defaultStartDate = startOfHour(addHours(addDays(new Date(), 2), 1));
+const defaultEndDate = startOfHour(addHours(addDays(new Date(), 3), 1));
 
 export default class CreateEventPure extends PureComponent {
     state = {
         friends: [],
         startDate: defaultStartDate,
         endDate: defaultEndDate,
+        title: '',
     };
 
     static propTypes = {
@@ -101,7 +101,7 @@ export default class CreateEventPure extends PureComponent {
         const now = new Date();
         let isValid = true;
 
-        if (!title) {
+        if (!title.trim()) {
             isValid = false;
             this.setState({ titleError: true });
         }
@@ -145,7 +145,7 @@ export default class CreateEventPure extends PureComponent {
                 payload: {
                     title: 'Ни одного друга не выбрано',
                     description:
-                        'Для того чтобы создать событие, Вам необходимо добавить хотя бы одного друга',
+                        'Для того чтобы создать событие, Вам необходимо добавить хотя бы одного друга.',
                 },
             });
         }
@@ -158,7 +158,7 @@ export default class CreateEventPure extends PureComponent {
 
         showSpinner();
         createEvent({
-            title,
+            title: title.trim(),
             startDate,
             endDate,
             users: friendsIds,
