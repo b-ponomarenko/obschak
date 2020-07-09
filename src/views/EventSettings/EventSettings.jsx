@@ -32,7 +32,7 @@ const mapDispatch = (dispatch) => ({
     fetchEvent: (id) => dispatch(fetchEventWithUsers(id)),
     fetchEvents: () => dispatch(events()),
     openAddFriendsModal: (payload) => dispatch(openModal({ name: 'ADD_FRIENDS_MODAL', payload })),
-    fetchFriends: (search) => dispatch(getFriends(search)),
+    fetchFriends: (q) => dispatch(getFriends({ q })),
     fetchUsers: (users) => dispatch(getUsers({ users })),
     updateEvent: (payload) => dispatch(updateEvent(payload)),
     openPopout: ({ name, payload }) => dispatch(openPopout({ name, payload })),

@@ -4,6 +4,8 @@ import Icon28CameraOutline from '@vkontakte/icons/dist/28/camera_outline';
 import { Avatar, Spinner } from '@vkontakte/vkui';
 import styles from './UploadedAvatarPure.module.css';
 
+const TEN_MB = 10000000;
+
 export default class UploadedAvatarPure extends PureComponent {
     static propTypes = {
         image: pt.string,
@@ -28,6 +30,13 @@ export default class UploadedAvatarPure extends PureComponent {
 
         if (!image) {
             return;
+        }
+
+        if (image.size > TEN_MB) {
+            return openSnackbar({
+                type: 'error',
+                children: 'Загрузите файл весом до 10 МБ',
+            });
         }
 
         if (!/image\/.*$/g.test(image.type)) {

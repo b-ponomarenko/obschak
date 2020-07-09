@@ -27,6 +27,8 @@ import { getImage } from '../../utils/image';
 const NumberInput = numberInputHOC(Input);
 const isArrayEqual = (a, b) => equal([...a].sort(), [...b].sort());
 
+const TEN_MB = 10000000;
+
 export default class PurchaseFormPure extends PureComponent {
     static propTypes = {
         user: pt.object,
@@ -159,6 +161,13 @@ export default class PurchaseFormPure extends PureComponent {
         const { uploadImage, openSnackbar } = this.props;
         const { files } = e.target;
 
+        if ([...files].some(({ size }) => size > TEN_MB)) {
+            return openSnackbar({
+                type: 'error',
+                children: 'Каждый из загружаемых файлов должен быть весом до 10 МБ',
+            });
+        }
+
         if ([...files].some(({ type }) => !/image\/.*$/g.test(type))) {
             return openSnackbar({
                 type: 'error',
@@ -229,6 +238,8 @@ export default class PurchaseFormPure extends PureComponent {
                         <FormLayoutGroup top="Стоимость">
                             <div className={styles.value}>
                                 <NumberInput
+                                    inputmode="decimal"
+                                    pattern="[0-9]*"
                                     placeholder="Введите стоимость"
                                     precision={2}
                                     value={value}

@@ -14,13 +14,16 @@ import {
     PanelHeaderButton,
     Placeholder,
     Search,
+    Spinner,
 } from '@vkontakte/vkui';
 import isEmpty from '@tinkoff/utils/is/empty';
 import HorizontalScroll from '../../components/HorizontallScroll/HorizontallScroll';
+import InfinityScroll from '../../components/InfinityScroll/InfinityScroll';
 
 export default class AddFriendsModalPure extends PureComponent {
     state = {
         selectedFriends: this.props.payload.selectedFriends,
+        friends: [],
     };
 
     static propTypes = {
@@ -31,6 +34,7 @@ export default class AddFriendsModalPure extends PureComponent {
             onSearch: pt.func,
         }),
         closeModal: pt.func,
+        fetchMoreFriends: pt.func,
         id: pt.string,
     };
 
@@ -60,12 +64,36 @@ export default class AddFriendsModalPure extends PureComponent {
         return this.setState({ selectedFriends: [...selectedFriends, friend] });
     };
 
-    handleSearch = (e) => this.props.payload.onSearch(e.target.value);
+    handleSearch = (e) => {
+        this.setState({ search: e.target.value, friends: [] });
+        return this.props.payload.onSearch(e.target.value);
+    };
+
+    handleFetchFriends = () => {
+        const { fetchMoreFriends, payload } = this.props;
+        const { friends } = payload;
+        const { search, total } = this.state;
+        const offset = this.state.friends.length + friends.length;
+
+        if (total === offset) {
+            return;
+        }
+
+        this.setState({ loading: true });
+        return fetchMoreFriends({ offset, q: search })
+            .then((data) =>
+                this.setState({
+                    friends: [...this.state.friends, ...data.items],
+                    total: data.count,
+                })
+            )
+            .finally(() => this.setState({ loading: false }));
+    };
 
     render() {
         const { id, payload } = this.props;
-        const { friends } = payload;
-        const { selectedFriends } = this.state;
+        const { selectedFriends, loading } = this.state;
+        const friends = [...payload.friends, ...this.state.friends];
 
         return (
             <ModalPage
@@ -112,21 +140,27 @@ export default class AddFriendsModalPure extends PureComponent {
                     </Placeholder>
                 )}
                 <List>
-                    {friends.map((friend) => {
-                        const { id, photo_100, first_name, last_name } = friend;
+                    <InfinityScroll
+                        next={this.handleFetchFriends}
+                        loadingComponent={<Spinner size="medium" />}
+                        loading={loading}
+                    >
+                        {friends.map((friend) => {
+                            const { id, photo_100, first_name, last_name } = friend;
 
-                        return (
-                            <Cell
-                                checked={selectedFriends.map(({ id }) => id).includes(id)}
-                                key={id}
-                                selectable
-                                before={<Avatar size={40} src={photo_100} />}
-                                onClick={() => this.toggleSelectFriend(friend)}
-                            >
-                                {first_name} {last_name}
-                            </Cell>
-                        );
-                    })}
+                            return (
+                                <Cell
+                                    checked={selectedFriends.map(({ id }) => id).includes(id)}
+                                    key={id}
+                                    selectable
+                                    before={<Avatar size={40} src={photo_100} />}
+                                    onClick={() => this.toggleSelectFriend(friend)}
+                                >
+                                    {first_name} {last_name}
+                                </Cell>
+                            );
+                        })}
+                    </InfinityScroll>
                 </List>
             </ModalPage>
         );

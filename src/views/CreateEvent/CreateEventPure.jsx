@@ -36,14 +36,14 @@ const getDateTimeString = (dateTime) => {
     return `${date}T${time}`;
 };
 
-const defaultStartDate = startOfHour(addHours(addDays(new Date(), 2), 1));
-const defaultEndDate = startOfHour(addHours(addDays(new Date(), 3), 1));
-
 export default class CreateEventPure extends PureComponent {
+    startDate = startOfHour(addHours(addDays(new Date(), 2), 1));
+    endDate = startOfHour(addHours(addDays(new Date(), 3), 1));
+
     state = {
         friends: [],
-        startDate: defaultStartDate,
-        endDate: defaultEndDate,
+        startDate: this.startDate,
+        endDate: this.endDate,
         title: '',
     };
 
@@ -63,11 +63,11 @@ export default class CreateEventPure extends PureComponent {
     fetchFriends = (search) => {
         const { fetchFriends, openModal } = this.props;
 
-        return fetchFriends(search).then((friends) =>
+        return fetchFriends(search).then((payload) =>
             openModal({
                 name: 'ADD_FRIENDS_MODAL',
                 payload: {
-                    friends,
+                    friends: payload.items,
                     selectedFriends: this.state.friends,
                     onClose: this.handleCloseModal,
                     onSearch: this.handleSearchModal,
@@ -84,12 +84,12 @@ export default class CreateEventPure extends PureComponent {
 
     handleStartDateChange = (e) => {
         this.setState({
-            startDate: new Date(e.target.value || defaultStartDate),
+            startDate: new Date(e.target.value || this.startDate),
             startDateError: false,
         });
     };
     handleEndDateChange = (e) =>
-        this.setState({ endDate: new Date(e.target.value || defaultEndDate), endDateError: false });
+        this.setState({ endDate: new Date(e.target.value || this.endDate), endDateError: false });
     handleChangeTitle = (e) =>
         this.setState({ title: e.target.value.slice(0, 30), titleError: false });
 
@@ -151,7 +151,7 @@ export default class CreateEventPure extends PureComponent {
         }
 
         if (!isValid) {
-            return;
+            return window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         const friendsIds = friends.map(({ id }) => id);
@@ -230,8 +230,7 @@ export default class CreateEventPure extends PureComponent {
                             >
                                 <Input
                                     type="datetime-local"
-                                    min={getDateTimeString(now)}
-                                    max={getDateTimeString(endDate)}
+                                    min={'2020-07-11T20:00'}
                                     onChange={this.handleStartDateChange}
                                     status={startDateError && 'error'}
                                     value={getDateTimeString(startDate)}
