@@ -26,6 +26,7 @@ const App = () => {
     const fetchUserInfo = useCallback(() => dispatch(getUserInfo()), []);
     const popouts = getPopouts();
     const popout = useSelector(({ popout }) => popout.popout);
+    const modal = useSelector(({ modals }) => modals.modal.name);
     const PopoutComponent = popouts[popout.name];
     const onSwipeBack = useBack();
     const handleSwipeStart = useCallback(() => dispatch(closeSnackbar()), []);
@@ -47,7 +48,7 @@ const App = () => {
                     popout={
                         PopoutComponent ? <PopoutComponent payload={popout.payload} /> : undefined
                     }
-                    history={history.map(({ name }) => name)}
+                    history={modal || popout.name ? [] : history.map(({ name }) => name)}
                     onSwipeBack={onSwipeBack}
                     onSwipeBackStart={handleSwipeStart}
                 >

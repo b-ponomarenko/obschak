@@ -57,9 +57,9 @@ export default class EventSettingsPure extends PureComponent {
         const { openAddFriendsModal, fetchFriends } = this.props;
         const { users } = this.state;
 
-        fetchFriends(search).then((friends) =>
+        fetchFriends(search).then((payload) =>
             openAddFriendsModal({
-                friends: friends.filter(({ id }) => !users.includes(id)),
+                friends: payload.items.filter(({ id }) => !users.includes(id)),
                 selectedFriends: [],
                 onClose: this.handleCloseModal,
                 onSearch: this.handleSearch,

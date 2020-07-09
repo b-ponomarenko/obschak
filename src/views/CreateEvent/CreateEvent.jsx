@@ -18,7 +18,7 @@ const mapState = ({ user, vk }) => {
 };
 
 const mapContext = (dispatch) => ({
-    fetchFriends: (search) => dispatch(getFriends(search)),
+    fetchFriends: (q) => dispatch(getFriends({ q })),
     openModal: ({ name, payload }) => dispatch(openModal({ name, payload })),
     openPopout: ({ name, payload }) => dispatch(openPopout({ name, payload })),
     navigateBack: () => dispatch(navigateTo('events')),

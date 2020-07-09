@@ -71,9 +71,12 @@ export default class EventPure extends PureComponent {
     };
 
     componentDidMount() {
-        const { fetchEvent, eventId } = this.props;
+        const { fetchEvent, openSnackbar, eventId } = this.props;
 
-        fetchEvent(eventId).catch(this.navigateBack);
+        fetchEvent(eventId).catch(() => {
+            this.navigateBack();
+            openSnackbar({ type: 'error', children: 'Вы не являетесь участником события.' });
+        });
     }
 
     handlePurchasesTabClick = () => this.setState({ tab: 'purchases' });

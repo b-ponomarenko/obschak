@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import last from '@tinkoff/utils/array/last';
 import { setHistory } from '../reducers/history';
 import bridge from '@vkontakte/vk-bridge';
+import closeSnackbar from '../actions/closeSnackbar';
 
 const useBack = () => {
     const history = useSelector(({ history }) => history);
@@ -20,6 +21,8 @@ const useBack = () => {
             if (h.length <= 1) {
                 bridge.send('VKWebAppDisableSwipeBack');
             }
+
+            dispatch(closeSnackbar());
 
             dispatch(setHistory(h));
 
