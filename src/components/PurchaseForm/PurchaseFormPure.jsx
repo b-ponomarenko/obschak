@@ -168,10 +168,10 @@ export default class PurchaseFormPure extends PureComponent {
             });
         }
 
-        if ([...files].some(({ type }) => !/image\/.*$/g.test(type))) {
+        if ([...files].some(({ type }) => !/image\/(jpg|jpeg|png|webp)$/g.test(type))) {
             return openSnackbar({
                 type: 'error',
-                children: 'Все загружаемые файлы должны быть изображениями',
+                children: 'Все загружаемые изображения должно быть jpg, jpeg или png',
             });
         }
 
@@ -271,7 +271,7 @@ export default class PurchaseFormPure extends PureComponent {
                                             multiple
                                             className={styles.file}
                                             ref={this.fileRef}
-                                            accept="image/*"
+                                            accept="image/jpeg,image/jpg,image/png,image/webp"
                                             onChange={this.handleInputFileChange}
                                         />
                                     </Avatar>

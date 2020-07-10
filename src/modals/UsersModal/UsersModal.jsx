@@ -45,6 +45,7 @@ const UsersModal = ({ id, payload }) => {
 
                         return (
                             <SimpleCell
+                                disabled={!selectable}
                                 key={id}
                                 before={<Avatar size={40} src={currentUser?.photo_100} />}
                                 onClick={() => setSelected(id)}

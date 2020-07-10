@@ -1,5 +1,6 @@
 import { decodeBase64 } from '../utils/base64';
 import navigateTo from './navigateTo';
+import openSnackbar from './openSnackbar';
 
 export default () => (dispatch) => {
     if (!window.location.hash) {
@@ -11,6 +12,8 @@ export default () => (dispatch) => {
 
         return dispatch(navigateTo(route, params));
     } catch (e) {
-        return;
+        return dispatch(
+            openSnackbar({ type: 'error', children: 'Вы перешли по невалидной ссылке' })
+        );
     }
 };

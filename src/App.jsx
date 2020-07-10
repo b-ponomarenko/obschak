@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,7 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import getFromStorage from './actions/vk/getFromStorage';
 
 const App = () => {
+    const [focused, setFocused] = useState(false);
     const { name } = useSelector(({ router }) => router.route);
     const history = useSelector(({ history }) => history);
     const dispatch = useDispatch();
@@ -37,6 +38,20 @@ const App = () => {
         dispatch(offerShare());
         dispatch(getNotifications());
         dispatch(getFromStorage());
+
+        const focusIn = () => setFocused(true);
+        const focusOut = () => setFocused(false);
+        const hideSnackbar = () => dispatch(closeSnackbar());
+
+        document.addEventListener('focusin', focusIn);
+        document.addEventListener('focusout', focusOut);
+        window.addEventListener('popstate', hideSnackbar);
+
+        return () => {
+            document.removeEventListener('focusin', focusIn);
+            document.removeEventListener('focusout', focusOut);
+            window.removeEventListener('popstate', hideSnackbar);
+        };
     }, []);
 
     return (
@@ -48,7 +63,7 @@ const App = () => {
                     popout={
                         PopoutComponent ? <PopoutComponent payload={popout.payload} /> : undefined
                     }
-                    history={modal || popout.name ? [] : history.map(({ name }) => name)}
+                    history={modal || popout.name || focused ? [] : history.map(({ name }) => name)}
                     onSwipeBack={onSwipeBack}
                     onSwipeBackStart={handleSwipeStart}
                 >
