@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import pt from 'prop-types';
 import isEmpty from '@tinkoff/utils/is/empty';
-import { format, startOfHour, addHours, isBefore, addDays } from 'date-fns';
+import { format, startOfHour, addHours, isBefore, isEqual, addDays } from 'date-fns';
+import ru from 'date-fns/locale/ru';
 import Icon28UserAddOutline from '@vkontakte/icons/dist/28/user_add_outline';
 import {
     PanelHeaderBack,
@@ -30,10 +31,22 @@ const getDateTimeString = (dateTime) => {
         return;
     }
 
-    const date = format(dateTime, 'yyyy-MM-dd');
-    const time = format(dateTime, 'HH:mm');
+    const date = format(dateTime, 'yyyy-MM-dd', { locale: ru });
+    const time = format(dateTime, 'HH:mm', { locale: ru });
 
     return `${date}T${time}`;
+};
+
+const prepareDate = (dateTimeString) => {
+    if (!dateTimeString) {
+        return;
+    }
+
+    const [date, time] = dateTimeString.split('T');
+    const [year, month, day] = date.split('-').map(Number);
+    const [hour, minute] = time.split(':').map(Number);
+
+    return new Date(year, month - 1, day, hour, minute);
 };
 
 export default class CreateEventPure extends PureComponent {
@@ -82,14 +95,16 @@ export default class CreateEventPure extends PureComponent {
 
     handleSearchModal = debounce(500, (value) => this.fetchFriends(value));
 
-    handleStartDateChange = (e) => {
+    handleStartDateChange = (e) =>
         this.setState({
-            startDate: new Date(e.target.value || this.startDate),
+            startDate: prepareDate(e.target.value) || this.startDate,
             startDateError: false,
         });
-    };
     handleEndDateChange = (e) =>
-        this.setState({ endDate: new Date(e.target.value || this.endDate), endDateError: false });
+        this.setState({
+            endDate: prepareDate(e.target.value) || this.endDate,
+            endDateError: false,
+        });
     handleChangeTitle = (e) =>
         this.setState({ title: e.target.value.slice(0, 30), titleError: false });
 
@@ -130,7 +145,7 @@ export default class CreateEventPure extends PureComponent {
             });
         }
 
-        if (isBefore(endDate, startDate)) {
+        if (isBefore(endDate, startDate) || isEqual(endDate, startDate)) {
             isValid = false;
             this.setState({
                 endDateError: true,
@@ -230,7 +245,8 @@ export default class CreateEventPure extends PureComponent {
                             >
                                 <Input
                                     type="datetime-local"
-                                    min={'2020-07-11T20:00'}
+                                    min={getDateTimeString(now)}
+                                    max={getDateTimeString(endDate)}
                                     onChange={this.handleStartDateChange}
                                     status={startDateError && 'error'}
                                     value={getDateTimeString(startDate)}
@@ -259,7 +275,11 @@ export default class CreateEventPure extends PureComponent {
                             Добавить участника
                         </CellButton>
                         {friends.map(({ id, photo_100, first_name, last_name }) => (
-                            <SimpleCell key={id} before={<Avatar size={40} src={photo_100} />}>
+                            <SimpleCell
+                                key={id}
+                                before={<Avatar size={40} src={photo_100} />}
+                                disabled
+                            >
                                 {first_name} {last_name}
                             </SimpleCell>
                         ))}

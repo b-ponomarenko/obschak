@@ -26,9 +26,13 @@ import Panel from '../../components/Panel/Panel';
 
 const groupEvents = memoize((events) => {
     const now = new Date();
-    const sortedEvents = [...events].sort((a, b) =>
-        isAfter(new Date(a.startDate), new Date(b.startDate)) ? 1 : -1
-    );
+    const sortedEvents = [...events].sort((a, b) => {
+        if (a.startDate === b.startDate) {
+            return a.title > b.title ? 1 : -1;
+        }
+
+        return isAfter(new Date(a.startDate), new Date(b.startDate)) ? -1 : 1;
+    });
     const pastEvents = [];
     const currentEvents = [];
     const futureEvents = [];

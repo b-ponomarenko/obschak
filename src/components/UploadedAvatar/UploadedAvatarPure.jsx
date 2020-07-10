@@ -20,15 +20,22 @@ export default class UploadedAvatarPure extends PureComponent {
     state = {};
 
     handleChangePhoto = () => {
+        const { loading } = this.state;
+
+        if (loading) {
+            return;
+        }
+
         this.fileRef.current.value = '';
         this.fileRef.current.click();
     };
 
     handleInputFileChange = (e) => {
         const [image] = e.target.files;
+        const { loading } = this.state;
         const { uploadImage, openSnackbar, onImageChange } = this.props;
 
-        if (!image) {
+        if (!image || loading) {
             return;
         }
 
@@ -39,10 +46,10 @@ export default class UploadedAvatarPure extends PureComponent {
             });
         }
 
-        if (!/image\/.*$/g.test(image.type)) {
+        if (!/image\/(jpg|jpeg|png|webp)$/g.test(image.type)) {
             return openSnackbar({
                 type: 'error',
-                children: 'Загружаемый файл должен быть изображением',
+                children: 'Загружаемое изображение должно быть jpg, jpeg или png',
             });
         }
 
@@ -54,6 +61,11 @@ export default class UploadedAvatarPure extends PureComponent {
 
     handleOpenPopout = (e) => {
         const { openPopout, onImageChange } = this.props;
+        const { loading } = this.state;
+
+        if (loading) {
+            return;
+        }
 
         e.stopPropagation();
 
@@ -73,7 +85,7 @@ export default class UploadedAvatarPure extends PureComponent {
                     type="file"
                     className={styles.file}
                     ref={this.fileRef}
-                    accept="image/*"
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
                     onChange={this.handleInputFileChange}
                 />
                 {image ? (
