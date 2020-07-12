@@ -2,6 +2,7 @@ import createRouter from 'router5';
 import browserPlugin from 'router5-plugin-browser';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import browserExtension from './browserExtension';
 
 export const useCurrentRoute = () => {
     const route = useSelector(({ router }) => router.route);
@@ -41,7 +42,7 @@ export const configureRouter = () => {
         { defaultRoute: 'events' }
     );
 
-    router.usePlugin(browserPlugin());
+    router.usePlugin(browserPlugin(undefined, browserExtension));
 
     return router;
 };
