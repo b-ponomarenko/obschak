@@ -3,9 +3,16 @@ import PropTypes from 'prop-types';
 import Icon56FireOutline from '@vkontakte/icons/dist/56/fire_outline';
 import { Placeholder, Button, View, Panel } from '@vkontakte/vkui';
 import styles from './ErrorBoundary.module.css';
+import { connect } from 'react-redux';
+import { stringify } from 'query-string';
 
 class ErrorBoundary extends PureComponent {
     state = { hasError: false };
+
+    static propTypes = {
+        vk: PropTypes.object,
+        children: PropTypes.node,
+    };
 
     componentDidCatch(error, errorInfo) {
         console.log(error, errorInfo);
@@ -13,7 +20,11 @@ class ErrorBoundary extends PureComponent {
         this.setState({ hasError: true });
     }
 
-    handleReload = () => window.location.reload();
+    handleReload = () => {
+        const { vk } = this.props;
+
+        return window.location.replace(`${window.location.origin}/?${stringify(vk)}`);
+    };
 
     render() {
         const { children } = this.props;
@@ -47,8 +58,4 @@ class ErrorBoundary extends PureComponent {
     }
 }
 
-ErrorBoundary.propTypes = {
-    children: PropTypes.node,
-};
-
-export default ErrorBoundary;
+export default connect(({ vk }) => ({ vk }))(ErrorBoundary);

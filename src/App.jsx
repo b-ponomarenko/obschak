@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, ConfigProvider } from '@vkontakte/vkui';
+import { View, Root, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useDispatch, useSelector } from 'react-redux';
 import ModalRoot from './modals/ModalRoot';
@@ -17,8 +17,11 @@ import closeSnackbar from './actions/closeSnackbar';
 import getNotifications from './actions/vk/getNotifications';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import getFromStorage from './actions/vk/getFromStorage';
+import Offline from './components/Offline/Offline';
+import { useBridge } from './core/bridge';
 
 const App = () => {
+    const [activeView, setActiveView] = useState('app');
     const [focused, setFocused] = useState(false);
     const { name } = useSelector(({ router }) => router.route);
     const history = useSelector(({ history }) => history);
@@ -35,6 +38,12 @@ const App = () => {
     }, []);
     const handleSwipeStart = useCallback(() => dispatch(closeSnackbar()), []);
 
+    useBridge('VKWebAppViewRestore', () => {
+        if (window.navigator.onLine) {
+            setActiveView('app');
+        }
+    });
+
     useEffect(() => {
         fetchUserInfo();
         dispatch(checkToRedirect());
@@ -44,39 +53,64 @@ const App = () => {
 
         const focusIn = () => setFocused(true);
         const focusOut = () => setFocused(false);
-        const hideSnackbar = () => dispatch(closeSnackbar());
+        const handleOnline = () => setActiveView('app');
+        const handleOffline = () => setActiveView('offline');
 
         document.addEventListener('focusin', focusIn);
         document.addEventListener('focusout', focusOut);
-        window.addEventListener('popstate', hideSnackbar);
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
 
         return () => {
             document.removeEventListener('focusin', focusIn);
             document.removeEventListener('focusout', focusOut);
-            window.removeEventListener('popstate', hideSnackbar);
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
         };
     }, []);
+
+    useEffect(() => {
+        const handlePopState = () => {
+            if (activeView === 'offline') {
+                window.history.forward();
+            }
+
+            dispatch(closeSnackbar());
+        };
+
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, [activeView]);
 
     return (
         <ConfigProvider isWebView>
             <ErrorBoundary>
-                <View
-                    activePanel={name}
-                    modal={<ModalRoot />}
-                    popout={
-                        PopoutComponent ? <PopoutComponent payload={popout.payload} /> : undefined
-                    }
-                    history={modal || popout.name || focused ? [] : history}
-                    onSwipeBack={onSwipeBack}
-                    onSwipeBackStart={handleSwipeStart}
-                >
-                    <Events id="events" />
-                    <CreateEvent id="create-event" />
-                    <Event id="event" />
-                    <EventSettings id="event.settings" />
-                    <CreatePurchase id="event.create-purchase" />
-                    <Purchase id="event.purchase" />
-                </View>
+                <Root activeView={activeView}>
+                    <View
+                        id="app"
+                        activePanel={name}
+                        modal={<ModalRoot />}
+                        popout={
+                            PopoutComponent ? (
+                                <PopoutComponent payload={popout.payload} />
+                            ) : undefined
+                        }
+                        history={modal || popout.name || focused ? [] : history}
+                        onSwipeBack={onSwipeBack}
+                        onSwipeBackStart={handleSwipeStart}
+                    >
+                        <Events id="events" />
+                        <CreateEvent id="create-event" />
+                        <Event id="event" />
+                        <EventSettings id="event.settings" />
+                        <CreatePurchase id="event.create-purchase" />
+                        <Purchase id="event.purchase" />
+                    </View>
+                    <Offline id="offline" />
+                </Root>
             </ErrorBoundary>
         </ConfigProvider>
     );
