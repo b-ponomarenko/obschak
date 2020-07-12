@@ -157,7 +157,6 @@ export default class PurchaseFormPure extends PureComponent {
     };
 
     handleInputFileChange = (e) => {
-        const { receipts } = this.state;
         const { uploadImage, openSnackbar } = this.props;
         const { files } = e.target;
 
@@ -179,7 +178,10 @@ export default class PurchaseFormPure extends PureComponent {
         return Promise.all([...files].map((file) => uploadImage(file)))
             .then((images) =>
                 this.setState({
-                    receipts: [...images.map(({ image }) => image).reverse(), ...receipts],
+                    receipts: [
+                        ...images.map(({ image }) => image).reverse(),
+                        ...this.state.receipts,
+                    ],
                 })
             )
             .finally(() => this.setState({ loading: false }));
