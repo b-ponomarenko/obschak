@@ -12,7 +12,6 @@ export default class PurchasePure extends PureComponent {
     static propTypes = {
         route: pt.object,
         user: pt.object,
-        navigateTo: pt.object,
         purchase: pt.object,
         event: pt.object,
         fetchPurchase: pt.func,
@@ -22,7 +21,6 @@ export default class PurchasePure extends PureComponent {
         closePopout: pt.func,
         showSpinner: pt.func,
         hideSpinner: pt.func,
-        onBack: pt.func,
     };
 
     componentDidMount() {
@@ -33,7 +31,7 @@ export default class PurchasePure extends PureComponent {
     }
 
     handleSubmit = (values) => {
-        const { updatePurchase, purchase, showSpinner, hideSpinner, onBack } = this.props;
+        const { updatePurchase, purchase, showSpinner, hideSpinner } = this.props;
         const { name, value, currency, creatorId, receipts, users } = values;
 
         showSpinner();
@@ -46,7 +44,7 @@ export default class PurchasePure extends PureComponent {
             receipts,
             participants: users,
         })
-            .then(onBack)
+            .then(this.handleBackClick)
             .finally(hideSpinner);
     };
 
@@ -60,18 +58,22 @@ export default class PurchasePure extends PureComponent {
     };
 
     handleDelete = () => {
-        const { deletePurchase, purchase, showSpinner, hideSpinner, onBack } = this.props;
+        const { deletePurchase, purchase, showSpinner, hideSpinner } = this.props;
 
         showSpinner();
-        return deletePurchase(purchase.id).then(onBack).finally(hideSpinner);
+        return deletePurchase(purchase.id).then(this.handleBackClick).finally(hideSpinner);
     };
 
+    handleBackClick = () => window.history.back();
+
     render() {
-        const { purchase, event, onBack } = this.props;
+        const { purchase, event } = this.props;
 
         return (
-            <Panel id="event.purchase">
-                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>Покупка</PanelHeader>
+            <Panel id="event.purchase" previousView="event">
+                <PanelHeader left={<PanelHeaderBack onClick={this.handleBackClick} />}>
+                    Покупка
+                </PanelHeader>
                 <DelayedLoader loading={!purchase}>
                     {() => {
                         const {

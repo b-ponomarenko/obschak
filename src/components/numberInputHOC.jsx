@@ -83,8 +83,6 @@ export default (InputComponent) =>
             const value = toNumber(stringValue, precision);
             const validate = getValidator(this.props.precision);
 
-            console.log(stringValue, typeof stringValue, value, validate(stringValue));
-
             if (!validate(stringValue)) {
                 return;
             }

@@ -66,7 +66,6 @@ export default class EventPure extends PureComponent {
         route: pt.object,
         openSnackbar: pt.func,
         copyTextToClipboard: pt.func,
-        onBack: pt.func,
         id: pt.string,
     };
 
@@ -74,7 +73,7 @@ export default class EventPure extends PureComponent {
         const { fetchEvent, openSnackbar, eventId } = this.props;
 
         fetchEvent(eventId).catch(() => {
-            this.navigateBack();
+            this.handleBackClick();
             openSnackbar({ type: 'error', children: 'Вы не являетесь участником события.' });
         });
     }
@@ -91,18 +90,6 @@ export default class EventPure extends PureComponent {
         const { eventId, navigateTo } = this.props;
 
         navigateTo('event.settings', { eventId });
-    };
-
-    navigateToNotifications = () => {
-        const { eventId, navigateTo } = this.props;
-
-        navigateTo('event.notifications', { eventId });
-    };
-
-    navigateBack = () => {
-        const { navigateTo } = this.props;
-
-        navigateTo('events');
     };
 
     handleRefreshEvent = () => {
@@ -122,13 +109,17 @@ export default class EventPure extends PureComponent {
         ).then(() => openSnackbar({ type: 'info', children: 'Ссылка на событие скопирована' }));
     };
 
+    handleBackClick = () => window.history.back();
+
     render() {
-        const { event, user, onBack, platform } = this.props;
+        const { event, user, platform } = this.props;
         const { isFetching } = this.state;
 
         return (
-            <Panel id="event">
-                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>Событие</PanelHeader>
+            <Panel id="event" previousView="events">
+                <PanelHeader left={<PanelHeaderBack onClick={this.handleBackClick} />}>
+                    Событие
+                </PanelHeader>
                 <DelayedLoader loading={!event}>
                     {() => {
                         const { title, users, startDate, endDate, photo, purchases } = event;

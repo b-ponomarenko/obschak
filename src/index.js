@@ -60,6 +60,10 @@ export const store = configureStore(router);
 
 store.dispatch(vkInfoLoaded(parse(window.location.search)));
 
+if (process.env.NODE_ENV !== 'production') {
+    window.store = store;
+}
+
 router.start(() => {
     ReactDOM.render(
         <Provider store={store}>

@@ -27,7 +27,6 @@ export default class EventSettingsPure extends PureComponent {
     state = initialState(this.props);
 
     static propTypes = {
-        navigateTo: pt.func,
         openAddFriendsModal: pt.func,
         fetchFriends: pt.func,
         fetchUsers: pt.func,
@@ -43,7 +42,6 @@ export default class EventSettingsPure extends PureComponent {
         closePopout: pt.func,
         showSpinner: pt.func,
         hideSpinner: pt.func,
-        onBack: pt.func,
     };
 
     componentDidMount() {
@@ -117,7 +115,6 @@ export default class EventSettingsPure extends PureComponent {
             fetchEvents,
             currentUser,
             event,
-            navigateTo,
             showSpinner,
             hideSpinner,
         } = this.props;
@@ -128,29 +125,19 @@ export default class EventSettingsPure extends PureComponent {
             users: event.users.filter((userId) => userId !== currentUser.id),
         })
             .then(fetchEvents)
-            .then(() => navigateTo('events'))
+            .then(this.goToEvents)
             .finally(hideSpinner);
     };
 
     handleDeleteEvent = () => {
-        const {
-            deleteEvent,
-            event,
-            fetchEvents,
-            navigateTo,
-            showSpinner,
-            hideSpinner,
-        } = this.props;
+        const { deleteEvent, event, fetchEvents, showSpinner, hideSpinner } = this.props;
 
         showSpinner();
-        return deleteEvent(event.id)
-            .then(fetchEvents)
-            .then(() => navigateTo('events'))
-            .finally(hideSpinner);
+        return deleteEvent(event.id).then(fetchEvents).then(this.goToEvents).finally(hideSpinner);
     };
 
     handleSaveEvent = () => {
-        const { updateEvent, event, showSpinner, hideSpinner, onBack } = this.props;
+        const { updateEvent, event, showSpinner, hideSpinner } = this.props;
         const { users, photo, title } = this.state;
 
         if (!title.trim()) {
@@ -164,18 +151,22 @@ export default class EventSettingsPure extends PureComponent {
             photo,
             title: title.trim(),
         })
-            .then(onBack)
+            .then(this.handleBackClick)
             .finally(hideSpinner);
     };
 
+    handleBackClick = () => window.history.back();
+
+    goToEvents = () => window.history.go(-2);
+
     render() {
-        const { event, user, currentUser, onBack } = this.props;
+        const { event, user, currentUser } = this.props;
         const { creatorId } = event;
         const { users, photo, title, titleError } = this.state;
 
         return (
-            <Panel id="event.settings">
-                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>
+            <Panel id="event.settings" previousView="event">
+                <PanelHeader left={<PanelHeaderBack onClick={this.handleBackClick} />}>
                     Настройки события
                 </PanelHeader>
                 <RichCell

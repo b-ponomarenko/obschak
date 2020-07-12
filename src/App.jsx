@@ -11,7 +11,6 @@ import EventSettings from './views/EventSettings/EventSettings';
 import CreatePurchase from './views/CreatePurchase/CreatePurchase';
 import getUserInfo from './actions/vk/getUserInfo';
 import Purchase from './views/Purchase/Purchase';
-import useBack from './hooks/useBack';
 import checkToRedirect from './actions/checkToRedirect';
 import offerShare from './modals/actions/offerShare';
 import closeSnackbar from './actions/closeSnackbar';
@@ -29,7 +28,11 @@ const App = () => {
     const popout = useSelector(({ popout }) => popout.popout);
     const modal = useSelector(({ modals }) => modals.modal.name);
     const PopoutComponent = popouts[popout.name];
-    const onSwipeBack = useBack();
+    const onSwipeBack = useCallback(() => {
+        dispatch(closeSnackbar());
+
+        return window.history.back();
+    }, []);
     const handleSwipeStart = useCallback(() => dispatch(closeSnackbar()), []);
 
     useEffect(() => {
@@ -63,7 +66,7 @@ const App = () => {
                     popout={
                         PopoutComponent ? <PopoutComponent payload={popout.payload} /> : undefined
                     }
-                    history={modal || popout.name || focused ? [] : history.map(({ name }) => name)}
+                    history={modal || popout.name || focused ? [] : history}
                     onSwipeBack={onSwipeBack}
                     onSwipeBackStart={handleSwipeStart}
                 >

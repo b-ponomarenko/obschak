@@ -8,7 +8,6 @@ import { withCurrentRoute } from '../../core/router';
 import fetchEventWithUsers from '../../actions/fetchEventWithUsers';
 import openSnackbar from '../../actions/openSnackbar';
 import copyTextToClipboard from '../../actions/vk/copyTextToClipboard';
-import { withSwipeBack } from '../../hooks/useBack';
 import { withPlatform } from '@vkontakte/vkui';
 
 const mapState = ({ event, user, vk }, { route }) => {
@@ -36,9 +35,4 @@ const mapDispatch = (dispatch) => ({
     copyTextToClipboard: (text) => dispatch(copyTextToClipboard(text)),
 });
 
-export default compose(
-    withPlatform,
-    withCurrentRoute,
-    withSwipeBack,
-    connect(mapState, mapDispatch)
-)(EventPure);
+export default compose(withPlatform, withCurrentRoute, connect(mapState, mapDispatch))(EventPure);

@@ -13,10 +13,9 @@ import notifications from './notifications';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { router5Middleware, router5Reducer } from 'redux-router5';
-import historyPlugin from '../core/historyPlugin';
 
-export default (router) => {
-    const store = createStore(
+export default (router) =>
+    createStore(
         combineReducers({
             router: router5Reducer,
             modals,
@@ -33,8 +32,3 @@ export default (router) => {
         }),
         composeWithDevTools(applyMiddleware(thunk, router5Middleware(router)))
     );
-
-    router.usePlugin(historyPlugin(store));
-
-    return store;
-};
