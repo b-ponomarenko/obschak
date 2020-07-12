@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import EventSettingsPure from './EventSettingsPure';
-import navigateTo from '../../actions/navigateTo';
 import fetchEventWithUsers from '../../actions/fetchEventWithUsers';
 import { compose } from 'redux';
 import { withCurrentRoute } from '../../core/router';
@@ -14,7 +13,6 @@ import closePopout from '../../actions/closePopout';
 import events from '../../actions/events/events';
 import deleteEvent from '../../actions/events/deleteEvent';
 import { hideSpinner, showSpinner } from '../../actions/spinner';
-import { withSwipeBack } from '../../hooks/useBack';
 
 const mapState = ({ event, user, vk }, { route }) => {
     const { params } = route;
@@ -28,7 +26,6 @@ const mapState = ({ event, user, vk }, { route }) => {
 };
 
 const mapDispatch = (dispatch) => ({
-    navigateTo: (routeName, routeParams) => dispatch(navigateTo(routeName, routeParams)),
     fetchEvent: (id) => dispatch(fetchEventWithUsers(id)),
     fetchEvents: () => dispatch(events()),
     openAddFriendsModal: (payload) => dispatch(openModal({ name: 'ADD_FRIENDS_MODAL', payload })),
@@ -42,8 +39,4 @@ const mapDispatch = (dispatch) => ({
     hideSpinner: () => dispatch(hideSpinner()),
 });
 
-export default compose(
-    withCurrentRoute,
-    withSwipeBack,
-    connect(mapState, mapDispatch)
-)(EventSettingsPure);
+export default compose(withCurrentRoute, connect(mapState, mapDispatch))(EventSettingsPure);

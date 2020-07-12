@@ -1,28 +1,23 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ModalRoot as ModalRootBase } from '@vkontakte/vkui';
 import { getModals } from '../core/modals';
 import closeModal from '../actions/closeModal';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-const mapState = ({ modals }) => ({
-    modal: modals.modal,
-});
-
-const mapDispatch = (dispatch) => ({
-    closeModal: () => dispatch(closeModal()),
-});
-
-const ModalRoot = ({ modal, closeModal }) => {
-    const { name, payload } = modal;
+const ModalRoot = () => {
+    const { modal = null } = useSelector(({ router }) => router.route.params);
+    const { payload } = useSelector(({ modals }) => modals.modal);
     const modals = getModals();
+    const dispatch = useDispatch();
+    const handleClose = useCallback(() => dispatch(closeModal()), []);
 
     return (
-        <ModalRootBase activeModal={name} onClose={closeModal}>
+        <ModalRootBase activeModal={modal} onClose={handleClose}>
             {modals.map(({ name, component: Component }) => (
-                <Component key={name} id={name} payload={payload} currentModal={modal.name} />
+                <Component key={name} id={name} payload={payload} currentModal={modal} />
             ))}
         </ModalRootBase>
     );
 };
 
-export default connect(mapState, mapDispatch)(ModalRoot);
+export default ModalRoot;

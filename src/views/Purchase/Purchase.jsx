@@ -5,11 +5,9 @@ import { withCurrentRoute } from '../../core/router';
 import purchaseById from '../../actions/events/purchaseById';
 import openPopout from '../../actions/openPopout';
 import closePopout from '../../actions/closePopout';
-import navigateTo from '../../actions/navigateTo';
 import deletePurchase from '../../actions/events/deletePurchase';
 import updatePurchase from '../../actions/events/updatePurchase';
 import { hideSpinner, showSpinner } from '../../actions/spinner';
-import { withSwipeBack } from '../../hooks/useBack';
 
 const mapState = ({ purchase, event }, { route }) => {
     const { purchaseId, eventId } = route.params;
@@ -26,13 +24,8 @@ const mapDispatch = (dispatch) => ({
     fetchPurchase: (purchaseId) => dispatch(purchaseById(purchaseId)),
     openPopout: ({ name, payload }) => dispatch(openPopout({ name, payload })),
     closePopout: () => dispatch(closePopout()),
-    navigateTo: (routeName, routeParams) => dispatch(navigateTo(routeName, routeParams)),
     showSpinner: () => dispatch(showSpinner()),
     hideSpinner: () => dispatch(hideSpinner()),
 });
 
-export default compose(
-    withCurrentRoute,
-    withSwipeBack,
-    connect(mapState, mapDispatch)
-)(PurchasePure);
+export default compose(withCurrentRoute, connect(mapState, mapDispatch))(PurchasePure);

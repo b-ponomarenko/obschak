@@ -26,15 +26,15 @@ export const withCurrentRoute = (WrappedComponent) => {
 export const configureRouter = () => {
     const router = createRouter(
         [
-            { name: 'events', path: '/events' },
-            { name: 'create-event', path: '/create-event' },
+            { name: 'events', path: '/events?modal' },
+            { name: 'create-event', path: '/create-event?modal' },
             {
                 name: 'event',
-                path: '/events/:eventId',
+                path: '/events/:eventId?modal&popout',
                 children: [
-                    { name: 'settings', path: '/settings' },
-                    { name: 'purchase', path: '/purchased/:purchaseId' },
-                    { name: 'create-purchase', path: '/create-purchase' },
+                    { name: 'settings', path: '/settings?modal' },
+                    { name: 'purchase', path: '/purchased/:purchaseId?modal' },
+                    { name: 'create-purchase', path: '/create-purchase?modal' },
                 ],
             },
         ],

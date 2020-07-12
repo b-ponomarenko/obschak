@@ -65,12 +65,10 @@ export default class CreateEventPure extends PureComponent {
         openModal: pt.func,
         openPopout: pt.func,
         createEvent: pt.func,
-        navigateBack: pt.func,
-        uploadImage: pt.func,
+        navigateTo: pt.func,
         user: pt.object,
         showSpinner: pt.func,
         hideSpinner: pt.func,
-        onBack: pt.func,
     };
 
     fetchFriends = (search) => {
@@ -111,7 +109,7 @@ export default class CreateEventPure extends PureComponent {
     handleImageChange = (image) => this.setState({ image });
 
     handleCreateEvent = () => {
-        const { openPopout, createEvent, user, showSpinner, hideSpinner, onBack } = this.props;
+        const { openPopout, createEvent, user, showSpinner, hideSpinner, navigateTo } = this.props;
         const { friends, startDate, endDate, title, image } = this.state;
         const now = new Date();
         let isValid = true;
@@ -172,7 +170,7 @@ export default class CreateEventPure extends PureComponent {
         const friendsIds = friends.map(({ id }) => id);
 
         showSpinner();
-        createEvent({
+        return createEvent({
             title: title.trim(),
             startDate,
             endDate,
@@ -180,14 +178,15 @@ export default class CreateEventPure extends PureComponent {
             creatorId: user.id,
             photo: image,
         })
-            .then(({ event }) => onBack('event', { eventId: event.id }))
+            .then(({ event }) => navigateTo('event', { eventId: event.id }, { replace: true }))
             .finally(hideSpinner);
     };
 
     handleDateSwitchClick = () => this.setState({ showDates: !this.state.showDates });
 
+    handleNavigateBack = () => window.history.back();
+
     render() {
-        const { onBack } = this.props;
         const {
             friends,
             startDate,
@@ -204,8 +203,10 @@ export default class CreateEventPure extends PureComponent {
         const now = new Date();
 
         return (
-            <Panel id="create-event">
-                <PanelHeader left={<PanelHeaderBack onClick={onBack} />}>Новое событие</PanelHeader>
+            <Panel id="create-event" previousView="events">
+                <PanelHeader left={<PanelHeaderBack onClick={this.handleNavigateBack} />}>
+                    Новое событие
+                </PanelHeader>
                 <div className={styles.container}>
                     <RichCell
                         multiline

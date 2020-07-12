@@ -1,3 +1,10 @@
-import { setModal } from '../reducers/modals';
+import { store } from '../index';
 
-export default () => (dispatch) => dispatch(setModal({ name: null }));
+export default () => () => {
+    const { params } = store.getState().router.route;
+    const { modal } = params;
+
+    if (modal) {
+        return window.history.back();
+    }
+};
