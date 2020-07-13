@@ -30,3 +30,7 @@ body,
 .Header {
     user-select: none !important;
 }
+
+iframe {
+    display: none !important;
+}
