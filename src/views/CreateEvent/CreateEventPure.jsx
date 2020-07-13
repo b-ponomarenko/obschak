@@ -247,8 +247,6 @@ export default class CreateEventPure extends PureComponent {
                             >
                                 <Input
                                     type="datetime-local"
-                                    min={getDateTimeString(now)}
-                                    max={getDateTimeString(endDate)}
                                     onChange={this.handleStartDateChange}
                                     status={startDateError && 'error'}
                                     value={getDateTimeString(startDate)}
@@ -261,7 +259,6 @@ export default class CreateEventPure extends PureComponent {
                             >
                                 <Input
                                     type="datetime-local"
-                                    min={getDateTimeString(startDate || now)}
                                     onChange={this.handleEndDateChange}
                                     status={endDateError && 'error'}
                                     value={getDateTimeString(endDate)}
