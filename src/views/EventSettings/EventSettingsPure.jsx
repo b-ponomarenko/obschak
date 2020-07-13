@@ -18,6 +18,8 @@ import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import styles from './EventSettingsPure.module.css';
 import { getImage } from '../../utils/image';
 import Panel from '../../components/Panel/Panel';
+import isEmpty from '@tinkoff/utils/is/empty';
+import getAccessToken from '../../actions/vk/getAccessToken';
 
 const initialState = ({ event }) => ({
     ...event,
@@ -139,18 +141,23 @@ export default class EventSettingsPure extends PureComponent {
     handleSaveEvent = () => {
         const { updateEvent, event, showSpinner, hideSpinner } = this.props;
         const { users, photo, title } = this.state;
+        const hasNewUsers = !isEmpty(users.filter((id) => !event.users.includes(id)));
 
         if (!title.trim()) {
             return this.setState({ titleError: true });
         }
 
         showSpinner();
-        return updateEvent({
-            ...event,
-            users,
-            photo,
-            title: title.trim(),
-        })
+        return (hasNewUsers ? getAccessToken('friends') : Promise.resolve({}))
+            .then(({ access_token }) =>
+                updateEvent({
+                    ...event,
+                    users,
+                    photo,
+                    title: title.trim(),
+                    accessToken: access_token,
+                })
+            )
             .then(this.handleBackClick)
             .finally(hideSpinner);
     };
