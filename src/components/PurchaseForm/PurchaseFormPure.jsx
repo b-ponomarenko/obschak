@@ -160,6 +160,17 @@ export default class PurchaseFormPure extends PureComponent {
         const { uploadImage, openSnackbar } = this.props;
         const { files } = e.target;
 
+        if (isEmpty(files)) {
+            return;
+        }
+
+        if (files.length > 10) {
+            return openSnackbar({
+                type: 'error',
+                children: 'Вы можете загрузить не более 10 изображений одновременно',
+            });
+        }
+
         if ([...files].some(({ size }) => size > TEN_MB)) {
             return openSnackbar({
                 type: 'error',

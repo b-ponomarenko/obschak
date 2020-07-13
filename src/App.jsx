@@ -23,7 +23,7 @@ import { useBridge } from './core/bridge';
 const App = () => {
     const [activeView, setActiveView] = useState('app');
     const [focused, setFocused] = useState(false);
-    const { name } = useSelector(({ router }) => router.route);
+    const { name: activePanel } = useSelector(({ router }) => router.route);
     const history = useSelector(({ history }) => history);
     const dispatch = useDispatch();
     const fetchUserInfo = useCallback(() => dispatch(getUserInfo()), []);
@@ -91,7 +91,7 @@ const App = () => {
                 <Root activeView={activeView}>
                     <View
                         id="app"
-                        activePanel={name}
+                        activePanel={activePanel}
                         modal={<ModalRoot />}
                         popout={
                             PopoutComponent ? (
