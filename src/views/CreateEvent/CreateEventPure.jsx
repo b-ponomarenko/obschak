@@ -201,7 +201,6 @@ export default class CreateEventPure extends PureComponent {
             endDateErrorMessage,
             showDates,
         } = this.state;
-        const now = new Date();
 
         return (
             <Panel id="create-event" previousView="events">
