@@ -17,7 +17,7 @@ import useCurrentEvent from '../../hooks/useCurrentEvent';
 import styles from './UsersModal.module.css';
 
 const UsersModal = ({ id, payload }) => {
-    const { title, users, onClose, selectable, value, showCreator } = payload;
+    const { title, users, onClose = () => {}, selectable, value, showCreator } = payload;
     const dispatch = useDispatch();
     const [selected, setSelected] = useState(selectable ? value : undefined);
     const user = useSelector(({ user }) => user);

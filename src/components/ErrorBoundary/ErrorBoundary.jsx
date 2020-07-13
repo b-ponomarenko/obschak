@@ -4,7 +4,6 @@ import Icon56FireOutline from '@vkontakte/icons/dist/56/fire_outline';
 import { Placeholder, Button, View, Panel } from '@vkontakte/vkui';
 import styles from './ErrorBoundary.module.css';
 import { connect } from 'react-redux';
-import { stringify } from 'query-string';
 
 class ErrorBoundary extends PureComponent {
     state = { hasError: false };
@@ -23,7 +22,7 @@ class ErrorBoundary extends PureComponent {
     handleReload = () => {
         const { vk } = this.props;
 
-        return window.location.replace(`${window.location.origin}/?${stringify(vk)}`);
+        return window.location.reload();
     };
 
     render() {

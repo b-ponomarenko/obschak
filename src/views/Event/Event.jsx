@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import EventPure from './EventPure';
 import navigateTo from '../../actions/navigateTo';
 import openModal from '../../actions/openModal';
-import closeModal from '../../actions/closeModal';
 import compose from '@tinkoff/utils/function/compose';
 import { withCurrentRoute } from '../../core/router';
 import fetchEventWithUsers from '../../actions/fetchEventWithUsers';
@@ -28,7 +27,7 @@ const mapDispatch = (dispatch) => ({
         dispatch(
             openModal({
                 name: 'USERS_MODAL',
-                payload: { ...payload, onClose: () => dispatch(closeModal()) },
+                payload,
             })
         ),
     openSnackbar: (payload) => dispatch(openSnackbar(payload)),
