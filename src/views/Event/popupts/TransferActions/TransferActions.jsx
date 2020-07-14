@@ -11,7 +11,10 @@ const TransferActions = ({ payload }) => {
     const { id } = payload;
     const handleClose = useCallback(() => dispatch(closePopout()), []);
     const handleCancelTransfer = useCallback(
-        () => dispatch(openPopout({ name: 'CANCEL_TRANSFER_CONFIRMATION', payload: { id } })),
+        () =>
+            dispatch(
+                openPopout({ name: 'CANCEL_TRANSFER_CONFIRMATION', payload: { id }, replace: true })
+            ),
         [id]
     );
 

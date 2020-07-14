@@ -1,5 +1,4 @@
-import openPopout from './openPopout';
-import closePopout from './closePopout';
+import { setPopout } from '../reducers/popout';
 
 const wait = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -10,7 +9,7 @@ export const showSpinner = () => (dispatch) => {
 
     return wait(500).then(() => {
         if (!isCanceled) {
-            dispatch(openPopout({ name: 'SCREEN_SPINNER' }));
+            dispatch(setPopout({ name: 'SCREEN_SPINNER' }));
         }
     });
 };
@@ -18,5 +17,5 @@ export const showSpinner = () => (dispatch) => {
 export const hideSpinner = () => (dispatch) => {
     isCanceled = true;
 
-    return dispatch(closePopout());
+    return dispatch(setPopout({ name: null }));
 };

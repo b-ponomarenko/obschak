@@ -14,7 +14,7 @@ const ModalRoot = () => {
     return (
         <ModalRootBase activeModal={modal} onClose={handleClose}>
             {modals.map(({ name, component: Component }) => (
-                <Component key={name} id={name} payload={payload} currentModal={modal} />
+                <Component key={name} id={name} payload={payload} />
             ))}
         </ModalRootBase>
     );
