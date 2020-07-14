@@ -12,6 +12,7 @@ import {
     CellButton,
     Input,
     RichCell,
+    ANDROID,
 } from '@vkontakte/vkui';
 import debounce from '@tinkoff/utils/function/debounce';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
@@ -20,6 +21,7 @@ import { getImage } from '../../utils/image';
 import Panel from '../../components/Panel/Panel';
 import isEmpty from '@tinkoff/utils/is/empty';
 import getAccessToken from '../../actions/vk/getAccessToken';
+import DeletableCellIOS from './DeletableCellIOS/DeletableCellIOS';
 
 const initialState = ({ event }) => ({
     ...event,
@@ -29,6 +31,7 @@ export default class EventSettingsPure extends PureComponent {
     state = initialState(this.props);
 
     static propTypes = {
+        platform: pt.string,
         openAddFriendsModal: pt.func,
         fetchFriends: pt.func,
         fetchUsers: pt.func,
@@ -170,7 +173,7 @@ export default class EventSettingsPure extends PureComponent {
     goToEvents = () => window.history.go(-2);
 
     render() {
-        const { event, user, currentUser } = this.props;
+        const { event, user, currentUser, platform } = this.props;
         const { creatorId } = event;
         const { users, photo, title, titleError } = this.state;
 
@@ -206,16 +209,15 @@ export default class EventSettingsPure extends PureComponent {
                     </CellButton>
                     {users.map((userId) => {
                         const member = user[userId];
+                        const removable =
+                            (currentUser.id === creatorId || !event.users.includes(userId)) &&
+                            userId !== currentUser.id &&
+                            users.length > 2;
 
-                        return (
+                        return platform === ANDROID || !removable ? (
                             <Cell
                                 key={userId}
-                                removable={
-                                    (currentUser.id === creatorId ||
-                                        !event.users.includes(userId)) &&
-                                    userId !== currentUser.id &&
-                                    users.length > 2
-                                }
+                                removable={removable}
                                 before={<Avatar size={40} src={member?.photo_100} />}
                                 onRemove={() => this.handleRemove(userId)}
                                 asideContent={
@@ -228,6 +230,22 @@ export default class EventSettingsPure extends PureComponent {
                             >
                                 {member?.first_name} {member?.last_name}
                             </Cell>
+                        ) : (
+                            <DeletableCellIOS
+                                removable
+                                key={userId}
+                                before={<Avatar size={40} src={member?.photo_100} />}
+                                onRemove={() => this.handleRemove(userId)}
+                                asideContent={
+                                    userId === creatorId && (
+                                        <div className={styles.userIcon}>
+                                            <Icon24Favorite width={16} height={16} />
+                                        </div>
+                                    )
+                                }
+                            >
+                                {member?.first_name} {member?.last_name}
+                            </DeletableCellIOS>
                         );
                     })}
                 </Group>

@@ -13,6 +13,7 @@ import closePopout from '../../actions/closePopout';
 import events from '../../actions/events/events';
 import deleteEvent from '../../actions/events/deleteEvent';
 import { hideSpinner, showSpinner } from '../../actions/spinner';
+import { withPlatform } from '@vkontakte/vkui';
 
 const mapState = ({ event, user, vk }, { route }) => {
     const { params } = route;
@@ -39,4 +40,8 @@ const mapDispatch = (dispatch) => ({
     hideSpinner: () => dispatch(hideSpinner()),
 });
 
-export default compose(withCurrentRoute, connect(mapState, mapDispatch))(EventSettingsPure);
+export default compose(
+    withCurrentRoute,
+    withPlatform,
+    connect(mapState, mapDispatch)
+)(EventSettingsPure);
