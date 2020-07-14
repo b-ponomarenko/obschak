@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import pt from 'prop-types';
-import { Alert } from '@vkontakte/vkui';
+import { Alert, ANDROID, usePlatform } from '@vkontakte/vkui';
 import { useDispatch, useSelector } from 'react-redux';
 import closePopout from '../../../../actions/closePopout';
 import useCurrentUser from '../../../../hooks/useCurrentUser';
@@ -14,6 +14,7 @@ import openModal from '../../../../actions/openModal';
 import { hideSpinner, showSpinner } from '../../../../actions/spinner';
 
 const PaymentConfirmation = ({ payload }) => {
+    const platform = usePlatform();
     const dispatch = useDispatch();
     const handleClose = useCallback(() => dispatch(closePopout()), []);
     const event = useCurrentEvent();
@@ -41,6 +42,7 @@ const PaymentConfirmation = ({ payload }) => {
                     })
                 );
             })
+            .then(() => dispatch(fetchEventWithUsers(event.id)))
             .then(() => {
                 if (userTo.id === currentUser.id) {
                     return;
@@ -53,7 +55,6 @@ const PaymentConfirmation = ({ payload }) => {
                     })
                 );
             })
-            .then(() => dispatch(fetchEventWithUsers(event.id)))
             .finally(() => dispatch(hideSpinner()));
     }, [event, payload, currentUser]);
     const personTo = petrovich(
@@ -75,6 +76,7 @@ const PaymentConfirmation = ({ payload }) => {
                 {
                     title: 'Да',
                     autoclose: true,
+                    mode: platform === ANDROID ? 'destructive' : 'default',
                     action: handleCreateTransfer,
                 },
             ]}

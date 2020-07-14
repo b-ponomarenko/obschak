@@ -19,7 +19,7 @@ const BalanceActions = (props) => {
     const dispatch = useDispatch();
     const handleClose = useCallback(() => dispatch(closePopout()), []);
     const openPaymentConfirmationPopout = useCallback(
-        () => dispatch(openPopout({ name: 'PAYMENT_CONFIRMATION', payload })),
+        () => dispatch(openPopout({ name: 'PAYMENT_CONFIRMATION', payload, replace: true })),
         [payload]
     );
     const currentUser = useCurrentUser();
@@ -44,6 +44,7 @@ const BalanceActions = (props) => {
 
                 dispatch(showSpinner());
                 return dispatch(createTransfer(event.id, payload))
+                    .then(() => dispatch(fetchEventWithUsers(event.id)))
                     .then(() =>
                         dispatch(
                             openModal({
@@ -52,7 +53,6 @@ const BalanceActions = (props) => {
                             })
                         )
                     )
-                    .then(() => dispatch(fetchEventWithUsers(event.id)))
                     .finally(() => dispatch(hideSpinner()));
             })
             .catch(() =>

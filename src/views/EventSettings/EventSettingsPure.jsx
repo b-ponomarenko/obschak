@@ -54,17 +54,20 @@ export default class EventSettingsPure extends PureComponent {
     }
 
     fetchFriends = (search) => {
-        const { openAddFriendsModal, fetchFriends } = this.props;
+        const { openAddFriendsModal, showSpinner, fetchFriends, hideSpinner } = this.props;
         const { users } = this.state;
 
-        fetchFriends(search).then((payload) =>
-            openAddFriendsModal({
-                friends: payload.items.filter(({ id }) => !users.includes(id)),
-                selectedFriends: [],
-                onClose: this.handleCloseModal,
-                onSearch: this.handleSearch,
-            })
-        );
+        showSpinner();
+        return fetchFriends(search)
+            .then((payload) =>
+                openAddFriendsModal({
+                    friends: payload.items.filter(({ id }) => !users.includes(id)),
+                    selectedFriends: [],
+                    onClose: this.handleCloseModal,
+                    onSearch: this.handleSearch,
+                })
+            )
+            .finally(hideSpinner);
     };
 
     handleRemove = (userId) =>

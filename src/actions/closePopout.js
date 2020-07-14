@@ -1,3 +1,10 @@
-import { setPopout } from '../reducers/popout';
+import { store } from '../index';
 
-export default () => (dispatch) => dispatch(setPopout({ name: null }));
+export default () => () => {
+    const { params } = store.getState().router.route;
+    const { popout } = params;
+
+    if (popout) {
+        return window.history.back();
+    }
+};

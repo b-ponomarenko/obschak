@@ -25,7 +25,6 @@ import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import debounce from '@tinkoff/utils/function/debounce';
 import { getImage } from '../../utils/image';
 import Panel from '../../components/Panel/Panel';
-import bridge from '@vkontakte/vk-bridge';
 
 const getDateTimeString = (dateTime) => {
     if (!dateTime) {
@@ -73,19 +72,22 @@ export default class CreateEventPure extends PureComponent {
     };
 
     fetchFriends = (search) => {
-        const { fetchFriends, openModal } = this.props;
+        const { fetchFriends, hideSpinner, showSpinner, openModal } = this.props;
 
-        return fetchFriends(search).then((payload) =>
-            openModal({
-                name: 'ADD_FRIENDS_MODAL',
-                payload: {
-                    friends: payload.items,
-                    selectedFriends: this.state.friends,
-                    onClose: this.handleCloseModal,
-                    onSearch: this.handleSearchModal,
-                },
-            })
-        );
+        showSpinner();
+        return fetchFriends(search)
+            .then((payload) =>
+                openModal({
+                    name: 'ADD_FRIENDS_MODAL',
+                    payload: {
+                        friends: payload.items,
+                        selectedFriends: this.state.friends,
+                        onClose: this.handleCloseModal,
+                        onSearch: this.handleSearchModal,
+                    },
+                })
+            )
+            .finally(hideSpinner);
     };
 
     handleOpenModal = () => this.fetchFriends();

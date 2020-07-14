@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import pt from 'prop-types';
-import { Alert } from '@vkontakte/vkui';
+import { Alert, ANDROID, usePlatform } from '@vkontakte/vkui';
 import closePopout from '../../../../actions/closePopout';
 import { useDispatch } from 'react-redux';
 import deleteTransfer from '../../../../actions/events/deleteTransfer';
@@ -9,6 +9,7 @@ import eventById from '../../../../actions/events/eventById';
 import { hideSpinner, showSpinner } from '../../../../actions/spinner';
 
 const CancelTransferConfirmation = ({ payload }) => {
+    const platform = usePlatform();
     const dispatch = useDispatch();
     const { id } = payload;
     const handleClose = useCallback(() => dispatch(closePopout()), []);
@@ -31,6 +32,7 @@ const CancelTransferConfirmation = ({ payload }) => {
                 {
                     title: 'Да',
                     autoclose: true,
+                    mode: platform === ANDROID ? 'destructive' : 'default',
                     action: handleDeleteTransfer,
                 },
             ]}

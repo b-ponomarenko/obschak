@@ -2,9 +2,9 @@ import { setModal } from '../reducers/modals';
 import { store } from '../index';
 import navigateTo from './navigateTo';
 
-export default ({ name: modal, payload }) => (dispatch) => {
+export default ({ name: modal, payload, replace }) => (dispatch) => {
     const { name, params } = store.getState().router.route;
 
     dispatch(setModal({ payload }));
-    return dispatch(navigateTo(name, { ...params, modal }));
+    return dispatch(navigateTo(name, { ...params, modal, popout: undefined }, { replace }));
 };

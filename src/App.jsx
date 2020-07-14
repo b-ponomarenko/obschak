@@ -29,8 +29,11 @@ const App = () => {
     const fetchUserInfo = useCallback(() => dispatch(getUserInfo()), []);
     const popouts = getPopouts();
     const popout = useSelector(({ popout }) => popout.popout);
-    const modal = useSelector(({ modals }) => modals.modal.name);
-    const PopoutComponent = popouts[popout.name];
+    const { modal = null, popout: popoutName = null } = useSelector(
+        ({ router }) => router.route.params
+    );
+    const PopoutComponent =
+        popouts[popout.name === 'SCREEN_SPINNER' ? 'SCREEN_SPINNER' : popoutName];
     const onSwipeBack = useCallback(() => {
         dispatch(closeSnackbar());
 
@@ -98,7 +101,7 @@ const App = () => {
                                 <PopoutComponent payload={popout.payload} />
                             ) : undefined
                         }
-                        history={modal || popout.name || focused ? [] : history}
+                        history={modal || popoutName || focused ? [] : history}
                         onSwipeBack={onSwipeBack}
                         onSwipeBackStart={handleSwipeStart}
                     >
