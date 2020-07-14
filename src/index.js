@@ -27,6 +27,7 @@ import SuccessTransfer from './views/Event/modals/SuccessTransfer/SuccessTransfe
 import NotificationCard from './views/Event/modals/NotificationCard/NotificationCard';
 import ShareOfferCard from './modals/ShareOfferCard/ShareOfferCard';
 import './index.css';
+import DeleteUserSheet from './views/EventSettings/popouts/DeleteUserSheet/DeleteUserSheet';
 
 // Init VK  Mini App
 bridge.send('VKWebAppInit');
@@ -54,6 +55,7 @@ registerPopout('DELETE_EVENT_CONFIRMATION', DeleteEventConfirmation);
 registerPopout('DELETE_PURCHASE_CONFIRMATION', DeletePurchaseConfirmation);
 registerPopout('TRANSFER_ACTIONS', TransferActions);
 registerPopout('CANCEL_TRANSFER_CONFIRMATION', CancelTransferConfirmation);
+registerPopout('DELETE_USER_SHEET', DeleteUserSheet);
 
 export const router = configureRouter();
 export const store = configureStore(router);
