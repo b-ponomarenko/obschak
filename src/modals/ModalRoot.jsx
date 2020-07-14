@@ -3,6 +3,7 @@ import { ModalRoot as ModalRootBase } from '@vkontakte/vkui';
 import { getModals } from '../core/modals';
 import closeModal from '../actions/closeModal';
 import { useDispatch, useSelector } from 'react-redux';
+import './ModalRoot.css';
 
 const ModalRoot = () => {
     const { modal = null } = useSelector(({ router }) => router.route.params);
