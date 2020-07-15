@@ -10,6 +10,7 @@ import openSnackbar from '../../../../actions/openSnackbar';
 import { useBridge } from '../../../../core/bridge';
 import enableNotifications from '../../../../actions/vk/enableNotifications';
 import setToStorage from '../../../../actions/vk/setToStorage';
+import { hideSpinner, showSpinner } from '../../../../actions/spinner';
 
 const ContextNotifications = () => {
     const notifications = useSelector(({ notifications }) => notifications);
@@ -31,14 +32,17 @@ const ContextNotifications = () => {
         }
 
         if (isNotificationShowed) {
-            return dispatch(enableNotifications()).then(handleSuccess);
+            dispatch(showSpinner());
+            return dispatch(enableNotifications())
+                .then(handleSuccess)
+                .finally(() => dispatch(hideSpinner()));
         }
 
         return dispatch(
             openModal({
                 name: 'NOTIFICATION_CARD',
                 payload: {
-                    onSuccess: handleSuccess,
+                    onSuccess: () => {},
                 },
             })
         );
