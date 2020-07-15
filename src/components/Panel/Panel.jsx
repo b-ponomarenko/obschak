@@ -7,6 +7,7 @@ import styles from './Panel.module.css';
 import Icon28ErrorOutline from '@vkontakte/icons/dist/28/error_outline';
 import Icon28DoneOutline from '@vkontakte/icons/dist/28/done_outline';
 import { setHistory } from '../../reducers/history';
+import once from '@tinkoff/utils/function/once';
 
 const icons = {
     error: <Icon28ErrorOutline width={24} height={24} className={styles.errorIcon} />,
@@ -24,7 +25,11 @@ const Panel = ({ children, previousView, id, ...props }) => {
     const snackbarIcon = icons[snackbar?.type];
 
     useEffect(() => {
-        dispatch(setHistory([previousView, id].filter(Boolean)));
+        const cb = once(() => dispatch(setHistory([previousView, id].filter(Boolean))));
+
+        document.addEventListener('VKUI:View:transition-end', cb);
+
+        return () => document.removeEventListener('VKUI:View:transition-end', cb);
     }, [previousView]);
 
     return (
