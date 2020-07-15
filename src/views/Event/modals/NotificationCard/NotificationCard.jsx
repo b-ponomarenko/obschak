@@ -5,6 +5,7 @@ import { ModalCard } from '@vkontakte/vkui';
 import { useDispatch } from 'react-redux';
 import closeModal from '../../../../actions/closeModal';
 import enableNotifications from '../../../../actions/vk/enableNotifications';
+import { hideSpinner, showSpinner } from '../../../../actions/spinner';
 
 const NotificationCard = ({ payload }) => {
     const { onSuccess } = payload;
@@ -14,7 +15,10 @@ const NotificationCard = ({ payload }) => {
     }, []);
     const handleEnableNotifications = useCallback(() => {
         handleClose();
-        dispatch(enableNotifications()).then(onSuccess);
+        dispatch(showSpinner());
+        dispatch(enableNotifications())
+            .then(onSuccess)
+            .finally(() => dispatch(hideSpinner()));
     }, []);
 
     return (
