@@ -28,7 +28,13 @@ import NotificationCard from './views/Event/modals/NotificationCard/Notification
 import ShareOfferCard from './modals/ShareOfferCard/ShareOfferCard';
 import './index.css';
 import DeleteUserSheet from './views/EventSettings/popouts/DeleteUserSheet/DeleteUserSheet';
+import * as Sentry from '@sentry/browser';
 
+Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_DNS,
+    enabled: process.env.NODE_ENV === 'production',
+    environment: process.env.NODE_ENV,
+});
 // Init VK  Mini App
 bridge.send('VKWebAppInit');
 

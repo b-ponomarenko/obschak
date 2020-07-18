@@ -1,4 +1,4 @@
-import bridge from '@vkontakte/vk-bridge';
+import { bridge } from '../../core/bridge';
 import { store } from '../../index';
 
 export default ({ value, to, description }) => (dispatch) => {

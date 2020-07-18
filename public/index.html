@@ -9,7 +9,7 @@
         <% if (process.env.NODE_ENV === 'production') { %>
         <meta
             http-equiv="Content-Security-Policy"
-            content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src *; frame-src https://vk.com/app7473655; font-src *; connect-src 'self' https://*.herokuapp.com"
+            content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src *; frame-src https://vk.com/app7473655; font-src *; connect-src 'self' https://*.herokuapp.com; report-uri https://o413283.ingest.sentry.io/api/5300180/security/?sentry_key=c0e076c753b9420bb4d10044aa71030e"
         />
         <% } %>
         <meta name="theme-color" content="#000000" />

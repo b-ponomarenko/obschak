@@ -1,5 +1,5 @@
 import getAccessToken from './getAccessToken';
-import bridge from '@vkontakte/vk-bridge';
+import { bridge } from '../../core/bridge';
 
 export default ({ q = '', offset = 0 } = {}) => (dispatch) =>
     getAccessToken('friends')

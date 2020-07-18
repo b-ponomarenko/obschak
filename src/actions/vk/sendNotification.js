@@ -1,5 +1,5 @@
 import { store } from '../../index';
-import bridge from '@vkontakte/vk-bridge';
+import { bridge } from '../../core/bridge';
 
 export default ({ userId, message }) => (dispatch) => {
     const { vk_user_id } = store.getState().vk;

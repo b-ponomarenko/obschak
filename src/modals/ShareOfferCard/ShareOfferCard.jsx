@@ -3,7 +3,7 @@ import Icon56Users3Outline from '@vkontakte/icons/dist/56/users_3_outline';
 import pt from 'prop-types';
 import { ModalCard, Textarea } from '@vkontakte/vkui';
 import { useDispatch } from 'react-redux';
-import bridge from '@vkontakte/vk-bridge';
+import { bridge } from '../../core/bridge';
 import closeModal from '../../actions/closeModal';
 
 const ShareOfferCard = ({ payload }) => {

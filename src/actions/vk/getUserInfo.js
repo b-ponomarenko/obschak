@@ -1,4 +1,4 @@
-import bridge from '@vkontakte/vk-bridge';
+import { bridge } from '../../core/bridge';
 import { userLoaded } from '../../reducers/user';
 
 export default () => (dispatch) =>

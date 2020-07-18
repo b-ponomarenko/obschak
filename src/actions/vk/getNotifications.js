@@ -1,4 +1,4 @@
-import bridge from '@vkontakte/vk-bridge';
+import { bridge } from '../../core/bridge';
 import { setNotifications } from '../../reducers/notifications';
 import { store } from '../../index';
 
