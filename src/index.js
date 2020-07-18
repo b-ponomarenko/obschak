@@ -31,8 +31,6 @@ import DeleteUserSheet from './views/EventSettings/popouts/DeleteUserSheet/Delet
 import * as Sentry from '@sentry/browser';
 import packageJson from '../package.json';
 
-console.log(packageJson);
-
 Sentry.init({
     dsn: process.env.REACT_APP_SENTRY_DNS,
     enabled: process.env.NODE_ENV === 'production',
