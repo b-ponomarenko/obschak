@@ -19,6 +19,7 @@ export const bridge = {
                     errorType: 'api',
                     apiType: 'bridge',
                 },
+                extra: args,
             });
             return Promise.reject(e);
         }),
