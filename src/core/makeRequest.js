@@ -32,7 +32,7 @@ export const makeEventsRequest = ({ method, ...rest }) => {
             },
         });
 
-        if (e.status > 499 && rest.httpMethod.toLowerCase() !== 'get') {
+        if (e.status > 499 && rest.httpMethod?.toLowerCase() !== 'get') {
             store.dispatch(
                 openSnackbar({
                     type: 'error',
@@ -42,7 +42,7 @@ export const makeEventsRequest = ({ method, ...rest }) => {
             );
         }
 
-        if (e.status > 399 && e.status < 500 && rest.httpMethod.toLowerCase() !== 'get') {
+        if (e.status > 399 && e.status < 500 && rest.httpMethod?.toLowerCase() !== 'get') {
             store.dispatch(
                 openSnackbar({ type: 'error', children: 'Проверьте введенные данные.' })
             );
