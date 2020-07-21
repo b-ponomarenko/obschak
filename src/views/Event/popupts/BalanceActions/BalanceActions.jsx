@@ -70,7 +70,7 @@ const BalanceActions = (props) => {
             <ActionSheetItem onClick={openPaymentConfirmationPopout}>
                 Подтвердить оплату
             </ActionSheetItem>
-            {currentUser.id === from && (
+            {currentUser.id === from && value >= 50 && (
                 <ActionSheetItem onClick={openVkPayFrom}>Отправить деньги</ActionSheetItem>
             )}
             {platform === IOS && (
