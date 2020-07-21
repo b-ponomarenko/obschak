@@ -2,8 +2,6 @@ import React, { PureComponent } from 'react';
 import cx from 'classnames';
 import Icon20FollowersOutline from '@vkontakte/icons/dist/20/followers_outline';
 import Icon20CalendarOutline from '@vkontakte/icons/dist/20/calendar_outline';
-import Icon28Notifications from '@vkontakte/icons/dist/28/notifications';
-import Icon28MarketOutline from '@vkontakte/icons/dist/28/market_outline';
 import Icon28ShareExternalOutline from '@vkontakte/icons/dist/28/share_external_outline';
 import Icon28SettingsOutline from '@vkontakte/icons/dist/28/settings_outline';
 import {
@@ -39,6 +37,7 @@ import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
 import { encodeBase64 } from '../../utils/base64';
 import { getImage } from '../../utils/image';
 import ContextNotifications from './components/ContextNotifications/ContextNotifications';
+import { bridge } from '../../core/bridge';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -111,6 +110,19 @@ export default class EventPure extends PureComponent {
 
     handleBackClick = () => window.history.back();
 
+    handleOpenFullPhoto = () => {
+        const { photo } = this.props.event;
+
+        if (!photo) {
+            return;
+        }
+
+        bridge.send('VKWebAppShowImages', {
+            images: [getImage(photo, 'l')],
+            start_index: 0,
+        });
+    };
+
     render() {
         const { event, user, platform } = this.props;
         const { isFetching } = this.state;
@@ -140,6 +152,7 @@ export default class EventPure extends PureComponent {
                                                     src={getImage(photo, 'xs')}
                                                     letter={title}
                                                     size={72}
+                                                    onClick={this.handleOpenFullPhoto}
                                                 />
                                             </div>
                                         }

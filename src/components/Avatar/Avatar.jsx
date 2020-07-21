@@ -33,8 +33,8 @@ const hashFromString = (userName) =>
         return a & a;
     }, 0);
 
-const Avatar = ({ src, letter = '', ...rest }) => (
-    <div className={styles.avatar}>
+const Avatar = ({ src, letter = '', onClick, ...rest }) => (
+    <div className={styles.avatar} onClick={onClick}>
         <BaseAvatar {...rest} src={src} style={{ background: getColor(hashFromString(letter)) }} />
         <div className={styles.placeholder}>
             {!src && <Title level="1">{letter.charAt(0)}</Title>}
@@ -45,6 +45,7 @@ const Avatar = ({ src, letter = '', ...rest }) => (
 Avatar.propTypes = {
     src: pt.string,
     letter: pt.string,
+    onClick: pt.func,
 };
 
 export default Avatar;
