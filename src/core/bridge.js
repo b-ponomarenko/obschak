@@ -13,14 +13,17 @@ export const useBridge = (event, cb) => {
 export const bridge = {
     send: (...args) =>
         vkBridge.send(...args).catch((e) => {
-            Sentry.captureException(e, {
-                level: Severity.Error,
-                contexts: {
-                    errorType: 'api',
-                    apiType: 'bridge',
-                },
-                extra: args,
-            });
+            if (e.error_data?.error_reason?.toLowerCase?.() !== 'user denied') {
+                Sentry.captureException(e, {
+                    level: Severity.Error,
+                    contexts: {
+                        errorType: 'api',
+                        apiType: 'bridge',
+                    },
+                    extra: args,
+                });
+            }
+
             return Promise.reject(e);
         }),
 };
