@@ -38,6 +38,7 @@ import { encodeBase64 } from '../../utils/base64';
 import { getImage } from '../../utils/image';
 import ContextNotifications from './components/ContextNotifications/ContextNotifications';
 import { bridge } from '../../core/bridge';
+import { wait } from '../../utils/promise';
 
 export default class EventPure extends PureComponent {
     state = {
@@ -95,7 +96,9 @@ export default class EventPure extends PureComponent {
         const { fetchEvent, eventId } = this.props;
 
         this.setState({ isFetching: true });
-        fetchEvent(eventId).finally(() => this.setState({ isFetching: false }));
+        return Promise.race([wait(5000), fetchEvent(eventId)]).finally(() =>
+            this.setState({ isFetching: false })
+        );
     };
 
     handleShareClick = () => {

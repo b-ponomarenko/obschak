@@ -23,6 +23,7 @@ import memoize from '@tinkoff/utils/function/memoize/one';
 import { plural } from '../../plural';
 import DelayedLoader from '../../components/DelayedLoader/DelayedLoader';
 import Panel from '../../components/Panel/Panel';
+import { wait } from '../../utils/promise';
 
 const groupEvents = memoize((events) => {
     const now = new Date();
@@ -78,7 +79,9 @@ export default class EventsPure extends PureComponent {
         const { fetchEvents } = this.props;
 
         this.setState({ fetching: true });
-        fetchEvents().finally(() => this.setState({ fetching: false }));
+        return Promise.race([fetchEvents(), wait(5000)]).finally(() =>
+            this.setState({ fetching: false })
+        );
     };
 
     render() {
