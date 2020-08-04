@@ -1,0 +1,55 @@
+.imgContainer {
+    padding-top: 12px;
+    position: relative;
+}
+
+@keyframes before {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.imgContainerBefore,
+.imgContainerAfter {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain !important;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+.imgContainerBefore {
+    background: url('before.PNG') no-repeat bottom;
+    animation-name: before;
+    opacity: 1;
+}
+
+@keyframes after {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.imgContainerAfter {
+    background: url('after.PNG') no-repeat bottom;
+    animation-name: after;
+    animation-delay: 2s;
+    opacity: 0;
+}
+
+.image {
+    max-width: 100%;
+    visibility: hidden;
+}

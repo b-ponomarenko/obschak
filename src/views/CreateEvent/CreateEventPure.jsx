@@ -25,6 +25,8 @@ import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
 import debounce from '@tinkoff/utils/function/debounce';
 import { getImage } from '../../utils/image';
 import Panel from '../../components/Panel/Panel';
+import Icon20Info from '@vkontakte/icons/dist/20/info';
+import SimplifyDebtsSettings from '../../components/SimplifyDebtsSettings/SimplifyDebtsSettings';
 
 const getDateTimeString = (dateTime) => {
     if (!dateTime) {
@@ -58,6 +60,7 @@ export default class CreateEventPure extends PureComponent {
         startDate: this.startDate,
         endDate: this.endDate,
         title: '',
+        debtType: 'simple',
     };
 
     static propTypes = {
@@ -113,7 +116,7 @@ export default class CreateEventPure extends PureComponent {
 
     handleCreateEvent = () => {
         const { openPopout, createEvent, user, showSpinner, hideSpinner, navigateTo } = this.props;
-        const { friends, startDate, endDate, title, image } = this.state;
+        const { friends, startDate, endDate, title, image, debtType } = this.state;
         const now = new Date();
         let isValid = true;
 
@@ -180,6 +183,7 @@ export default class CreateEventPure extends PureComponent {
             users: friendsIds,
             creatorId: user.id,
             photo: image,
+            debtType,
         })
             .then(({ event }) => navigateTo('event', { eventId: event.id }, { replace: true }))
             .finally(hideSpinner);
@@ -188,6 +192,8 @@ export default class CreateEventPure extends PureComponent {
     handleDateSwitchClick = () => this.setState({ showDates: !this.state.showDates });
 
     handleNavigateBack = () => window.history.back();
+
+    handleDebtTypeChange = (debtType) => this.setState({ debtType });
 
     render() {
         const {
@@ -202,6 +208,7 @@ export default class CreateEventPure extends PureComponent {
             startDateErrorMessage,
             endDateErrorMessage,
             showDates,
+            debtType,
         } = this.state;
 
         return (
@@ -233,6 +240,10 @@ export default class CreateEventPure extends PureComponent {
                             bottom={titleError && 'Введите название события'}
                         />
                     </RichCell>
+                    <SimplifyDebtsSettings
+                        debtType={debtType}
+                        onChange={this.handleDebtTypeChange}
+                    />
                     <SimpleCell
                         disabled
                         after={<Switch checked={showDates} onClick={this.handleDateSwitchClick} />}
