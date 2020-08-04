@@ -20,6 +20,7 @@ import styles from './EventSettingsPure.module.css';
 import { getImage } from '../../utils/image';
 import Panel from '../../components/Panel/Panel';
 import DeletableCellIOS from './DeletableCellIOS/DeletableCellIOS';
+import SimplifyDebtsSettings from '../../components/SimplifyDebtsSettings/SimplifyDebtsSettings';
 
 const initialState = ({ event }) => ({
     ...event,
@@ -144,7 +145,7 @@ export default class EventSettingsPure extends PureComponent {
 
     handleSaveEvent = () => {
         const { updateEvent, event, showSpinner, hideSpinner } = this.props;
-        const { users, photo, title } = this.state;
+        const { users, photo, title, debtType } = this.state;
 
         if (!title.trim()) {
             return this.setState({ titleError: true });
@@ -155,6 +156,7 @@ export default class EventSettingsPure extends PureComponent {
             ...event,
             users,
             photo,
+            debtType,
             title: title.trim(),
         })
             .then(this.handleBackClick)
@@ -165,10 +167,12 @@ export default class EventSettingsPure extends PureComponent {
 
     goToEvents = () => window.history.go(-2);
 
+    handleDebtTypeChange = (debtType) => this.setState({ debtType });
+
     render() {
         const { event, user, currentUser, platform } = this.props;
         const { creatorId } = event;
-        const { users, photo, title, titleError } = this.state;
+        const { users, photo, title, titleError, debtType } = this.state;
 
         return (
             <Panel id="event.settings" previousView="event">
@@ -193,6 +197,7 @@ export default class EventSettingsPure extends PureComponent {
                         bottom={titleError && 'Введите название события'}
                     />
                 </RichCell>
+                <SimplifyDebtsSettings debtType={debtType} onChange={this.handleDebtTypeChange} />
                 <Group header={<Header mode="secondary">Участники</Header>}>
                     <CellButton
                         before={<Icon28UserAddOutline />}

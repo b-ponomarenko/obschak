@@ -1,11 +1,7 @@
 import React, { PureComponent } from 'react';
 import cx from 'classnames';
 import pt from 'prop-types';
-import memoize from '@tinkoff/utils/function/memoize/one';
-import getDebtList from '../../getDebtList';
 import UserRelation from '../UserRelation/UserRelation';
-
-const getDebtListCached = memoize(getDebtList);
 
 export default class BalanceList extends PureComponent {
     static propTypes = {
@@ -19,8 +15,7 @@ export default class BalanceList extends PureComponent {
 
     render() {
         const { event, showBalanceActions, currentUser } = this.props;
-        const { purchases, transfers } = event;
-        const debts = getDebtListCached(purchases, currentUser.id, transfers);
+        const { debts } = event;
 
         return debts.map((debt) => {
             const { from, to } = debt;

@@ -31,6 +31,7 @@ import './index.css';
 import DeleteUserSheet from './views/EventSettings/popouts/DeleteUserSheet/DeleteUserSheet';
 import * as Sentry from '@sentry/browser';
 import packageJson from '../package.json';
+import SimplifyDebtsExplanationCard from './modals/SimplifyDebtsExplanationCard/SimplifyDebtsExplanationCard';
 
 Sentry.init({
     dsn: process.env.REACT_APP_SENTRY_DNS,
@@ -53,6 +54,7 @@ registerModal('USERS_MODAL', UsersModal);
 registerModal('SUCCESS_TRANSFER', SuccessTransfer);
 registerModal('NOTIFICATION_CARD', NotificationCard);
 registerModal('SHARE_OFFER_CARD', ShareOfferCard);
+registerModal('SIMPLIFY_DEBTS_EXPLANATION_CARD', SimplifyDebtsExplanationCard);
 
 registerPopout('BALANCE_ACTIONS', BalanceActions);
 registerPopout('SCREEN_SPINNER', ScreenSpinner);
