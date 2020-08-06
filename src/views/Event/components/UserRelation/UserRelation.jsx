@@ -20,15 +20,10 @@ const UserRelation = ({ relation, type, onClick }) => {
                 <Card mode="shadow" size="l" onClick={handleClick}>
                     <div className={styles.container}>
                         <div className={styles.userContainer}>
-                            <SimpleCell
-                                before={<Avatar src={userFrom?.photo_100} size={40} />}
-                                after={
-                                    <div className={styles.turnIcon}>
-                                        <TurnIcon />
-                                    </div>
-                                }
-                                disabled
-                            >
+                            <div className={styles.turnIcon}>
+                                <TurnIcon />
+                            </div>
+                            <SimpleCell before={<Avatar src={userFrom?.photo_100} size={40} />}>
                                 {userFrom?.first_name} {userFrom?.last_name}
                             </SimpleCell>
                             <SimpleCell
