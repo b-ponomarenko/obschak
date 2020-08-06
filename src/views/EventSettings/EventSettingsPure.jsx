@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react';
 import pt from 'prop-types';
 import Icon24Favorite from '@vkontakte/icons/dist/24/favorite';
 import Icon28UserAddOutline from '@vkontakte/icons/dist/28/user_add_outline';
+import Icon28LinkCircleOutline from '@vkontakte/icons/dist/28/link_circle_outline';
+import Icon28CopyOutline from '@vkontakte/icons/dist/28/copy_outline';
+import Icon28BlockOutline from '@vkontakte/icons/dist/28/block_outline';
 import {
     Header,
     PanelHeader,
@@ -13,6 +16,7 @@ import {
     Input,
     RichCell,
     ANDROID,
+    SimpleCell,
 } from '@vkontakte/vkui';
 import debounce from '@tinkoff/utils/function/debounce';
 import UploadedAvatar from '../../components/UploadedAvatar/UploadedAvatar';
@@ -21,6 +25,7 @@ import { getImage } from '../../utils/image';
 import Panel from '../../components/Panel/Panel';
 import DeletableCellIOS from './DeletableCellIOS/DeletableCellIOS';
 import SimplifyDebtsSettings from '../../components/SimplifyDebtsSettings/SimplifyDebtsSettings';
+import { encodeBase64 } from '../../utils/base64';
 
 const initialState = ({ event }) => ({
     ...event,
@@ -31,7 +36,12 @@ export default class EventSettingsPure extends PureComponent {
 
     static propTypes = {
         platform: pt.string,
+        appId: pt.string,
         openAddFriendsModal: pt.func,
+        getJoinLink: pt.func,
+        copyTextToClipboard: pt.func,
+        openSnackbar: pt.func,
+        resetJoinLink: pt.func,
         fetchFriends: pt.func,
         fetchUsers: pt.func,
         fetchEvents: pt.func,
@@ -169,6 +179,57 @@ export default class EventSettingsPure extends PureComponent {
 
     handleDebtTypeChange = (debtType) => this.setState({ debtType });
 
+    handleCopyInviteLink = () => {
+        const {
+            getJoinLink,
+            openSnackbar,
+            showSpinner,
+            hideSpinner,
+            event,
+            appId,
+            copyTextToClipboard,
+        } = this.props;
+        const { id } = event;
+
+        showSpinner();
+        return getJoinLink(id)
+            .then(({ join }) =>
+                copyTextToClipboard(
+                    `https://vk.com/app${appId}#${encodeBase64(
+                        JSON.stringify({ route: 'join', params: { join } })
+                    )}`
+                )
+            )
+            .then(() => openSnackbar({ type: 'info', children: 'Ссылка-приглашение скопирована' }))
+            .catch((e) => {
+                openSnackbar({ type: 'error', children: e.body?.message });
+                return Promise.reject(e);
+            })
+            .finally(hideSpinner);
+    };
+
+    handleResetInviteLink = () => {
+        const {
+            resetJoinLink,
+            getJoinLink,
+            event,
+            openSnackbar,
+            showSpinner,
+            hideSpinner,
+        } = this.props;
+        const { id } = event;
+
+        showSpinner();
+        return getJoinLink(id)
+            .then(({ join }) => resetJoinLink(join))
+            .then(() => openSnackbar({ type: 'info', children: 'Ссылка-приглашение аннулирована' }))
+            .catch((e) => {
+                openSnackbar({ type: 'error', children: e.body?.message });
+                return Promise.reject(e);
+            })
+            .finally(hideSpinner);
+    };
+
     render() {
         const { event, user, currentUser, platform } = this.props;
         const { creatorId } = event;
@@ -247,6 +308,22 @@ export default class EventSettingsPure extends PureComponent {
                         );
                     })}
                 </Group>
+                {currentUser.id === event.creatorId && (
+                    <Group>
+                        <SimpleCell
+                            before={<Icon28CopyOutline />}
+                            onClick={this.handleCopyInviteLink}
+                        >
+                            Скопировать приглашение
+                        </SimpleCell>
+                        <SimpleCell
+                            before={<Icon28BlockOutline />}
+                            onClick={this.handleResetInviteLink}
+                        >
+                            Аннулировать приглашение
+                        </SimpleCell>
+                    </Group>
+                )}
                 <Group>
                     <CellButton onClick={this.handleSaveEvent}>Сохранить событие</CellButton>
                     <CellButton mode="danger" onClick={this.handleOpenLeaveEventConfirmationPopup}>
