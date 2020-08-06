@@ -27,7 +27,7 @@
 }
 
 .imgContainerBefore {
-    background: url('before.PNG') no-repeat bottom;
+    background: url('https://ik.imagekit.io/obschak/before_AohB0cNbJVj.PNG') no-repeat bottom;
     animation-name: before;
     opacity: 1;
 }
@@ -43,7 +43,7 @@
 }
 
 .imgContainerAfter {
-    background: url('after.PNG') no-repeat bottom;
+    background: url('https://ik.imagekit.io/obschak/after_i6_qDPp7r.PNG') no-repeat bottom;
     animation-name: after;
     animation-delay: 2s;
     opacity: 0;
