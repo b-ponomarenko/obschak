@@ -19,6 +19,7 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import getFromStorage from './actions/vk/getFromStorage';
 import Offline from './components/Offline/Offline';
 import { useBridge } from './core/bridge';
+import Join from './views/Join/Join';
 
 const App = () => {
     const [activeView, setActiveView] = useState('app');
@@ -111,6 +112,7 @@ const App = () => {
                         <EventSettings id="event.settings" />
                         <CreatePurchase id="event.create-purchase" />
                         <Purchase id="event.purchase" />
+                        <Join id="join" />
                     </View>
                     <Offline id="offline" />
                 </Root>

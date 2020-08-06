@@ -38,6 +38,7 @@ export const configureRouter = () => {
                     { name: 'create-purchase', path: '/create-purchase?modal&popout' },
                 ],
             },
+            { name: 'join', path: '/join/:join' },
         ],
         { defaultRoute: 'events' }
     );

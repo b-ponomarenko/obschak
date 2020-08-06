@@ -14,6 +14,10 @@ import events from '../../actions/events/events';
 import deleteEvent from '../../actions/events/deleteEvent';
 import { hideSpinner, showSpinner } from '../../actions/spinner';
 import { withPlatform } from '@vkontakte/vkui';
+import getJoinLink from '../../actions/events/getJoinLink';
+import copyTextToClipboard from '../../actions/vk/copyTextToClipboard';
+import openSnackbar from '../../actions/openSnackbar';
+import resetJoinLink from '../../actions/events/resetJoinLink';
 
 const mapState = ({ event, user, vk }, { route }) => {
     const { params } = route;
@@ -23,10 +27,15 @@ const mapState = ({ event, user, vk }, { route }) => {
         currentUser: currentUser({ vk, user }),
         eventId: params.eventId,
         event: event[params.eventId],
+        appId: vk.vk_app_id,
     };
 };
 
 const mapDispatch = (dispatch) => ({
+    getJoinLink: (id) => dispatch(getJoinLink(id)),
+    resetJoinLink: (joinLink) => dispatch(resetJoinLink(joinLink)),
+    copyTextToClipboard: (text) => dispatch(copyTextToClipboard(text)),
+    openSnackbar: (payload) => dispatch(openSnackbar(payload)),
     fetchEvent: (id) => dispatch(fetchEventWithUsers(id)),
     fetchEvents: () => dispatch(events()),
     openAddFriendsModal: (payload) => dispatch(openModal({ name: 'ADD_FRIENDS_MODAL', payload })),
